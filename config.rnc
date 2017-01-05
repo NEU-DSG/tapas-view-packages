@@ -1,0 +1,30 @@
+datatypes xs = "http://www.w3.org/2001/XMLSchema-datatypes"
+namespace tapas="http://www.wheatoncollege.edu/TAPAS/1.0"
+
+# RELAX NG schema for TAPAS View Package configuration files.
+# Written 2017-01-04 by Syd Bauman & Ashley Clark
+# Copyleft
+
+start = element tapas:view_package {
+  attribute xml:id { xs:ID },
+  attribute dynamic { xs:boolean },
+  attribute scope { "single" | "group" | "collection" },
+  element tapas:human_name { text },
+  element tapas:description { phrase* },
+  element tapas:file_types { file_type+ },
+  element tapas:css_path { xs:anyURI },
+  element tapas:js_path  { xs:anyURI },
+  element tapas:parameters { parameter* },
+  element tapas:test_files { test_file* },
+  element tapas:XProc { xs:NMTOKEN }
+}
+phrase =  text
+file_type = element tapas:file_type { ("ography" | "tei" | "odd" | "xslt" ) }
+parameter = element tapas:parameter {
+   attribute name { xs:NMTOKEN },
+   text
+   }
+test_file = element tapas:test_file { path }
+path = xs:anyURI { pattern = "[\-A-Za-z0-9$_.+!*'(),%/]+" }
+
+  
