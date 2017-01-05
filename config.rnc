@@ -7,14 +7,19 @@ namespace html ="http://www.w3.org/1999/xhtml"
 # Copyleft
 
 start = element tapas:view_package {
+
    # the version number of the *package* document
    attribute version { xs:string { pattern = "[0-9]+(\.[0-9]+(\.[0-9]+[αβ]?)?)?" } },
+
    # the ID is the name of this package from the computer's point of view (e.g., "colorBox")
    attribute xml:id { xs:ID },
+
    # the name from a human's point of view (e.g., "Colored Boxes")
    element tapas:human_name { text },
+
    # false=static, i.e. there is an HTML or other output file sitting around ready to be served out
    attribute dynamic { xs:boolean },
+
    # whether the usable or expected input is:
    #  * a single TEI file,
    #  * a selected set of TEI files, 
@@ -22,35 +27,50 @@ start = element tapas:view_package {
    #  * all the collections in an entire project
    #  * all of the publicly viewable documents in TAPAS 
    attribute scope { "file" | "found_set" | "collection" | "project" | "public" },
+
    # Short (1 para) human-readable description to be published; can use in-line HTML elements
    element tapas:description { phrase* },
+
    # the kind(s) of files this view package can handle as the main input
    element tapas:file_types { file_type+ },
+
    # a path relative to the package file to a directory which contains the CSS
    element tapas:css_dir { path? },
+
    # a path relative to the package file to a directory which contains the javajscript
    element tapas:js_dir  { path? },
+
    # parameters to the XSLT, XQuery, or XProc
    element tapas:parameters { parameter* },
+
    # list of useful schemas against which candidate input files should be run,
    # in the order specified. (If & when we have the capability to run validity
    # tests in parallel we will need a different container element or some such.)
    element tapas:constraints { constraint* },
+
    # XProc pipeline to be used to generate output from input file(s)
    # Currently presumed to be a file in the same directory as this config file
    element tapas:XProc { xs:NMTOKEN? }
 }
+
+
 file_type = element tapas:file_type { "ography" | "tei" | "odd" | "xslt" }
+
 parameter = element tapas:parameter {
    attribute name { xs:NMTOKEN },
    text
    }
-# relative path to a single schema, for now either RELAX NG or Schematron (which
-# the system differentiates by extension:
-#  * .rnc = RELAX NG compact syntax
-#  * .rng = RELAX NG XML syntax
-#  * .sch = ISO Schematron
-#  * .isosch = ISO Schematron
+
+# Relative path to a single schema, for now either RELAX NG or ISO Schematron.
+# The system may either differentiate by extension, or use the value of the
+# @scheme attribute. Possibilities are:
+#    extn     @scheme      kind
+#    ----     --------     ----------------
+#  * .rnc     RNC          RELAX NG compact syntax
+#  * .rng     RNG          RELAX NG XML syntax
+#  * .sch     Schematron   ISO Schematron
+#  * .isosch  Schematron   ISO Schematron
+# It is an error (that we don't test for) to specify "RNG" on a .rnc file, e.g.
 # Note that ODD files are not in the list. If you need to validate against the
 # output of an ODD, for now you need to generate that separately and include
 # the output here.)
@@ -58,6 +78,7 @@ constraint = element tapas:constraint {
    attribute scheme { "RNC" | "RNG" | "Schematron" },
    path
 }
+
 # a path in our universe is always a relative filepath; if you want characters
 # in the filename that are not allowed in a URI, you would have to use the %HEX
 # encoding method
