@@ -43,13 +43,18 @@ start = element tapas:view_package {
    # parameters to the XSLT, XQuery, or XProc
    element tapas:parameters { parameter* },
 
-   # list of useful schemas against which candidate input files should be run,
-   # in the order specified. (If & when we have the capability to run validity
-   # tests in parallel we will need a different container element or some such.)
+   # list of useful schemas against which candidate input files should
+   # be run, in the order specified. (If & when we have the capability
+   # to run validity tests in parallel we will need a different
+   # container element or some such.) I (Syd) am not sure why we have
+   # this separate from <tapas:XProc>, below. I'm guessing that we
+   # anticipate there will be packages that use XProc and those that
+   # don't.
    element tapas:constraints { constraint* },
 
    # XProc pipeline to be used to generate output from input file(s)
-   # Currently presumed to be a file in the same directory as this config file
+   # Currently presumed to be a file in the same directory as this
+   # config file
    element tapas:XProc { xs:NMTOKEN? }
 }
 
