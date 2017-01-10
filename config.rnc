@@ -17,7 +17,8 @@ start = element tapas:view_package {
    # the name from a human's point of view (e.g., "Colored Boxes")
    element tapas:human_name { text },
 
-   # false=static, i.e. there is an HTML or other output file sitting around ready to be served out
+   # false means static, i.e. there is an HTML or other output file sitting around ready to
+   # be served out
    attribute dynamic { xs:boolean },
 
    # whether the usable or expected input is:
@@ -45,10 +46,9 @@ start = element tapas:view_package {
 
    # EITHER use XProc or direct executaion of ( constraints, ( XQuery+ | XSLT+ ) )
    # HOWEVER note that for the moment XQuery is not supported (because it's a pain
-   # to execute an XQury from within the tapas-xq program that is handling the request
-   # in eXist).
-   ( xproc | manual )
-
+   # to execute an XQuery from within the tapas-xq program that is handling the 
+   # request in eXist).
+   ( manual | xproc )
 }
 
 
@@ -117,7 +117,7 @@ constraint = element tapas:constraint {
 # a path in our universe is always a relative filepath; if you want characters
 # in the filename that are not allowed in a URI, you would have to use the %HEX
 # encoding method
-path = xs:anyURI { pattern = "[\-A-Za-z0-9$_.+!*'(),%/]+" }
+path = xs:anyURI { pattern = "[\-A-Za-z0-9$_.+!*'(),%/]+/" }
 
 phrase = (
    text
