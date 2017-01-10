@@ -16,7 +16,7 @@ they either need two copies of it, or it should be stored in
 `common/`.)
 
 Note that this does not include utilities for running that code (e.g.,
-the Saxon <tt>.jar</tt> file) or for creating it (e.g., the schema for
+the Saxon .jar file) or for creating it (e.g., the schema for
 XSLT or for <tt>config.xml</tt> files). Our presumption is code
-written for a package should independant of processor version. (Cross
-your fingers.)
+written for a package should be independant of processor version.
+(Cross your fingers.)

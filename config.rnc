@@ -38,11 +38,21 @@ start = element tapas:view_package {
    element tapas:css_dir { path? },
 
    # a path relative to the package file to a directory which contains the javajscript
-   element tapas:js_dir  { path? },
+   element tapas:js_dir { path? },
 
-   # parameters to the XSLT, XQuery, or XProc
+   # parameters from Hydra to eXist
    element tapas:parameters { parameter* },
 
+   # EITHER use XProc or direct executaion of ( constraints, ( XQuery+ | XSLT+ ) )
+   # HOWEVER note that for the moment XQuery is not supported (because it's a pain
+   # to execute an XQury from within the tapas-xq program that is handling the request
+   # in eXist).
+   ( xproc | manual )
+
+}
+
+
+manual =
    # list of useful schemas against which candidate input files should
    # be run, in the order specified. (If & when we have the capability
    # to run validity tests in parallel we will need a different
@@ -51,17 +61,37 @@ start = element tapas:view_package {
    # anticipate there will be packages that use XProc and those that
    # don't.
    element tapas:constraints { constraint* },
+   ( xquery+ | xslt+ )
 
-   # XProc pipeline to be used to generate output from input file(s)
-   # Currently presumed to be a file in the same directory as this
-   # config file
-   element tapas:XProc { xs:NMTOKEN? }
+
+# The program to be run to generate output from input file(s)
+# Currently presumed to be a file in the same directory as this
+# config file
+xquery = element tapas:run {
+   attribute type {"xquery"},
+   attribute pgm { xs:NMTOKEN },
+   parameter*
+}
+xslt = element tapas:run {
+   attribute type {"xslt"},
+   attribute pgm { xs:NMTOKEN },
+   parameter*
+}
+xproc = element tapas:run {
+   attribute type {"xproc"},
+   attribute pgm { xs:NMTOKEN },
+   Pparameter*
 }
 
 
 file_type = element tapas:file_type { "ography" | "tei" | "odd" | "xslt" }
 
 parameter = element tapas:parameter {
+   attribute name { xs:NMTOKEN },
+   text
+   }
+Pparameter = element tapas:parameter {
+   attribute port { xs:NMTOKEN },
    attribute name { xs:NMTOKEN },
    text
    }
