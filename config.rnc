@@ -11,10 +11,10 @@ start = element tapas:view_package {
    # the version number of the *package* document
    attribute version { xs:string { pattern = "[0-9]+(\.[0-9]+(\.[0-9]+[αβ]?)?)?" } },
 
-   # the ID is the name of this package from the computer's point of view (e.g., "colorBox")
+   # the ID is the name of this package from the computer's point of view (e.g., "color-blocks")
    attribute xml:id { xs:ID },
 
-   # the name from a human's point of view (e.g., "Colored Boxes")
+   # the name from a human's point of view (e.g., "Color Blocks")
    element tapas:human_name { text },
 
    # false means static, i.e. there is an HTML or other output file sitting around ready to
@@ -38,17 +38,17 @@ start = element tapas:view_package {
    # a path relative to the package file to a directory which contains the CSS
    element tapas:css_dir { path? },
 
-   # a path relative to the package file to a directory which contains the javajscript
+   # a path relative to the package file to a directory which contains the Javascript
    element tapas:js_dir { path? },
 
    # parameters from Hydra to eXist
    element tapas:parameters { parameter* },
 
-   # EITHER use XProc or direct executaion of ( constraints, ( XQuery+ | XSLT+ ) )
+   # EITHER use XProc or direct execution of ( constraints, ( XQuery+ | XSLT+ ) )
    # HOWEVER note that for the moment XQuery is not supported (because it's a pain
-   # to execute an XQuery from within the tapas-xq program that is handling the 
+   # to execute an XQuery from within the tapas-xq XQuery that is handling the 
    # request in eXist).
-   ( manual | xproc )
+   ( manual | xproc | xslt )
 }
 
 
