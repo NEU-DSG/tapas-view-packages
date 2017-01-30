@@ -88,6 +88,7 @@ file_type = element tapas:file_type { "ography" | "tei" | "odd" | "xslt" }
 
 parameter = element tapas:parameter {
    attribute name { xs:NMTOKEN },
+   attribute as { xs:string },
    text
    }
 Pparameter = element tapas:parameter {
