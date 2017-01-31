@@ -35,11 +35,11 @@ start = element tapas:view_package {
    # the kind(s) of files this view package can handle as the main input
    element tapas:file_types { file_type+ },
 
-   # a path relative to the package file to a directory which contains the CSS
-   element tapas:css_dir { path? },
+   # the CSS files(s) that should be explicitly loaded by the generated HTML
+   element tapas:css_files { css_file* },
 
-   # a path relative to the package file to a directory which contains the Javascript
-   element tapas:js_dir { path? },
+   # the Javascript file(s) that should be explicitly loaded by the generated HTML
+   element tapas:js_files { js_file* },
 
    # parameters from Hydra to eXist
    element tapas:parameters { parameter* },
@@ -112,13 +112,16 @@ Pparameter = element tapas:parameter {
 # the output here.)
 constraint = element tapas:constraint {
    attribute scheme { "RNC" | "RNG" | "Schematron" },
-   path
+   filepath
 }
+
+css_file = element tapas:css_file { filepath }
+js_file = element tapas:js_file { filepath }
 
 # a path in our universe is always a relative filepath; if you want characters
 # in the filename that are not allowed in a URI, you would have to use the %HEX
 # encoding method
-path = xs:anyURI { pattern = "[\-A-Za-z0-9$_.+!*'(),%/]+/" }
+filepath = xs:anyURI { pattern = "[\-A-Za-z0-9$_.+!*'(),%/]+" }
 
 phrase = (
    text
