@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../config.rnc" type="application/relax-ng-compact-syntax"?>
+<view_package xmlns="http://www.wheatoncollege.edu/TAPAS/1.0" 
+  version="1.0" xml:id="teibp" dynamic="false" scope="file">
+  <human_name>TEI Boilerplate</human_name>
+  <description>Copies TEI document, with a very few modifications, into an HTML 
+    shell, which provides access to Javascript and other features from the browser. 
+    Originally created by John A. Walsh.</description>
+  <file_types>
+    <file_type>tei</file_type>
+    <file_type>ography</file_type>
+  </file_types>
+  <css_files>
+    <css_file>css/teibp.css</css_file>
+    <css_file>css/custom.css</css_file>
+  </css_files>
+  <js_files>
+    <js_file>js/jquery/jquery.min.js</js_file>
+    <js_file>js/jquery/plugins/jquery.blockUI.js</js_file>
+    <js_file>js/teibp.js</js_file>
+  </js_files>
+  <parameters>
+    <parameter name="assets-base" as="xs:string">A file path representing the path to the parent 
+      directory of the CSS/JS/image assets associated with the requested Reader type.</parameter>
+    <parameter name="file" as="node(tei:TEI)">A TEI-encoded XML document.</parameter>
+  </parameters>
+  <run type="xslt" pgm="teibp-fragment.xsl"/>
+</view_package>
