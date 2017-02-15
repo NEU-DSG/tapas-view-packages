@@ -35,6 +35,19 @@ start = element tapas:view_package {
    # the kind(s) of files this view package can handle as the main input
    element tapas:file_types { file_type+ },
 
+   # the git branch that should be pulled to production hydra/rails and eXist
+   # only used for sub-modules that are their own repo; we always use 'master'
+   # for those that are directly in the tapas-viewpackages repo, in which case
+   # this element can be empty
+   # Here we only enforce that characters
+   #    U+00-U+1F, U+7F, U+20, ~, ^, :, ?, *, \, and [
+   # are not allowed. There are other restrictions to branch names, for which see
+   # https://git-scm.com/docs/git-check-ref-format
+   element tapas:git_branch { xsd:token { pattern = "[^	 ~^:?*\\\[]*" } },
+   # regexp obtained by using
+   #   <param name="pattern">[^&#x09;&#x7F; ~^:?*\\\[]*</param>
+   # in a little test file and converting to RNC with trang. :-)
+
    # the CSS files(s) that should be explicitly loaded by the generated HTML
    element tapas:css_files { css_file* },
 
