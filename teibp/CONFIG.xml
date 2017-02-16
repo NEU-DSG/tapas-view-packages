@@ -10,6 +10,7 @@
     <file_type>tei</file_type>
     <file_type>ography</file_type>
   </file_types>
+  <git_branch></git_branch>
   <css_files>
     <css_file>css/teibp.css</css_file>
     <css_file>css/custom.css</css_file>
