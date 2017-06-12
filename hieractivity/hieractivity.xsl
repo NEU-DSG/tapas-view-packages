@@ -13,22 +13,21 @@
   xmlns:tps="http://tapas.northeastern.edu"
   exclude-result-prefixes="#all">
   
-  <xsl:output method="xhtml" omit-xml-declaration="yes"/>
+  <xsl:output indent="no" method="xhtml" omit-xml-declaration="yes"/>
+  
+  <!-- PARAMETERS AND VARIABLES -->
+  
+  <xsl:param name="assets-base" select="'./'"/>
+  <xsl:variable name="css-base" select="concat($assets-base,'css/')"/>
+  <xsl:variable name="js-base" select="concat($assets-base,'js/')"/>
+  <xsl:param name="fullHTML"   select="'false'"/> <!-- set to 'true' to get browsable output for debugging -->
+  
   
   <!-- TEMPLATES -->
   
   <xsl:template match="/">
-    <html>
-      <head>
-        <title>Testing</title>
-        <meta charset="UTF-8" />
-        <link id="maincss" rel="stylesheet" type="text/css" href="css/hieractive.css" />
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js"
-          integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-          crossorigin="anonymous"></script>
-        <script src="https://d3js.org/d3.v4.min.js" type="text/javascript"></script>
-      </head>
-      <body>
+    <xsl:variable name="body" as="node()">
+      <div class="hieractivity">
         <div id="tei-container">
           <xsl:apply-templates select="//text"/>
         </div>
@@ -37,9 +36,31 @@
           min="40" max="100" step="1" value="100" />
           100%
         </div>
-        <script src="js/hieractive.js" type="text/javascript"></script>
-      </body>
-    </html>
+      </div>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$fullHTML">
+        <html>
+          <head>
+            <title>Testing</title>
+            <meta charset="UTF-8" />
+            <link id="maincss" rel="stylesheet" type="text/css" href="{$css-base}hieractivity.css" />
+            <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+              integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+              crossorigin="anonymous"></script>
+            <script src="https://d3js.org/d3.v4.min.js" type="text/javascript"></script>
+          </head>
+          <body>
+            <xsl:copy-of select="$body"/>
+            <script src="{$js-base}hieractivity.js" type="text/javascript"></script>
+          </body>
+        </html>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy-of select="$body"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    
   </xsl:template>
   
   <xsl:template match="*">
@@ -52,8 +73,6 @@
     <xsl:attribute name="data-tapas-att-{local-name()}" select="data(.)"/>
   </xsl:template>
   
-  <!--<xsl:template match="text()"/>-->
-  
   <xsl:template match=" TEI | text | front | body | back | div | ab | floatingText 
                       | div1 | div2 | div3 | div4 | div5 | div6 | div7 | lg
                       | listBibl | listEvent | listOrg | listPerson | listPlace">
@@ -62,10 +81,30 @@
     </div>
   </xsl:template>
   
+  <xsl:template match="lb | pb">
+    <br>
+      <xsl:call-template name="save-gi"/>
+      <xsl:call-template name="get-attributes"/>
+    </br>
+  </xsl:template>
+  
   <xsl:template match="p">
     <p>
       <xsl:call-template name="keep-calm-and-carry-on"/>
     </p>
+  </xsl:template>
+  
+  <!-- Handle simple lists, those containing only <item>s. -->
+  <xsl:template match="list[not(*[not(self::item)])]">
+    <ul>
+      <xsl:call-template name="keep-calm-and-carry-on"/>
+    </ul>
+  </xsl:template>
+  
+  <xsl:template match="list[not(*[not(self::item)])]/item">
+    <li>
+      <xsl:call-template name="keep-calm-and-carry-on"/>
+    </li>
   </xsl:template>
   
   

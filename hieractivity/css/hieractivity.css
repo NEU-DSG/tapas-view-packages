@@ -1,12 +1,14 @@
 body {
     color: gray;
 }
+
 #tei-container {
     padding: 0.15em;
     height: 100%;
     width: 100%;
     /*position: fixed;*/
 }
+
 div[data-tapas-gi] {
     margin: 1em;
     border: thin solid purple;
@@ -16,14 +18,18 @@ div[data-tapas-gi] {
     height: 0.9em;
     width: 0.9em;*/
 }
+
 #control-panel {
   border-radius: 0.4em;
   width: 400px;
-  position: absolute;
+  position: fixed;
+  z-index: 900;
+  bottom: -1px;
   background-color: darkgray;
   color: black;
   text-align: center;
 }
+
 #zoom-slide {
-  opacity: .8;
+  
 }
