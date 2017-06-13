@@ -32,9 +32,12 @@
           <xsl:apply-templates select="//text"/>
         </div>
         <div id="control-panel">
-          40% <input id="zoom-slide" type="range"
-          min="40" max="100" step="1" value="100" />
-          100%
+          <div id="zoom-container">
+            <input id="zoom-slide" type="range"
+              min="20" max="100" step="1" value="100" />
+            <span class="block">+</span>
+            <span class="block">-</span>
+          </div>
         </div>
       </div>
     </xsl:variable>
@@ -75,7 +78,8 @@
   
   <xsl:template match=" TEI | text | front | body | back | div | ab | floatingText 
                       | div1 | div2 | div3 | div4 | div5 | div6 | div7 | lg
-                      | listBibl | listEvent | listOrg | listPerson | listPlace">
+                      | listBibl | listEvent | listOrg | listPerson | listPlace
+                      | titlePage">
     <div>
       <xsl:call-template name="keep-calm-and-carry-on"/>
     </div>
@@ -92,6 +96,16 @@
     <p>
       <xsl:call-template name="keep-calm-and-carry-on"/>
     </p>
+  </xsl:template>
+  
+  <!-- TEI elements which do not warrant an <html:p>, but should have 
+    "display: block". -->
+  <xsl:template match=" head | l 
+                      | argument | byline | docAuthor | docDate | docEdition 
+                      | docImprint | docTitle[not(titlePart)] | titlePart">
+    <span class="block">
+      <xsl:call-template name="keep-calm-and-carry-on"/>
+    </span>
   </xsl:template>
   
   <!-- Handle simple lists, those containing only <item>s. -->

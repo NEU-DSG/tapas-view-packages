@@ -1,35 +1,47 @@
-body {
-    color: gray;
+.hieractivity {
+  color: gray;
+  /* TEI-specific styles */
 }
-
-#tei-container {
-    padding: 0.15em;
-    height: 100%;
-    width: 100%;
-    /*position: fixed;*/
+.hieractivity #tei-container {
+  padding: 0.15em;
+  height: 100%;
+  width: 90%;
+  /*position: fixed;*/
 }
-
-div[data-tapas-gi] {
-    margin: 1em;
-    border: thin solid purple;
-    padding: 0.2em;
-    display: block;
-    /*position: absolute;
-    height: 0.9em;
-    width: 0.9em;*/
-}
-
-#control-panel {
+.hieractivity #control-panel {
   border-radius: 0.4em;
-  width: 400px;
+  height: 400px;
+  width: 50px;
   position: fixed;
   z-index: 900;
-  bottom: -1px;
+  top: 10px;
+  right: 10px;
   background-color: darkgray;
   color: black;
   text-align: center;
 }
-
-#zoom-slide {
-  
+.hieractivity #control-panel #zoom-container #zoom-slide {
+  display: block;
+  width: 140px;
+  float: left;
+  transform: translate(-64.5px, 64px) rotate(0.75turn);
+  /*&::before {
+          content: '+';
+        }
+      
+        &::after {
+          content: '-';
+          }*/
+}
+.hieractivity .block {
+  display: block;
+}
+.hieractivity div[data-tapas-gi] {
+  margin: 1em;
+  border: thin solid purple;
+  padding: 0.2em;
+  display: block;
+  /*position: absolute;
+      height: 0.9em;
+      width: 0.9em;*/
 }

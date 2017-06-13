@@ -4,7 +4,7 @@ $(document).ready(function() {
   $('div[data-tapas-gi]').toArray().forEach(function(obj) { 
     heightData.push($(obj).height());
   });
-  console.log(heightData);
+  //console.log(heightData);
   
   // Set up relevant d3 selections.
   var scrollElement = d3.select('[data-tapas-gi]');
@@ -22,13 +22,20 @@ $(document).ready(function() {
   // Translate and scale the first element with @data-tapas-gi.
   function transformed(scale) {
     //var transform = d3.event.transform;
-    scrollElement.style("transform", "translate(0,0) scale(" + scale + ")");
+    var h = heightData[0],
+        w = $(scrollElement.node()).width(),
+        xNew = w / 2 * (-1 + scale),
+        yNew = h / 2 * (-1 + scale);
+    scrollElement.style("transform", 
+        "translate("+ xNew + "px,"+ yNew +"px)"
+      + "scale(" + scale + ")");
+    scrollElement.style("hieght", h * scale);
   }
   
   // When the zoom slider value is changed, convert the integer into a decimal and 
     // call transformed().
   function slid(d) {
-    var k = d3.select(this).property('value')  / 100;
+    var k = d3.select(this).property('value') / 100;
     //console.log(k);
     transformed(k);
   }
