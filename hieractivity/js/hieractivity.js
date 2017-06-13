@@ -5,6 +5,9 @@ $(document).ready(function() {
     heightData.push($(obj).height());
   });
   //console.log(heightData);
+  var color = d3.scaleOrdinal()
+    .range(d3.schemeCategory20
+      .map(function (c) { c = d3.rgb(c); c.opacity = 0.6; return c; }));
   
   // Set up relevant d3 selections.
   var scrollElement = d3.select('[data-tapas-gi]');
@@ -17,11 +20,14 @@ $(document).ready(function() {
       .style('height', function(d) {
         //console.log(d);
         return d + 'px';
+      })
+      .style('background-color', function() { 
+        var depth = $(this).attr('data-tapas-box-depth');
+        return color(depth);
       });
   
   // Translate and scale the first element with @data-tapas-gi.
   function transformed(scale) {
-    //var transform = d3.event.transform;
     var h = heightData[0],
         w = $(scrollElement.node()).width(),
         xNew = w / 2 * (-1 + scale),
@@ -29,7 +35,7 @@ $(document).ready(function() {
     scrollElement.style("transform", 
         "translate("+ xNew + "px,"+ yNew +"px)"
       + "scale(" + scale + ")");
-    scrollElement.style("hieght", h * scale);
+    //scrollElement.style("height", h * scale);
   }
   
   // When the zoom slider value is changed, convert the integer into a decimal and 

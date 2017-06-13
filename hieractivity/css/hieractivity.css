@@ -38,10 +38,9 @@
 }
 .hieractivity div[data-tapas-gi] {
   margin: 1em;
-  border: thin solid purple;
-  padding: 0.2em;
+  padding: 0.4em;
   display: block;
-  /*position: absolute;
-      height: 0.9em;
-      width: 0.9em;*/
+}
+.hieractivity ul {
+  padding-inline-start: 1em;
 }

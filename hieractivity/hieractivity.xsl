@@ -76,12 +76,21 @@
     <xsl:attribute name="data-tapas-att-{local-name()}" select="data(.)"/>
   </xsl:template>
   
+  <!-- Block-level TEI elements will be used to create boxes in the HTML output. 
+    Since CSS doesn't allow selecting on ancestors of nodes, we calculate the depth 
+    (nestedness) of the current node here. -->
   <xsl:template match=" TEI | text | front | body | back | div | ab | floatingText 
                       | div1 | div2 | div3 | div4 | div5 | div6 | div7 | lg
                       | listBibl | listEvent | listOrg | listPerson | listPlace
                       | titlePage">
+    <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
     <div>
-      <xsl:call-template name="keep-calm-and-carry-on"/>
+      <xsl:call-template name="get-attributes"/>
+      <xsl:call-template name="save-gi"/>
+      <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
+      <xsl:apply-templates>
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+      </xsl:apply-templates>
     </div>
   </xsl:template>
   
