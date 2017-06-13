@@ -33,10 +33,10 @@
         </div>
         <div id="control-panel">
           <div id="zoom-container">
+            -
             <input id="zoom-slide" type="range"
               min="20" max="100" step="1" value="100" />
-            <span class="block">+</span>
-            <span class="block">-</span>
+            +
           </div>
         </div>
       </div>

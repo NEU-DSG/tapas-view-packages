@@ -5,9 +5,12 @@ $(document).ready(function() {
     heightData.push($(obj).height());
   });
   //console.log(heightData);
+  
+  // View package color scheme
+  var tapasScheme = d3.schemeCategory20
+    .map(function (c) { c = d3.rgb(c); c.opacity = 0.6; return c; });
   var color = d3.scaleOrdinal()
-    .range(d3.schemeCategory20
-      .map(function (c) { c = d3.rgb(c); c.opacity = 0.6; return c; }));
+    .range(tapasScheme);
   
   // Set up relevant d3 selections.
   var scrollElement = d3.select('[data-tapas-gi]');
@@ -45,9 +48,4 @@ $(document).ready(function() {
     //console.log(k);
     transformed(k);
   }
-  
-  /*function zoomed() {
-    transformed(d3.event.scale);
-    zoomSlider.property("value", d3.event.scale);
-  }*/
 });
