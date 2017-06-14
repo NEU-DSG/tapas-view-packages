@@ -33,12 +33,21 @@
 .hieractivity .block[data-tapas-gi=cb] {
   margin: 0.4em 0;
 }
+.hieractivity .block-after::after {
+  content: '';
+  display: block;
+}
 .hieractivity .label-explanatory {
   opacity: 0.95;
   font-size: 0.8em;
 }
 .hieractivity *[data-tapas-gi] {
   padding: 0 0.1em;
+}
+.hieractivity [data-tapas-gi=lb]::before {
+  content: '↵';
+  opacity: 0.6;
+  font-size: 0.7em;
 }
 .hieractivity div[data-tapas-gi] {
   margin: 2em 1em;

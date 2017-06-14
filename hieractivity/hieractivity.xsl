@@ -101,8 +101,11 @@
   </xsl:template>
   
   <xsl:template match="lb">
-    <span class="block">
+    <span>
       <xsl:call-template name="set-data-attributes"/>
+      <xsl:if test="ancestor::p">
+        <xsl:attribute name="class" select="'block-after'"/>
+      </xsl:if>
     </span>
   </xsl:template>
   

@@ -46,6 +46,11 @@
     }
   }
   
+  .block-after::after {
+    content: '';
+    display: block;
+  }
+  
   .label-explanatory {
     opacity: 0.95;
     font-size: 0.8em;
@@ -54,6 +59,15 @@
   *[data-tapas-gi] {
     padding: 0 0.1em;
   }
+  
+  [data-tapas-gi=lb] {
+    
+    &::before {
+      content: '↵';
+      opacity: 0.6;
+      font-size: 0.7em;
+    }
+  } // [data-tapas-gi=lb]
   
   div[data-tapas-gi] {
     margin: 2em 1em;

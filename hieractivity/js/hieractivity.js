@@ -8,9 +8,12 @@ $(document).ready(function() {
   
   // View package color scheme
   var tapasScheme = d3.schemeCategory20
-    .map(function (c) { c = d3.rgb(c); c.opacity = 0.7; return c; });
+    .map(function (c) { c = d3.rgb(c); c.opacity = 0.75; return c; });
   var color = d3.scaleOrdinal()
     .range(tapasScheme);
+  /*var tapasScheme = d3.scaleSequential(d3.interpolatePlasma)
+    .domain([-1,6]);
+  var color = tapasScheme;*/
   
   // Set up relevant d3 selections.
   var teiContainer = d3.select('#tei-container');
