@@ -33,8 +33,26 @@
 
   /* TEI-specific styles */
   
+  .centered() {
+    text-align: center;
+  }
+  
   .block {
     display: block;
+    
+    &[data-tapas-gi=pb],
+    &[data-tapas-gi=cb] {
+      margin: 0.4em 0;
+    }
+  }
+  
+  .label-explanatory {
+    opacity: 0.95;
+    font-size: 0.8em;
+  }
+  
+  *[data-tapas-gi] {
+    padding: 0 0.1em;
   }
   
   div[data-tapas-gi] {
@@ -54,6 +72,14 @@
   
   ul {
     padding-inline-start: 1em;
+  }
+  
+  [data-tapas-gi=titlePage] {
+    .centered();
+  }
+  
+  [data-tapas-gi=head] {
+    .centered();
   }
 
 } // .hieractivity

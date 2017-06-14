@@ -29,6 +29,17 @@
 .hieractivity .block {
   display: block;
 }
+.hieractivity .block[data-tapas-gi=pb],
+.hieractivity .block[data-tapas-gi=cb] {
+  margin: 0.4em 0;
+}
+.hieractivity .label-explanatory {
+  opacity: 0.95;
+  font-size: 0.8em;
+}
+.hieractivity *[data-tapas-gi] {
+  padding: 0 0.1em;
+}
 .hieractivity div[data-tapas-gi] {
   margin: 2em 1em;
   padding: 0.85em;
@@ -43,4 +54,10 @@
 }
 .hieractivity ul {
   padding-inline-start: 1em;
+}
+.hieractivity [data-tapas-gi=titlePage] {
+  text-align: center;
+}
+.hieractivity [data-tapas-gi=head] {
+  text-align: center;
 }

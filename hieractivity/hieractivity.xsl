@@ -22,6 +22,11 @@
   <xsl:variable name="js-base" select="concat($assets-base,'js/')"/>
   <xsl:param name="fullHTML"   select="'false'"/> <!-- set to 'true' to get browsable output for debugging -->
   
+  <xsl:variable name="interjectStart">&lt;[ </xsl:variable>
+  <xsl:variable name="interjectEnd"> ]&gt;</xsl:variable>
+  
+  <!-- FUNCTIONS -->
+  
   
   <!-- TEMPLATES -->
   
@@ -66,13 +71,15 @@
     
   </xsl:template>
   
+  <xsl:template match="@*" priority="-10"/>
+  
   <xsl:template match="*">
     <span>
       <xsl:call-template name="keep-calm-and-carry-on"/>
     </span>
   </xsl:template>
   
-  <xsl:template match="@*" name="make-data-attr" priority="-20">
+  <xsl:template match="@*" name="make-data-attr" mode="carry-on" priority="-20">
     <xsl:attribute name="data-tapas-att-{local-name()}" select="data(.)"/>
   </xsl:template>
   
@@ -82,11 +89,10 @@
   <xsl:template match=" TEI | text | front | body | back | div | ab | floatingText 
                       | div1 | div2 | div3 | div4 | div5 | div6 | div7 | lg
                       | listBibl | listEvent | listOrg | listPerson | listPlace
-                      | titlePage">
+                      | sp[not(ancestor::p)] | titlePage">
     <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
     <div>
-      <xsl:call-template name="get-attributes"/>
-      <xsl:call-template name="save-gi"/>
+      <xsl:call-template name="set-data-attributes"/>
       <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
       <xsl:apply-templates>
         <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
@@ -94,11 +100,29 @@
     </div>
   </xsl:template>
   
-  <xsl:template match="lb | pb">
-    <br>
-      <xsl:call-template name="save-gi"/>
-      <xsl:call-template name="get-attributes"/>
-    </br>
+  <xsl:template match="lb">
+    <span class="block">
+      <xsl:call-template name="set-data-attributes"/>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="cb | pb">
+    <span class="block">
+      <xsl:call-template name="set-data-attributes"/>
+      <span class="label-explanatory">
+        <xsl:value-of select="$interjectStart"/>
+        <xsl:choose>
+          <xsl:when test="self::cb">column</xsl:when>
+          <xsl:when test="self::pb">page</xsl:when>
+        </xsl:choose>
+        <xsl:text> break</xsl:text>
+        <xsl:if test="@n">
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="@n"/>
+        </xsl:if>
+        <xsl:value-of select="$interjectEnd"/>
+      </span>
+    </span>
   </xsl:template>
   
   <xsl:template match="p">
@@ -107,9 +131,10 @@
     </p>
   </xsl:template>
   
-  <!-- TEI elements which do not warrant an <html:p>, but should have 
+  <!-- TEI elements which do not warrant an <html:div> or <html:p>, but should have 
     "display: block". -->
-  <xsl:template match=" head | l 
+  <xsl:template match=" byline | head | l | stage 
+                      | salute | signed
                       | argument | byline | docAuthor | docDate | docEdition 
                       | docImprint | docTitle[not(titlePart)] | titlePart">
     <span class="block">
@@ -130,24 +155,81 @@
     </li>
   </xsl:template>
   
+  <xsl:template match="gap">
+    <xsl:variable name="contentDivider" select="': '"/>
+    <span>
+      <xsl:call-template name="set-data-attributes"/>
+      <span class="label-explanatory">
+        <xsl:value-of select="$interjectStart"/>
+        <xsl:text>gap</xsl:text>
+        <xsl:choose>
+          <xsl:when test="desc">
+            <xsl:value-of select="$contentDivider"/>
+            <xsl:apply-templates/>
+          </xsl:when>
+          <xsl:when test="@extent">
+            <xsl:value-of select="$contentDivider"/>
+            <xsl:value-of select="@extent"/>
+          </xsl:when>
+          <xsl:when test="@quantity">
+            <xsl:value-of select="$contentDivider"/>
+            <xsl:value-of select="@quantity"/>
+            <xsl:if test="@unit">
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="@unit"/>
+            </xsl:if>
+          </xsl:when>
+        </xsl:choose>
+        <xsl:value-of select="$interjectEnd"/>
+      </span>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="choice">
+    <span>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:value-of select="$interjectStart"/>
+      <xsl:apply-templates/>
+      <xsl:value-of select="$interjectEnd"/>
+    </span>
+  </xsl:template>
+  
+  <!-- Whitespace inside <choice> is thrown away. -->
+  <xsl:template match="choice/text()"/>
+  
+  <xsl:template match="choice/*[preceding-sibling::*]">
+    <xsl:text> | </xsl:text>
+    <span>
+      <xsl:call-template name="keep-calm-and-carry-on"/>
+    </span>
+  </xsl:template>
+  
   
   <!-- SUPPLEMENTAL TEMPLATES -->
   
+  <!-- Set data attributes, using the convenience template 'set-data-attributes'. 
+    Then apply templates on child nodes. -->
   <xsl:template name="keep-calm-and-carry-on">
-    <xsl:call-template name="save-gi"/>
-    <xsl:call-template name="get-attributes"/>
+    <xsl:call-template name="set-data-attributes"/>
     <xsl:apply-templates/>
   </xsl:template>
   
   <!-- Apply templates on attributes. -->
   <xsl:template name="get-attributes">
-    <xsl:apply-templates select="@*" mode="#current"/>
+    <xsl:apply-templates select="@*" mode="carry-on"/>
     <xsl:call-template name="save-gi"/>
   </xsl:template>
   
   <!-- Create a data attribute to store the name of the current TEI element. -->
   <xsl:template name="save-gi">
     <xsl:attribute name="data-tapas-gi" select="local-name(.)"/>
+  </xsl:template>
+  
+  <!-- Set data attributes, saving the TEI element's name and attribute values. This 
+    is a convenience template for 'save-gi' followed by 'get-attributes'. -->
+  <xsl:template name="set-data-attributes">
+    <xsl:call-template name="save-gi"/>
+    <xsl:call-template name="get-attributes"/>
   </xsl:template>
   
 </xsl:stylesheet>
