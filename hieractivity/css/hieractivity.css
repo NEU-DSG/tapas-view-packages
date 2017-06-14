@@ -3,10 +3,8 @@
   /* TEI-specific styles */
 }
 .hieractivity #tei-container {
-  padding: 0.15em;
-  height: 100%;
   width: 90%;
-  /*position: fixed;*/
+  overflow: hidden;
 }
 .hieractivity #control-panel {
   border: medium solid #555555;
@@ -35,6 +33,13 @@
   margin: 2em 1em;
   padding: 0.85em;
   display: block;
+}
+.hieractivity div[data-tapas-gi][data-tapas-gi=text] {
+  margin: 0;
+}
+.hieractivity p {
+  padding: 0.15em 0.5em;
+  background-color: #DDD;
 }
 .hieractivity ul {
   padding-inline-start: 1em;

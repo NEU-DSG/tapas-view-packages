@@ -2,10 +2,8 @@
   color: gray;
   
   #tei-container {
-    padding: 0.15em;
-    height: 100%;
     width: 90%;
-    /*position: fixed;*/
+    overflow: hidden;
   }
 
   #control-panel {
@@ -27,11 +25,8 @@
       display: flex;
       
       #zoom-slide {
-        //display: block;
         width: 110px;
-        //float: left;
-        //transform: translate(-64.5px,64px) rotate(0.75turn);
-      } // #zoom-slide
+      }
     } // #zoom-container
   } // .control-panel
 
@@ -46,6 +41,15 @@
     margin: 2em 1em;
     padding: 0.85em;
     display: block;
+    
+    &[data-tapas-gi=text] {
+      margin: 0;
+    }
+  } // div[data-tapas-gi]
+  
+  p {
+    padding: 0.15em 0.5em;
+    background-color: #DDD;
   }
   
   ul {

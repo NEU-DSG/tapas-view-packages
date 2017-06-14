@@ -13,6 +13,7 @@ $(document).ready(function() {
     .range(tapasScheme);
   
   // Set up relevant d3 selections.
+  var teiContainer = d3.select('#tei-container');
   var scrollElement = d3.select('[data-tapas-gi]');
   var zoomSlider = d3.select('#zoom-slide')
     .on('input', slid);
@@ -35,10 +36,15 @@ $(document).ready(function() {
         w = $(scrollElement.node()).width(),
         xNew = w / 2 * (-1 + scale),
         yNew = h / 2 * (-1 + scale);
-    scrollElement.style("transform", 
+    scrollElement.style('transform', 
         "translate("+ xNew + "px,"+ yNew +"px)"
       + "scale(" + scale + ")");
-    //scrollElement.style("height", h * scale);
+    // Change the height of the teiContainer to match the working (scaled) height of 
+      // scrollElement. This is necessary in order to keep the scrollbar from 
+      // registering the 'actual' height of scrollElement, which is unaffected by 
+      // CSS transformations.
+    var hNew = scrollElement.node().getBoundingClientRect().height + 10;
+    teiContainer.style('height', hNew + 'px');
   }
   
   // When the zoom slider value is changed, convert the integer into a decimal and 
