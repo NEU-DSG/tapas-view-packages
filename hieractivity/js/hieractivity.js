@@ -4,7 +4,6 @@ $(document).ready(function() {
   $('[data-tapas-gi].boxed').toArray().forEach(function(obj) { 
     heightData.push($(obj).height());
   });
-  //console.log(heightData);
   
   // View package color scheme
   var tapasScheme = d3.schemeCategory20
@@ -19,7 +18,8 @@ $(document).ready(function() {
   var teiContainer = d3.select('#tei-container');
   var scrollElement = d3.select('div[data-tapas-gi].boxed');
   var zoomSlider = d3.select('#zoom-slide')
-    .on('input', slid);
+    .on('input', slid)
+    .on('mouseout', workedHeight);
   // Assign—explicitly—the divs' heights back to them. d3.js requires some absolute 
     // height value in order to zoom on HTML elements.
   var containers = d3.selectAll('[data-tapas-gi].boxed')
@@ -42,12 +42,7 @@ $(document).ready(function() {
     scrollElement.style('transform', 
         "translate("+ xNew + "px,"+ yNew +"px)"
       + "scale(" + scale + ")");
-    // Change the height of the teiContainer to match the working (scaled) height of 
-      // scrollElement. This is necessary in order to keep the scrollbar from 
-      // registering the 'actual' height of scrollElement, which is unaffected by 
-      // CSS transformations.
-    var hNew = scrollElement.node().getBoundingClientRect().height + 10;
-    teiContainer.style('height', hNew + 'px');
+    workedHeight();
   }
   
   // When the zoom slider value is changed, convert the integer into a decimal and 
@@ -56,5 +51,14 @@ $(document).ready(function() {
     var k = d3.select(this).property('value') / 100;
     //console.log(k);
     transformed(k);
+  }
+
+  // Change the height of the teiContainer to match the working (scaled) height of 
+    // scrollElement. This is necessary in order to keep the scrollbar from 
+    // registering the 'actual' height of scrollElement, which is unaffected by 
+    // CSS transformations.
+  function workedHeight() {
+    var hNew = scrollElement.node().getBoundingClientRect().height + 10;
+    teiContainer.style('height', hNew + 'px');
   }
 });
