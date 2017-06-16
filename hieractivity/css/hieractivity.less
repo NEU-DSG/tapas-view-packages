@@ -74,7 +74,7 @@
     }
   } // [data-tapas-gi=lb]
   
-  div[data-tapas-gi] {
+  [data-tapas-gi].boxed {
     margin: 2em 1em;
     padding: 0.85em;
     display: block;
@@ -82,10 +82,11 @@
     &[data-tapas-gi=text] {
       margin: 0;
     }
-  } // div[data-tapas-gi]
+  } // [data-tapas-gi].boxed
   
-  p {
+  [data-tapas-gi=p] {
     padding: 0.15em 0.5em;
+    display: block;
     background-color: #DDD;
   }
   

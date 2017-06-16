@@ -1,7 +1,7 @@
 $(document).ready(function() {
   // Get the calculated heights of each div with a @data-tapas-gi on it. 
   var heightData = [];
-  $('div[data-tapas-gi]').toArray().forEach(function(obj) { 
+  $('[data-tapas-gi].boxed').toArray().forEach(function(obj) { 
     heightData.push($(obj).height());
   });
   //console.log(heightData);
@@ -17,12 +17,12 @@ $(document).ready(function() {
   
   // Set up relevant d3 selections.
   var teiContainer = d3.select('#tei-container');
-  var scrollElement = d3.select('[data-tapas-gi]');
+  var scrollElement = d3.select('div[data-tapas-gi].boxed');
   var zoomSlider = d3.select('#zoom-slide')
     .on('input', slid);
   // Assign—explicitly—the divs' heights back to them. d3.js requires some absolute 
     // height value in order to zoom on HTML elements.
-  var containers = d3.selectAll('div[data-tapas-gi]')
+  var containers = d3.selectAll('[data-tapas-gi].boxed')
       .data(heightData)
       .style('height', function(d) {
         //console.log(d);

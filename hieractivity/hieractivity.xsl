@@ -27,6 +27,20 @@
   
   <!-- FUNCTIONS -->
   
+  <xsl:function name="tps:is-chunk-level" as="xs:boolean">
+    <xsl:param name="element" as="element()" required="yes"/>
+    <xsl:value-of 
+      select="exists($element[
+                self::TEI | self::text | self::front | self::body | self::back 
+              | self::ab | self::floatingText | self::lg | self::div
+              | self::div1 | self::div2 | self::div3 | self::div4 | self::div5 
+              | self::div6 | self::div7 | self::titlePage
+              | self::listBibl | self::listEvent | self::listOrg | self::listPerson 
+              | self::listPlace
+              | self::quote[descendant::p] | self::said[descendant::p]
+              | self::figure | self::note | self::sp
+              ])"/>
+  </xsl:function>
   
   <!-- TEMPLATES -->
   
@@ -86,21 +100,20 @@
   <!-- Block-level TEI elements will be used to create boxes in the HTML output. 
     Since CSS doesn't allow selecting on ancestors of nodes, we calculate the depth 
     (nestedness) of the current node here. -->
-  <xsl:template match=" TEI | text | front | body | back | div | ab | floatingText 
-                      | div1 | div2 | div3 | div4 | div5 | div6 | div7 | lg
-                      | listBibl | listEvent | listOrg | listPerson | listPlace
-                      | sp[not(ancestor::p)] | titlePage">
+  <xsl:template match="*[tps:is-chunk-level(.)]" mode="#default inside-p">
     <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
-    <div>
+    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
+    <xsl:element name="{$wrapper}">
+      <xsl:attribute name="class" select="'boxed'"/>
       <xsl:call-template name="set-data-attributes"/>
       <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
-      <xsl:apply-templates>
+      <xsl:apply-templates mode="#current">
         <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
       </xsl:apply-templates>
-    </div>
+    </xsl:element>
   </xsl:template>
   
-  <xsl:template match="lb">
+  <xsl:template match="lb" mode="#default inside-p">
     <span>
       <xsl:call-template name="set-data-attributes"/>
       <xsl:if test="ancestor::p">
@@ -109,7 +122,7 @@
     </span>
   </xsl:template>
   
-  <xsl:template match="cb | pb">
+  <xsl:template match="cb | pb" mode="#default inside-p">
     <span class="block">
       <xsl:call-template name="set-data-attributes"/>
       <span class="label-explanatory">
@@ -128,18 +141,13 @@
     </span>
   </xsl:template>
   
-  <xsl:template match="p">
-    <p>
-      <xsl:call-template name="keep-calm-and-carry-on"/>
-    </p>
-  </xsl:template>
-  
   <!-- TEI elements which do not warrant an <html:div> or <html:p>, but should have 
     "display: block". -->
   <xsl:template match=" byline | head | l | stage 
                       | salute | signed
                       | argument | byline | docAuthor | docDate | docEdition 
-                      | docImprint | docTitle[not(titlePart)] | titlePart">
+                      | docImprint | docTitle[not(titlePart)] | titlePart" 
+                mode="#default inside-p">
     <span class="block">
       <xsl:call-template name="keep-calm-and-carry-on"/>
     </span>
@@ -158,7 +166,20 @@
     </li>
   </xsl:template>
   
-  <xsl:template match="gap">
+  <xsl:template match="p">
+    <p>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:apply-templates mode="inside-p"/>
+    </p>
+  </xsl:template>
+  
+  <xsl:template match="*" priority="-10" mode="inside-p">
+    <span>
+      <xsl:call-template name="keep-calm-and-carry-on"/>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="gap" mode="#default inside-p">
     <xsl:variable name="contentDivider" select="': '"/>
     <span>
       <xsl:call-template name="set-data-attributes"/>
@@ -188,20 +209,20 @@
     </span>
   </xsl:template>
   
-  <xsl:template match="choice">
+  <xsl:template match="choice" mode="#default inside-p">
     <span class="label-explanatory">
       <xsl:call-template name="set-data-attributes"/>
       <xsl:value-of select="$interjectStart"/>
       <xsl:text>choice: </xsl:text>
-      <xsl:apply-templates/>
+      <xsl:apply-templates mode="#current"/>
       <xsl:value-of select="$interjectEnd"/>
     </span>
   </xsl:template>
   
   <!-- Whitespace inside <choice> is thrown away. -->
-  <xsl:template match="choice/text()"/>
+  <xsl:template match="choice/text()" mode="#default inside-p"/>
   
-  <xsl:template match="choice/*[preceding-sibling::*]">
+  <xsl:template match="choice/*[preceding-sibling::*]" mode="#default inside-p">
     <xsl:text> | </xsl:text>
     <span>
       <xsl:call-template name="keep-calm-and-carry-on"/>
@@ -215,7 +236,7 @@
     Then apply templates on child nodes. -->
   <xsl:template name="keep-calm-and-carry-on">
     <xsl:call-template name="set-data-attributes"/>
-    <xsl:apply-templates/>
+    <xsl:apply-templates mode="#current"/>
   </xsl:template>
   
   <!-- Apply templates on attributes. -->
