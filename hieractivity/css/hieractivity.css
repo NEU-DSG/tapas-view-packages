@@ -41,6 +41,10 @@
   opacity: 0.95;
   font-size: 0.8em;
 }
+.hieractivity .label-explanatory [data-tapas-gi] {
+  opacity: unset;
+  font-size: initial;
+}
 .hieractivity *[data-tapas-gi] {
   padding: 0 0.1em;
 }

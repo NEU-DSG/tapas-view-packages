@@ -189,9 +189,10 @@
   </xsl:template>
   
   <xsl:template match="choice">
-    <span>
+    <span class="label-explanatory">
       <xsl:call-template name="set-data-attributes"/>
       <xsl:value-of select="$interjectStart"/>
+      <xsl:text>choice: </xsl:text>
       <xsl:apply-templates/>
       <xsl:value-of select="$interjectEnd"/>
     </span>
