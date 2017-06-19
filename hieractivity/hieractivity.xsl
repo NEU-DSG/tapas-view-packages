@@ -44,11 +44,17 @@
   
   <!-- TEMPLATES -->
   
-  <xsl:template match="/">
+  <xsl:template match="/TEI" priority="92">
+    <xsl:apply-templates/>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader" priority="91"/>
+  
+  <xsl:template match="text" priority="90">
     <xsl:variable name="body" as="node()">
       <div class="hieractivity">
         <div id="tei-container">
-          <xsl:apply-templates select="//text"/>
+          <xsl:apply-templates/>
         </div>
         <div id="control-panel">
           <div id="zoom-container">
@@ -56,6 +62,9 @@
             <input id="zoom-slide" type="range"
               min="20" max="100" step="1" value="100" />
             +
+          </div>
+          <div>
+            <xsl:call-template name="counting-robot"/>
           </div>
         </div>
       </div>
@@ -229,17 +238,64 @@
   
   <!-- SUPPLEMENTAL TEMPLATES -->
   
-  <!-- Set data attributes, using the convenience template 'set-data-attributes'. 
-    Then apply templates on child nodes. -->
-  <xsl:template name="keep-calm-and-carry-on">
-    <xsl:call-template name="set-data-attributes"/>
-    <xsl:apply-templates mode="#current"/>
+  <!-- Count number of each type of element within the current element (assumed 
+    <text>). -->
+  <xsl:template name="counting-robot">
+    <xsl:variable name="allElements" select="descendant::*/local-name(.)"/>
+    <xsl:variable name="distinctGIs" select="distinct-values($allElements)"/>
+    <select>
+      <option value=""></option>
+      <xsl:variable name="options" as="item()*">
+        <xsl:for-each select="$distinctGIs">
+          <xsl:variable name="gi" select="."/>
+          <xsl:variable name="count" select="count($allElements[. eq $gi])"/>
+          <option value="{$gi}">
+            <span class="gi-name"><xsl:value-of select="$gi"/></span>
+            <xsl:text> </xsl:text>
+            <span class="gi-count"><xsl:value-of select="$count"/></span>
+          </option>
+        </xsl:for-each>
+      </xsl:variable>
+      <xsl:perform-sort select="$options">
+        <xsl:sort select="xs:integer(descendant::*:span[@class eq 'gi-count']/text())" order="descending"/>
+        <xsl:sort select="descendant::*:span[@class eq 'gi-name']/text()"/>
+      </xsl:perform-sort>
+    </select>
+    <!--<table id="gi-option-table" tabindex="0">
+      <tbody>
+        <tr class="option option-active">
+          <td></td>
+          <td></td>
+        </tr>
+        <xsl:variable name="options" as="item()*">
+          <xsl:for-each select="$distinctGIs">
+            <xsl:variable name="gi" select="."/>
+            <xsl:variable name="count" select="count($allElements[. eq $gi])"/>
+            <tr class="option">
+              <td class="gi-name"><xsl:value-of select="$gi"/></td>
+              <td class="gi-count"><xsl:value-of select="$count"/></td>
+            </tr>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:perform-sort select="$options">
+          <xsl:sort select="xs:integer(descendant::*:td[@class eq 'gi-count']/text())" order="descending"/>
+          <xsl:sort select="descendant::*:td[@class eq 'gi-name']/text()"/>
+        </xsl:perform-sort>
+      </tbody>
+    </table>-->
   </xsl:template>
   
   <!-- Apply templates on attributes. -->
   <xsl:template name="get-attributes">
     <xsl:apply-templates select="@*" mode="carry-on"/>
     <xsl:call-template name="save-gi"/>
+  </xsl:template>
+  
+  <!-- Set data attributes, using the convenience template 'set-data-attributes'. 
+    Then apply templates on child nodes. -->
+  <xsl:template name="keep-calm-and-carry-on">
+    <xsl:call-template name="set-data-attributes"/>
+    <xsl:apply-templates mode="#current"/>
   </xsl:template>
   
   <!-- Create a data attribute to store the name of the current TEI element. -->
