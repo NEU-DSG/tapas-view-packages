@@ -20,6 +20,12 @@
     color: black;
     text-align: center;
     
+    h2, h3, h4 {
+      margin: 0.5em 0;
+      font-family: ‘Palatino Linotype’, ‘Book Antiqua’, Palatino, serif;
+      font-weight: normal;
+    }
+    
     #zoom-container {
       padding: 0.4em;
       display: flex;
@@ -28,6 +34,34 @@
         width: 110px;
       }
     } // #zoom-container
+    
+    #gi-option-selector {
+      border: thin solid black;
+      padding: 0.25em;
+      display: block;
+      height: 130px;
+      background-color: white;
+      overflow: auto;
+      text-align: left;
+      
+      label {
+        display: block;
+        
+        .gi-label {
+          margin: 0 0.35em;
+          font-size: 0.85em;
+          
+          .gi-name {
+            font-family: 'Courier', 'Courier New', monospace;
+          }
+          
+          .gi-count {
+            margin-top: 0.2em;
+            float: right;
+          }
+        } // .gi-label
+      } // label
+    } // #gi-option-table
   } // .control-panel
 
 
@@ -35,6 +69,11 @@
   
   .centered() {
     text-align: center;
+  }
+  
+  // This style is applied to any element that is selected by the user.
+  .selected-gi {
+    border-left: 1em solid black;
   }
   
   .block {

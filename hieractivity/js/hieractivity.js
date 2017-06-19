@@ -17,6 +17,7 @@ $(document).ready(function() {
   // Set up relevant d3 selections.
   var teiContainer = d3.select('#tei-container');
   var scrollElement = d3.select('div[data-tapas-gi].boxed');
+  console.log(scrollElement.node());
   var zoomSlider = d3.select('#zoom-slide')
     .on('input', slid)
     .on('mouseout', workedHeight);
@@ -61,4 +62,16 @@ $(document).ready(function() {
     var hNew = scrollElement.node().getBoundingClientRect().height + 10;
     teiContainer.style('height', hNew + 'px');
   }
+  
+  $('input[name=element]').change(function(e) {
+    e.preventDefault();
+    // Remove the previous selection.
+    d3.selectAll('.selected-gi[data-tapas-gi]').classed('selected-gi', false);
+    // Select the new element type.
+    var checked = $('input[name=element]:checked');
+    checked.each(function() {
+      var gi = $( this ).val();
+      d3.selectAll('[data-tapas-gi='+ gi +']').classed('selected-gi', true);
+    });
+  });
 });

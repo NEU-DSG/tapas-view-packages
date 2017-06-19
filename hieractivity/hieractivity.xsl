@@ -45,27 +45,30 @@
   <!-- TEMPLATES -->
   
   <xsl:template match="/TEI" priority="92">
-    <xsl:apply-templates/>
-  </xsl:template>
-  
-  <xsl:template match="teiHeader" priority="91"/>
-  
-  <xsl:template match="text" priority="90">
+    
     <xsl:variable name="body" as="node()">
       <div class="hieractivity">
+        <h1>
+          <xsl:apply-templates select="teiHeader/fileDesc/titleStmt/title[1]"/>
+        </h1>
         <div id="tei-container">
           <xsl:apply-templates/>
         </div>
         <div id="control-panel">
+          <h2>Controls</h2>
+          <h3>Zoom out</h3>
           <div id="zoom-container">
             -
             <input id="zoom-slide" type="range"
               min="20" max="100" step="1" value="100" />
             +
           </div>
-          <div>
-            <xsl:call-template name="counting-robot"/>
-          </div>
+          <h3>Mark elements</h3>
+          <form id="gi-option-selector">
+            <xsl:call-template name="counting-robot">
+              <xsl:with-param name="start" select="text"/>
+            </xsl:call-template>
+          </form>
         </div>
       </div>
     </xsl:variable>
@@ -91,8 +94,10 @@
         <xsl:copy-of select="$body"/>
       </xsl:otherwise>
     </xsl:choose>
-    
   </xsl:template>
+  
+  <!-- We don't (yet) process the <teiHeader>. -->
+  <xsl:template match="teiHeader" priority="91"/>
   
   <xsl:template match="@*" priority="-10"/>
   
@@ -238,51 +243,34 @@
   
   <!-- SUPPLEMENTAL TEMPLATES -->
   
-  <!-- Count number of each type of element within the current element (assumed 
-    <text>). -->
+  <!-- Count number of each type of element within a given element (the default is 
+    the current node). -->
   <xsl:template name="counting-robot">
-    <xsl:variable name="allElements" select="descendant::*/local-name(.)"/>
+    <xsl:param name="start" select="." as="node()"/>
+    <xsl:variable name="allElements" select="$start/descendant-or-self::*/local-name(.)"/>
     <xsl:variable name="distinctGIs" select="distinct-values($allElements)"/>
-    <select>
-      <option value=""></option>
+      <label>
+        <input type="radio" name="element" value="none" checked="checked"></input>
+        <span class="gi-label">defaults only</span>
+      </label>
       <xsl:variable name="options" as="item()*">
         <xsl:for-each select="$distinctGIs">
           <xsl:variable name="gi" select="."/>
           <xsl:variable name="count" select="count($allElements[. eq $gi])"/>
-          <option value="{$gi}">
-            <span class="gi-name"><xsl:value-of select="$gi"/></span>
-            <xsl:text> </xsl:text>
-            <span class="gi-count"><xsl:value-of select="$count"/></span>
-          </option>
+          <label>
+            <input type="radio" name="element" value="{$gi}"></input>
+            <span class="gi-label">
+              <span class="gi-name"><xsl:value-of select="$gi"/></span>
+              <xsl:text> </xsl:text>
+              <span class="gi-count"><xsl:value-of select="$count"/></span>
+            </span>
+          </label>
         </xsl:for-each>
       </xsl:variable>
       <xsl:perform-sort select="$options">
         <xsl:sort select="xs:integer(descendant::*:span[@class eq 'gi-count']/text())" order="descending"/>
         <xsl:sort select="descendant::*:span[@class eq 'gi-name']/text()"/>
       </xsl:perform-sort>
-    </select>
-    <!--<table id="gi-option-table" tabindex="0">
-      <tbody>
-        <tr class="option option-active">
-          <td></td>
-          <td></td>
-        </tr>
-        <xsl:variable name="options" as="item()*">
-          <xsl:for-each select="$distinctGIs">
-            <xsl:variable name="gi" select="."/>
-            <xsl:variable name="count" select="count($allElements[. eq $gi])"/>
-            <tr class="option">
-              <td class="gi-name"><xsl:value-of select="$gi"/></td>
-              <td class="gi-count"><xsl:value-of select="$count"/></td>
-            </tr>
-          </xsl:for-each>
-        </xsl:variable>
-        <xsl:perform-sort select="$options">
-          <xsl:sort select="xs:integer(descendant::*:td[@class eq 'gi-count']/text())" order="descending"/>
-          <xsl:sort select="descendant::*:td[@class eq 'gi-name']/text()"/>
-        </xsl:perform-sort>
-      </tbody>
-    </table>-->
   </xsl:template>
   
   <!-- Apply templates on attributes. -->
