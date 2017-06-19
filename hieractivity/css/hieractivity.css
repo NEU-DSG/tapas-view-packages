@@ -1,5 +1,5 @@
 .hieractivity {
-  color: gray;
+  color: #808080;
   /* TEI-specific styles */
 }
 .hieractivity #tei-container {
@@ -10,7 +10,7 @@
   border: medium solid #555555;
   border-radius: 0.4em;
   padding: 0.25em;
-  width: 150px;
+  width: 180px;
   position: fixed;
   z-index: 900;
   top: 10px;
@@ -31,7 +31,7 @@
   display: flex;
 }
 .hieractivity #control-panel #zoom-container #zoom-slide {
-  width: 110px;
+  width: 140px;
 }
 .hieractivity #control-panel #gi-option-selector {
   border: thin solid black;
@@ -57,7 +57,8 @@
   float: right;
 }
 .hieractivity .selected-gi {
-  border-left: 1em solid black;
+  background-color: black;
+  color: #dddddd;
 }
 .hieractivity .block {
   display: block;
@@ -90,17 +91,23 @@
   margin: 2em 1em;
   padding: 0.85em;
   display: block;
-  /*&.selected-gi {
-      border-left-width: thick;
-    }*/
 }
 .hieractivity [data-tapas-gi].boxed[data-tapas-gi=text] {
   margin: 0;
 }
+.hieractivity [data-tapas-gi].boxed.selected-gi {
+  border-left: 1em solid black;
+  background-color: unset;
+  color: unset;
+}
 .hieractivity [data-tapas-gi=p] {
   padding: 0.15em 0.5em;
   display: block;
-  background-color: #DDD;
+  background-color: #dddddd;
+}
+.hieractivity [data-tapas-gi=p].selected-gi {
+  border-left: 1em solid black;
+  color: unset;
 }
 .hieractivity ul {
   padding-inline-start: 1em;

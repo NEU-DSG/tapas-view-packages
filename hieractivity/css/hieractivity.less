@@ -1,5 +1,13 @@
+// hierarchy.less
+
+// COLORS
+@gray-dark:   #555555;
+@gray:        #808080;
+@gray-light:  #DDDDDD;
+
+// RULES
 .hieractivity {
-  color: gray;
+  color: @gray;
   
   #tei-container {
     width: 90%;
@@ -7,11 +15,11 @@
   }
 
   #control-panel {
-    border: medium solid #555555;
+    border: medium solid @gray-dark;
     border-radius: 0.4em;
     padding: 0.25em;
     //height: 150px;
-    width: 150px;
+    width: 180px;
     position: fixed;
     z-index: 900;
     top: 10px;
@@ -31,7 +39,7 @@
       display: flex;
       
       #zoom-slide {
-        width: 110px;
+        width: 140px;
       }
     } // #zoom-container
     
@@ -73,7 +81,8 @@
   
   // This style is applied to any element that is selected by the user.
   .selected-gi {
-    border-left: 1em solid black;
+    background-color: black;
+    color: @gray-light;
   }
   
   .block {
@@ -121,12 +130,23 @@
     &[data-tapas-gi=text] {
       margin: 0;
     }
+    
+    &.selected-gi {
+      border-left: 1em solid black;
+      background-color: unset;
+      color: unset;
+    }
   } // [data-tapas-gi].boxed
   
   [data-tapas-gi=p] {
     padding: 0.15em 0.5em;
     display: block;
-    background-color: #DDD;
+    background-color: @gray-light;
+    
+    &.selected-gi {
+      border-left: 1em solid black;
+      color: unset;
+    }
   }
   
   ul {
