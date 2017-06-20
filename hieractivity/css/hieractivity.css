@@ -34,7 +34,7 @@
   width: 140px;
 }
 .hieractivity #control-panel #gi-option-selector {
-  border: thin solid black;
+  border: thin solid #808080;
   padding: 0.25em;
   display: block;
   height: 130px;

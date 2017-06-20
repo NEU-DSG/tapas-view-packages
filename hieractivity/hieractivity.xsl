@@ -56,7 +56,7 @@
         </div>
         <div id="control-panel">
           <h2>Controls</h2>
-          <h3>Zoom out</h3>
+          <h3>Zoom</h3>
           <div id="zoom-container">
             -
             <input id="zoom-slide" type="range"
@@ -166,15 +166,17 @@
   
   <!-- Handle simple lists, those containing only <item>s. -->
   <xsl:template match="list[not(*[not(self::item)])]">
-    <ul>
+    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'ul'"/>
+    <xsl:element name="{$wrapper}">
       <xsl:call-template name="keep-calm-and-carry-on"/>
-    </ul>
+    </xsl:element>
   </xsl:template>
   
   <xsl:template match="list[not(*[not(self::item)])]/item">
-    <li>
+    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'li'"/>
+    <xsl:element name="{$wrapper}">
       <xsl:call-template name="keep-calm-and-carry-on"/>
-    </li>
+    </xsl:element>
   </xsl:template>
   
   <xsl:template match="p">

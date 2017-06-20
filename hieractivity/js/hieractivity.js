@@ -17,7 +17,7 @@ $(document).ready(function() {
   // Set up relevant d3 selections.
   var teiContainer = d3.select('#tei-container');
   var scrollElement = d3.select('div[data-tapas-gi].boxed');
-  console.log(scrollElement.node());
+  var scrollElementNode = scrollElement.node();
   var zoomSlider = d3.select('#zoom-slide')
     .on('input', slid)
     .on('mouseout', workedHeight);
@@ -37,7 +37,7 @@ $(document).ready(function() {
   // Translate and scale the first element with @data-tapas-gi.
   function transformed(scale) {
     var h = heightData[0],
-        w = $(scrollElement.node()).width(),
+        w = $(scrollElementNode).width(),
         xNew = w / 2 * (-1 + scale),
         yNew = h / 2 * (-1 + scale);
     scrollElement.style('transform', 
@@ -59,7 +59,7 @@ $(document).ready(function() {
     // registering the 'actual' height of scrollElement, which is unaffected by 
     // CSS transformations.
   function workedHeight() {
-    var hNew = scrollElement.node().getBoundingClientRect().height + 10;
+    var hNew = scrollElementNode.getBoundingClientRect().height + 10;
     teiContainer.style('height', hNew + 'px');
   }
   
@@ -73,5 +73,10 @@ $(document).ready(function() {
       var gi = $( this ).val();
       d3.selectAll('[data-tapas-gi='+ gi +']').classed('selected-gi', true);
     });
+    // Get the first newly-selected element and scroll to it.
+    var instance1 = d3.select('.selected-gi[data-tapas-gi]').node();
+    if ( instance1 !== null && instance1 !== undefined ) {
+      instance1.scrollIntoView();
+    }
   });
 });
