@@ -26,6 +26,7 @@
   <xsl:variable name="interjectStart">&lt;[ </xsl:variable>
   <xsl:variable name="interjectEnd"> ]&gt;</xsl:variable>
   
+  
   <!-- FUNCTIONS -->
   
   <xsl:function name="tps:is-chunk-level" as="xs:boolean">
@@ -46,6 +47,7 @@
               ])"/>
   </xsl:function>
   
+  
   <!-- TEMPLATES -->
   
   <xsl:template match="/TEI" priority="92">
@@ -55,7 +57,7 @@
           <xsl:apply-templates select="teiHeader/fileDesc/titleStmt/title[1]"/>
         </h1>
         <div id="tei-container">
-          <xsl:apply-templates/>
+          <xsl:apply-templates select="text"/>
         </div>
         <div id="control-panel">
           <h2>Controls</h2>
@@ -68,7 +70,7 @@
           </div>
           <h3>Mark elements</h3>
           <form id="gi-option-selector">
-            <xsl:call-template name="counting-robot">
+            <xsl:call-template name="gi-counting-robot">
               <xsl:with-param name="start" select="text"/>
             </xsl:call-template>
           </form>
@@ -84,10 +86,10 @@
             <link id="maincss" rel="stylesheet" type="text/css" href="{$css-base}hieractivity.css" />
             <script src="{$common-base}jquery/jquery-3.2.1.min.js"></script>
             <script src="{$common-base}d3/d3.v4.min.js" type="text/javascript"></script>
+            <script src="{$js-base}hieractivity.js" type="text/javascript"></script>
           </head>
           <body>
             <xsl:copy-of select="$body"/>
-            <script src="{$js-base}hieractivity.js" type="text/javascript"></script>
           </body>
         </html>
       </xsl:when>
@@ -193,6 +195,50 @@
     </span>
   </xsl:template>
   
+  <xsl:template match="graphic | media" mode="#default inside-p">
+    <xsl:variable name="hasURL" select="exists(@url) and normalize-space(@url) ne ''"/>
+    <span class="media-obj">
+      <xsl:call-template name="get-attributes"/>
+      <!-- If the current element has an @url, create a link for it. -->
+      <xsl:if test="$hasURL">
+        <a target="_blank">
+          <xsl:apply-templates select="@*"/>
+          <xsl:variable name="description">
+            <xsl:call-template name="count-preceding-of-type"/>
+            <xsl:choose>
+              <xsl:when test="desc or following-sibling::figDesc">
+                <xsl:text>; described below.</xsl:text>
+              </xsl:when>
+              <xsl:when test="preceding-sibling::figDesc">
+                <xsl:text>; described above.</xsl:text>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:variable>
+          <!-- TAPAS doesn't embed audio/video. Only images are given some kind of 
+            visual indicator. -->
+          <xsl:choose>
+            <xsl:when test="self::graphic or contains(@mimeType,'image')">
+              <img class="thumbnail" src="{@url/data(.)}" 
+                alt="{$description}"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <span class="label-explanatory">
+                <xsl:value-of select="$interjectStart"/>
+                <xsl:value-of select="$description"/>
+                <xsl:value-of select="$interjectEnd"/>
+              </span>
+            </xsl:otherwise>
+          </xsl:choose>
+        </a>
+        <xsl:apply-templates/>
+      </xsl:if>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="@url">
+    <xsl:attribute name="href" select="data(.)"/>
+  </xsl:template>
+  
   <xsl:template match="gap" mode="#default inside-p">
     <xsl:variable name="contentDivider" select="': '"/>
     <span>
@@ -246,9 +292,24 @@
   
   <!-- SUPPLEMENTAL TEMPLATES -->
   
+  <xsl:template name="count-preceding-of-type">
+    <xsl:param name="element" select="." as="node()"/>
+    <xsl:variable name="gi" select="local-name($element)"/>
+    <xsl:value-of select="$gi"/>
+    <xsl:text> #</xsl:text>
+    <xsl:value-of select="count(preceding::*[local-name(.) eq $gi][ancestor::text]) + 1"/>
+    <xsl:text> of the TEI document</xsl:text>
+  </xsl:template>
+  
+  <!-- Apply templates on attributes. -->
+  <xsl:template name="get-attributes">
+    <xsl:apply-templates select="@*" mode="carry-on"/>
+    <xsl:call-template name="save-gi"/>
+  </xsl:template>
+  
   <!-- Count number of each type of element within a given element (the default is 
     the current node). -->
-  <xsl:template name="counting-robot">
+  <xsl:template name="gi-counting-robot">
     <xsl:param name="start" select="." as="node()"/>
     <xsl:variable name="allElements" select="$start/descendant-or-self::*/local-name(.)"/>
     <xsl:variable name="distinctGIs" select="distinct-values($allElements)"/>
@@ -274,12 +335,6 @@
       <xsl:sort select="xs:integer(descendant::*:span[@class eq 'gi-count']/text())" order="descending"/>
       <xsl:sort select="descendant::*:span[@class eq 'gi-name']/text()"/>
     </xsl:perform-sort>
-  </xsl:template>
-  
-  <!-- Apply templates on attributes. -->
-  <xsl:template name="get-attributes">
-    <xsl:apply-templates select="@*" mode="carry-on"/>
-    <xsl:call-template name="save-gi"/>
   </xsl:template>
   
   <!-- Set data attributes, using the convenience template 'set-data-attributes'. 

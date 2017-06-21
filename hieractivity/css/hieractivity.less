@@ -147,6 +147,24 @@
       border-left: 1em solid black;
       color: unset;
     }
+  } // [data-tapas-gi-p]
+  
+  .media-obj {
+    display: inline-block;
+    
+    .thumbnail {
+      max-height: 50px;
+      // Use the .label-explanatory rules for text, because if the image doesn't 
+        // show, the alt text will.
+      .label-explanatory();
+    }
+  } // .media-obj
+  
+  [data-tapas-gi=figure] > .media-obj {
+    margin: 0.2em;
+    padding: 0.2em 0;
+    display: block;
+    text-align: center;
   }
   
   [data-tapas-gi=list] {

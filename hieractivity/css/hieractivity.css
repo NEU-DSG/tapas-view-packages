@@ -109,7 +109,25 @@
   border-left: 1em solid black;
   color: unset;
 }
-.hieractivity ul {
+.hieractivity .media-obj {
+  display: inline-block;
+}
+.hieractivity .media-obj .thumbnail {
+  max-height: 50px;
+  opacity: 0.95;
+  font-size: 0.8em;
+}
+.hieractivity .media-obj .thumbnail [data-tapas-gi] {
+  opacity: unset;
+  font-size: initial;
+}
+.hieractivity [data-tapas-gi=figure] > .media-obj {
+  margin: 0.2em;
+  padding: 0.2em 0;
+  display: block;
+  text-align: center;
+}
+.hieractivity [data-tapas-gi=list] {
   padding-inline-start: 1em;
 }
 .hieractivity [data-tapas-gi=titlePage] {
