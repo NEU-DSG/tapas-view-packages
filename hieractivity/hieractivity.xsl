@@ -18,6 +18,7 @@
   <!-- PARAMETERS AND VARIABLES -->
   
   <xsl:param name="assets-base" select="'./'"/>
+  <xsl:variable name="common-base" select="concat($assets-base,'../common/')"/>
   <xsl:variable name="css-base" select="concat($assets-base,'css/')"/>
   <xsl:variable name="js-base" select="concat($assets-base,'js/')"/>
   <xsl:param name="fullHTML"   select="'false'"/> <!-- set to 'true' to get browsable output for debugging -->
@@ -33,10 +34,13 @@
       select="exists($element[
                 self::TEI | self::text | self::front | self::body | self::back 
               | self::ab | self::floatingText | self::lg | self::div
+              | self::group
               | self::div1 | self::div2 | self::div3 | self::div4 | self::div5 
               | self::div6 | self::div7 | self::titlePage
               | self::listBibl | self::listEvent | self::listOrg | self::listPerson 
-              | self::listPlace
+              | self::listPlace | self::castList
+              | self::performance | self::prologue | self::epilogue | self::set 
+              | self::opener | self::closer | self::postscript
               | self::quote[descendant::p] | self::said[descendant::p]
               | self::figure | self::note | self::sp
               ])"/>
@@ -45,7 +49,6 @@
   <!-- TEMPLATES -->
   
   <xsl:template match="/TEI" priority="92">
-    
     <xsl:variable name="body" as="node()">
       <div class="hieractivity">
         <h1>
@@ -79,10 +82,8 @@
             <title>Testing</title>
             <meta charset="UTF-8" />
             <link id="maincss" rel="stylesheet" type="text/css" href="{$css-base}hieractivity.css" />
-            <script src="https://code.jquery.com/jquery-3.2.1.min.js"
-              integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-              crossorigin="anonymous"></script>
-            <script src="https://d3js.org/d3.v4.min.js" type="text/javascript"></script>
+            <script src="{$common-base}jquery/jquery-3.2.1.min.js"></script>
+            <script src="{$common-base}d3/d3.v4.min.js" type="text/javascript"></script>
           </head>
           <body>
             <xsl:copy-of select="$body"/>
@@ -154,7 +155,7 @@
   
   <!-- TEI elements which do not warrant an <html:div> or <html:p>, but should have 
     "display: block". -->
-  <xsl:template match=" byline | head | l | stage 
+  <xsl:template match=" head | l | stage 
                       | salute | signed
                       | argument | byline | docAuthor | docDate | docEdition 
                       | docImprint | docTitle[not(titlePart)] | titlePart" 
@@ -251,28 +252,28 @@
     <xsl:param name="start" select="." as="node()"/>
     <xsl:variable name="allElements" select="$start/descendant-or-self::*/local-name(.)"/>
     <xsl:variable name="distinctGIs" select="distinct-values($allElements)"/>
-      <label>
-        <input type="radio" name="element" value="none" checked="checked"></input>
-        <span class="gi-label">defaults only</span>
-      </label>
-      <xsl:variable name="options" as="item()*">
-        <xsl:for-each select="$distinctGIs">
-          <xsl:variable name="gi" select="."/>
-          <xsl:variable name="count" select="count($allElements[. eq $gi])"/>
-          <label>
-            <input type="radio" name="element" value="{$gi}"></input>
-            <span class="gi-label">
-              <span class="gi-name"><xsl:value-of select="$gi"/></span>
-              <xsl:text> </xsl:text>
-              <span class="gi-count"><xsl:value-of select="$count"/></span>
-            </span>
-          </label>
-        </xsl:for-each>
-      </xsl:variable>
-      <xsl:perform-sort select="$options">
-        <xsl:sort select="xs:integer(descendant::*:span[@class eq 'gi-count']/text())" order="descending"/>
-        <xsl:sort select="descendant::*:span[@class eq 'gi-name']/text()"/>
-      </xsl:perform-sort>
+    <label>
+      <input type="radio" name="element" value="none" checked="checked"></input>
+      <span class="gi-label">defaults only</span>
+    </label>
+    <xsl:variable name="options" as="item()*">
+      <xsl:for-each select="$distinctGIs">
+        <xsl:variable name="gi" select="."/>
+        <xsl:variable name="count" select="count($allElements[. eq $gi])"/>
+        <label>
+          <input type="radio" name="element" value="{$gi}"></input>
+          <span class="gi-label">
+            <span class="gi-name"><xsl:value-of select="$gi"/></span>
+            <xsl:text> </xsl:text>
+            <span class="gi-count"><xsl:value-of select="$count"/></span>
+          </span>
+        </label>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:perform-sort select="$options">
+      <xsl:sort select="xs:integer(descendant::*:span[@class eq 'gi-count']/text())" order="descending"/>
+      <xsl:sort select="descendant::*:span[@class eq 'gi-name']/text()"/>
+    </xsl:perform-sort>
   </xsl:template>
   
   <!-- Apply templates on attributes. -->
