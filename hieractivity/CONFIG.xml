@@ -14,7 +14,7 @@
     <css_file>css/hieractivity.css</css_file>
   </css_files>
   <js_files>
-    <!--<js_file>jQuery</js_file>-->
+    <js_file>../common/jquery/jquery-3.2.1.min.js</js_file>
     <js_file>../common/d3/d3.v4.min.js</js_file>
     <js_file>js/hieractivity.js</js_file>
   </js_files>
