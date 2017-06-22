@@ -15,7 +15,7 @@
   
   <xsl:output indent="no" method="xhtml" omit-xml-declaration="yes"/>
   
-  <!-- PARAMETERS AND VARIABLES -->
+<!-- PARAMETERS AND VARIABLES -->
   
   <xsl:param name="assets-base" select="'./'"/>
   <xsl:variable name="common-base" select="concat($assets-base,'../common/')"/>
@@ -25,9 +25,10 @@
   
   <xsl:variable name="interjectStart">&lt;[ </xsl:variable>
   <xsl:variable name="interjectEnd"> ]&gt;</xsl:variable>
+  <xsl:variable name="nbsp" select="'&#160;'"/>
   
   
-  <!-- FUNCTIONS -->
+<!-- FUNCTIONS -->
   
   <xsl:function name="tps:is-chunk-level" as="xs:boolean">
     <xsl:param name="element" as="element()" required="yes"/>
@@ -48,7 +49,7 @@
   </xsl:function>
   
   
-  <!-- TEMPLATES -->
+<!-- TEMPLATES -->
   
   <xsl:template match="/TEI" priority="92">
     <xsl:variable name="body" as="node()">
@@ -104,7 +105,7 @@
   
   <xsl:template match="@*" priority="-10"/>
   
-  <xsl:template match="*">
+  <xsl:template match="*" mode="#default table-complex">
     <span>
       <xsl:call-template name="keep-calm-and-carry-on"/>
     </span>
@@ -128,6 +129,137 @@
         <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
       </xsl:apply-templates>
     </xsl:element>
+  </xsl:template>
+
+<!-- LISTS -->
+
+  <!-- Handle simple lists, those containing only <item>s. -->
+  <xsl:template match="list[not(*[not(self::item)])]">
+    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'ul'"/>
+    <xsl:element name="{$wrapper}">
+      <xsl:call-template name="keep-calm-and-carry-on"/>
+    </xsl:element>
+  </xsl:template>
+  
+  <xsl:template match="list[not(*[not(self::item)])]/item">
+    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'li'"/>
+    <xsl:element name="{$wrapper}">
+      <xsl:call-template name="keep-calm-and-carry-on"/>
+    </xsl:element>
+  </xsl:template>
+  
+<!-- TABLES -->
+  
+  <xsl:template match="cell/@rows | cell/@cols" mode="#default">
+    <xsl:variable name="data" select="data(.)"/>
+    <xsl:if test="$data castable as xs:integer and xs:integer($data) gt 1">
+      <xsl:variable name="attrName" select="substring-before(local-name(),'s')"/>
+      <xsl:attribute name="{$attrName}span" select="$data"/>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="table[not(*[not(self::head) and not(self::row)])]" priority="23" mode="#default">
+    <table>
+      <xsl:call-template name="get-attributes"/>
+      <xsl:apply-templates mode="table-simple"/>
+    </table>
+  </xsl:template>
+  
+  <xsl:template match="table/head" mode="table-simple">
+    <caption>
+      <xsl:call-template name="keep-calm-and-carry-on"/>
+    </caption>
+  </xsl:template>
+  
+  <xsl:template match="row" mode="table-simple">
+    <tr>
+      <xsl:call-template name="keep-calm-and-carry-on"/>
+    </tr>
+  </xsl:template>
+  
+  <xsl:template match="cell" mode="table-simple">
+    <td>
+      <xsl:call-template name="get-attributes"/>
+      <xsl:apply-templates select="@* | node()" mode="#default"/>
+    </td>
+  </xsl:template>
+  
+  <xsl:template match="table" mode="#default inside-p">
+    <span class="block">
+      <span>
+        <xsl:call-template name="get-attributes"/>
+        <xsl:apply-templates mode="table-complex"/>
+      </span>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="cell" mode="table-complex">
+    <xsl:variable name="cell" select="."/>
+    <xsl:variable name="columns" as="xs:integer" 
+      select="if ( @cols and xs:integer(@cols) gt 1 ) then @cols/data(.) else 1"/>
+    <xsl:variable name="rows" as="xs:integer" 
+      select="if ( @rows and xs:integer(@rows) gt 1 ) then @rows/data(.) else 1"/>
+    <xsl:variable name="contents">
+      <xsl:choose>
+        <xsl:when test="node() and ancestor::p">
+          <xsl:apply-templates mode="inside-p"/>
+        </xsl:when>
+        <xsl:when test="node()">
+          <xsl:apply-templates mode="#default"/>
+        </xsl:when>
+        <!-- Empty span 'cells' have to have something inside them. -->
+        <xsl:otherwise>
+          <xsl:value-of select="$nbsp"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:for-each select="1 to $columns">
+      <span>
+        <xsl:choose>
+          <xsl:when test="position() eq last()">
+            <xsl:call-template name="get-attributes">
+              <xsl:with-param name="start" select="$cell"/>
+            </xsl:call-template>
+            <xsl:copy-of select="$contents"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:if test="$columns gt 1">
+              <xsl:attribute name="class" select="'colspanned'"/>
+            </xsl:if>
+            <xsl:value-of select="$nbsp"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </span>
+    </xsl:for-each>
+  </xsl:template>
+  
+<!-- ELEMENTS THAT REQUIRE JUST A NEWLINE -->
+  
+  <!-- TEI elements which do not warrant an <html:div> or <html:p>, but should have 
+    "display: block". -->
+  <xsl:template match=" head | l | stage 
+                      | salute | signed
+                      | argument | byline | docAuthor | docDate | docEdition 
+                      | docImprint | docTitle[not(titlePart)] | titlePart" 
+                mode="#default inside-p">
+    <span class="block">
+      <xsl:call-template name="keep-calm-and-carry-on"/>
+    </span>
+  </xsl:template>
+  
+<!-- PARAGRAPHS AND ELEMENTS THAT MIGHT APPEAR IN THEM -->
+  
+  <xsl:template match="p">
+    <p>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:apply-templates mode="inside-p"/>
+    </p>
+  </xsl:template>
+  
+  <xsl:template match="*" priority="-10" mode="inside-p">
+    <span>
+      <xsl:call-template name="keep-calm-and-carry-on"/>
+    </span>
   </xsl:template>
   
   <xsl:template match="lb" mode="#default inside-p">
@@ -155,88 +287,68 @@
     </span>
   </xsl:template>
   
-  <!-- TEI elements which do not warrant an <html:div> or <html:p>, but should have 
-    "display: block". -->
-  <xsl:template match=" head | l | stage 
-                      | salute | signed
-                      | argument | byline | docAuthor | docDate | docEdition 
-                      | docImprint | docTitle[not(titlePart)] | titlePart" 
-                mode="#default inside-p">
-    <span class="block">
-      <xsl:call-template name="keep-calm-and-carry-on"/>
-    </span>
-  </xsl:template>
-  
-  <!-- Handle simple lists, those containing only <item>s. -->
-  <xsl:template match="list[not(*[not(self::item)])]">
-    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'ul'"/>
-    <xsl:element name="{$wrapper}">
-      <xsl:call-template name="keep-calm-and-carry-on"/>
-    </xsl:element>
-  </xsl:template>
-  
-  <xsl:template match="list[not(*[not(self::item)])]/item">
-    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'li'"/>
-    <xsl:element name="{$wrapper}">
-      <xsl:call-template name="keep-calm-and-carry-on"/>
-    </xsl:element>
-  </xsl:template>
-  
-  <xsl:template match="p">
-    <p>
-      <xsl:call-template name="set-data-attributes"/>
-      <xsl:apply-templates mode="inside-p"/>
-    </p>
-  </xsl:template>
-  
-  <xsl:template match="*" priority="-10" mode="inside-p">
-    <span>
-      <xsl:call-template name="keep-calm-and-carry-on"/>
+  <!-- Empty elements require placeholders. If no other template matches an element
+    that happens to be empty, this one simply outputs a label with the TEI element 
+    name. -->
+  <xsl:template match="*[not(*)][normalize-space(.) eq '']" priority="-5" mode="#default inside-p">
+    <span class="label-explanatory">
+      <xsl:call-template name="get-attributes"/>
+      <xsl:value-of select="$interjectStart"/>
+      <xsl:value-of select="local-name(.)"/>
+      <xsl:text> </xsl:text>
+      <xsl:apply-templates select="@*"/>
+      <xsl:value-of select="$interjectEnd"/>
     </span>
   </xsl:template>
   
   <xsl:template match="graphic | media" mode="#default inside-p">
     <xsl:variable name="hasURL" select="exists(@url) and normalize-space(@url) ne ''"/>
+    <xsl:variable name="description">
+      <xsl:call-template name="count-preceding-of-type"/>
+      <xsl:choose>
+        <xsl:when test="desc or following-sibling::figDesc">
+          <xsl:text>; described below.</xsl:text>
+        </xsl:when>
+        <xsl:when test="preceding-sibling::figDesc">
+          <xsl:text>; described above.</xsl:text>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:variable>
     <span class="media-obj">
       <xsl:call-template name="get-attributes"/>
       <!-- If the current element has an @url, create a link for it. -->
-      <xsl:if test="$hasURL">
-        <a target="_blank">
-          <xsl:apply-templates select="@*"/>
-          <xsl:variable name="description">
-            <xsl:call-template name="count-preceding-of-type"/>
+      <xsl:choose>
+        <xsl:when test="$hasURL">
+          <xsl:variable name="url" select="@url/data(.)"/>
+          <a target="_blank">
+            <xsl:attribute name="href" select="$url"/>
+            <!-- TAPAS doesn't embed audio/video. Only images are given some kind of 
+              visual indicator. -->
             <xsl:choose>
-              <xsl:when test="desc or following-sibling::figDesc">
-                <xsl:text>; described below.</xsl:text>
+              <xsl:when test="self::graphic or contains(@mimeType,'image')">
+                <img class="thumbnail" src="{$url}" 
+                  alt="{$interjectStart}{$description}{$interjectEnd}"/>
               </xsl:when>
-              <xsl:when test="preceding-sibling::figDesc">
-                <xsl:text>; described above.</xsl:text>
-              </xsl:when>
+              <xsl:otherwise>
+                <span class="label-explanatory">
+                  <xsl:value-of select="$interjectStart"/>
+                  <xsl:value-of select="$description"/>
+                  <xsl:value-of select="$interjectEnd"/>
+                </span>
+              </xsl:otherwise>
             </xsl:choose>
-          </xsl:variable>
-          <!-- TAPAS doesn't embed audio/video. Only images are given some kind of 
-            visual indicator. -->
-          <xsl:choose>
-            <xsl:when test="self::graphic or contains(@mimeType,'image')">
-              <img class="thumbnail" src="{@url/data(.)}" 
-                alt="{$description}"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <span class="label-explanatory">
-                <xsl:value-of select="$interjectStart"/>
-                <xsl:value-of select="$description"/>
-                <xsl:value-of select="$interjectEnd"/>
-              </span>
-            </xsl:otherwise>
-          </xsl:choose>
-        </a>
-        <xsl:apply-templates/>
-      </xsl:if>
+          </a>
+          <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:otherwise>
+          <span class="label-explanatory">
+            <xsl:value-of select="$interjectStart"/>
+            <xsl:value-of select="$description"/>
+            <xsl:value-of select="$interjectEnd"/>
+          </span>
+        </xsl:otherwise>
+      </xsl:choose>
     </span>
-  </xsl:template>
-  
-  <xsl:template match="@url">
-    <xsl:attribute name="href" select="data(.)"/>
   </xsl:template>
   
   <xsl:template match="gap" mode="#default inside-p">
@@ -290,7 +402,7 @@
   </xsl:template>
   
   
-  <!-- SUPPLEMENTAL TEMPLATES -->
+<!-- SUPPLEMENTAL TEMPLATES -->
   
   <xsl:template name="count-preceding-of-type">
     <xsl:param name="element" select="." as="node()"/>
@@ -303,8 +415,11 @@
   
   <!-- Apply templates on attributes. -->
   <xsl:template name="get-attributes">
-    <xsl:apply-templates select="@*" mode="carry-on"/>
-    <xsl:call-template name="save-gi"/>
+    <xsl:param name="start" select="." as="node()"></xsl:param>
+    <xsl:apply-templates select="$start/@*" mode="carry-on"/>
+    <xsl:call-template name="save-gi">
+      <xsl:with-param name="start" select="$start"/>
+    </xsl:call-template>
   </xsl:template>
   
   <!-- Count number of each type of element within a given element (the default is 
@@ -346,7 +461,8 @@
   
   <!-- Create a data attribute to store the name of the current TEI element. -->
   <xsl:template name="save-gi">
-    <xsl:attribute name="data-tapas-gi" select="local-name(.)"/>
+    <xsl:param name="start" select="." as="node()"/>
+    <xsl:attribute name="data-tapas-gi" select="local-name($start)"/>
   </xsl:template>
   
   <!-- Set data attributes, saving the TEI element's name and attribute values. This 

@@ -130,6 +130,30 @@
 .hieractivity [data-tapas-gi=list] {
   padding-inline-start: 1em;
 }
+.hieractivity [data-tapas-gi=list] span[data-tapas-gi=item] {
+  display: list-item;
+}
+.hieractivity span[data-tapas-gi=table] {
+  width: 100%;
+  display: table;
+}
+.hieractivity span[data-tapas-gi=table] > span[data-tapas-gi=head] {
+  display: table-caption;
+}
+.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row] {
+  display: table-row;
+}
+.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row] span[data-tapas-gi=cell],
+.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row] .colspanned {
+  border-top: thin solid #555555;
+  padding: 0.15em 0.2em;
+  display: table-cell;
+}
+.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row]:first-child span[data-tapas-gi=cell],
+.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row]:first-child .colspanned {
+  border-top: none;
+  display: table-cell;
+}
 .hieractivity [data-tapas-gi=titlePage] {
   text-align: center;
 }
