@@ -75,6 +75,8 @@
               <xsl:with-param name="start" select="text"/>
             </xsl:call-template>
           </form>
+          <h3>Current element</h3>
+          <dl id="gi-properties"></dl>
         </div>
       </div>
     </xsl:variable>
@@ -112,7 +114,10 @@
   </xsl:template>
   
   <xsl:template match="@*" name="make-data-attr" mode="carry-on" priority="-20">
-    <xsl:attribute name="data-tapas-att-{local-name()}" select="data(.)"/>
+    <xsl:variable name="attrName" 
+      select="if ( local-name() eq name() ) then name() 
+              else translate(name(),':','-')"/>
+    <xsl:attribute name="data-tapas-att-{$attrName}" select="data(.)"/>
   </xsl:template>
   
   <!-- Block-level TEI elements will be used to create boxes in the HTML output. 
@@ -124,6 +129,7 @@
     <xsl:element name="{$wrapper}">
       <xsl:attribute name="class" select="'boxed'"/>
       <xsl:call-template name="set-data-attributes"/>
+<!--      <xsl:attribute name="onclick" select="'inspectElement(this, event);'"/>-->
       <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>

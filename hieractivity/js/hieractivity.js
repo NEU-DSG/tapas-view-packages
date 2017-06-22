@@ -21,6 +21,7 @@ $(document).ready(function() {
   var zoomSlider = d3.select('#zoom-slide')
     .on('input', slid)
     .on('mouseout', workedHeight);
+  var giPropList = d3.select('#gi-properties');
   // Assign—explicitly—the divs' heights back to them. d3.js requires some absolute 
     // height value in order to zoom on HTML elements.
   var containers = d3.selectAll('[data-tapas-gi].boxed')
@@ -32,7 +33,8 @@ $(document).ready(function() {
       .style('background-color', function() { 
         var depth = $(this).attr('data-tapas-box-depth');
         return color(depth);
-      });
+      })
+      .on('click', inspectElement);
   
   // Translate and scale the first element with @data-tapas-gi.
   function transformed(scale) {
@@ -79,4 +81,20 @@ $(document).ready(function() {
       instance1.scrollIntoView();
     }
   });
+  
+  function inspectElement() {
+    var e = d3.event,
+        el = d3.select(this),
+        dataObj = el.node().dataset;
+    e.stopPropagation();
+    e.preventDefault();
+    giPropList.html('');
+    for (var key in dataObj) {
+      giPropList.append('dt')
+        .text(key);
+      giPropList.append('dd')
+        .text(dataObj[key]);
+    }
+    //giPropList.html(list);
+  }
 });
