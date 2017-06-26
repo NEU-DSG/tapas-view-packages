@@ -213,7 +213,7 @@
         <xsl:when test="node()">
           <xsl:apply-templates mode="#default"/>
         </xsl:when>
-        <!-- Empty span 'cells' have to have something inside them. -->
+        <!-- Empty <span> 'cells' have to have something inside them. -->
         <xsl:otherwise>
           <xsl:value-of select="$nbsp"/>
         </xsl:otherwise>
@@ -421,11 +421,22 @@
   
   <!-- Apply templates on attributes. -->
   <xsl:template name="get-attributes">
-    <xsl:param name="start" select="." as="node()"></xsl:param>
-    <xsl:apply-templates select="$start/@*" mode="carry-on"/>
+    <xsl:param name="start" select="." as="node()"/>
+    <!-- Create a data attribute with the name of the TEI element. -->
     <xsl:call-template name="save-gi">
       <xsl:with-param name="start" select="$start"/>
     </xsl:call-template>
+    <!-- Create data attribute copies of the TEI attributes. -->
+    <xsl:apply-templates select="$start/@*" mode="carry-on"/>
+    <!-- Create a data attribute listing the names of the TEI attributes. -->
+    <xsl:attribute name="data-tapas-attributes">
+      <xsl:for-each select="$start/@*">
+        <xsl:value-of select="./name()"/>
+        <xsl:if test="position() ne last()">
+          <xsl:text> </xsl:text>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:attribute>
   </xsl:template>
   
   <!-- Count number of each type of element within a given element (the default is 
@@ -445,7 +456,7 @@
         <label>
           <input type="radio" name="element" value="{$gi}"></input>
           <span class="gi-label">
-            <span class="gi-name"><xsl:value-of select="$gi"/></span>
+            <span class="gi-name encoded encoded-gi"><xsl:value-of select="$gi"/></span>
             <xsl:text> </xsl:text>
             <span class="gi-count"><xsl:value-of select="$count"/></span>
           </span>

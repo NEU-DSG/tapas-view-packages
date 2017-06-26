@@ -36,6 +36,28 @@ $(document).ready(function() {
       })
       .on('click', inspectElement);
   
+  // When the radio buttons' input value changes, mark HTML elements that correspond 
+    // to the chosen TEI element.
+  $('input[name=element]').change(function(e) {
+    e.preventDefault();
+    // Remove the previous selection.
+    d3.selectAll('.selected-gi[data-tapas-gi]').classed('selected-gi', false);
+    // Select the new element type.
+    var checked = $('input[name=element]:checked');
+    checked.each(function() {
+      var gi = $( this ).val();
+      d3.selectAll('[data-tapas-gi='+ gi +']').classed('selected-gi', true);
+    });
+    // Get the first newly-selected element and scroll to it.
+    var instance1 = d3.select('.selected-gi[data-tapas-gi]').node();
+    if ( instance1 !== null && instance1 !== undefined ) {
+      instance1.scrollIntoView();
+    }
+  });
+
+
+/*  FUNCTIONS  */
+  
   // Translate and scale the first element with @data-tapas-gi.
   function transformed(scale) {
     var h = heightData[0],
@@ -65,36 +87,41 @@ $(document).ready(function() {
     teiContainer.style('height', hNew + 'px');
   }
   
-  $('input[name=element]').change(function(e) {
-    e.preventDefault();
-    // Remove the previous selection.
-    d3.selectAll('.selected-gi[data-tapas-gi]').classed('selected-gi', false);
-    // Select the new element type.
-    var checked = $('input[name=element]:checked');
-    checked.each(function() {
-      var gi = $( this ).val();
-      d3.selectAll('[data-tapas-gi='+ gi +']').classed('selected-gi', true);
-    });
-    // Get the first newly-selected element and scroll to it.
-    var instance1 = d3.select('.selected-gi[data-tapas-gi]').node();
-    if ( instance1 !== null && instance1 !== undefined ) {
-      instance1.scrollIntoView();
-    }
-  });
-  
+  // Get the data attributes associated with an HTML element, and display information
+    // in the control panel regarding the TEI element represented.
   function inspectElement() {
     var e = d3.event,
         el = d3.select(this),
-        dataObj = el.node().dataset;
+        dataObj = el.node().dataset,
+        giName = dataObj['tapasGi'],
+        attrNames = dataObj['tapasAttributes'] === '' ? [] : dataObj['tapasAttributes'].split(' ');
     e.stopPropagation();
-    e.preventDefault();
+    //e.preventDefault();
     giPropList.html('');
-    for (var key in dataObj) {
-      giPropList.append('dt')
-        .text(key);
-      giPropList.append('dd')
-        .text(dataObj[key]);
-    }
-    //giPropList.html(list);
+    giPropList.append('dt')
+      .text('Element name:');
+    giPropList.append('dd')
+      .append('span')
+        .text(giName)
+        .classed('encoded encoded-gi', true);
+    // For each listed attribute, recreate its key in the datastore.
+    attrNames.forEach(function(str) {
+      var key = 'tapasAtt' + str.replace(/([-:]^\w|\b\w)/g, function(letter, index) {
+        return letter.toUpperCase();
+      }).replace(/[:-]/g,'');
+      if ( key !== 'tapasAtt' ) {
+        var value = dataObj[key];
+        if ( value !== undefined && value !== '' ) {
+          giPropList.append('dt')
+            .append('span')
+              .text('@'+str)
+              .classed('encoded encoded-att', true);
+          giPropList.append('dd')
+            .text(value);
+        } else {
+          console.log('Data attribute "'+ key + '" not found');
+        }
+      }
+    }, this);
   }
 });

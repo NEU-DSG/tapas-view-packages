@@ -2,6 +2,12 @@
   color: #808080;
   /* TEI-specific styles */
 }
+.hieractivity .encoded {
+  font-family: 'Courier', 'Courier New', monospace;
+}
+.hieractivity .encoded.encoded-att {
+  font-size: 0.95em;
+}
 .hieractivity #tei-container {
   width: 90%;
   overflow: hidden;
@@ -48,9 +54,6 @@
 .hieractivity #control-panel #gi-option-selector label .gi-label {
   margin: 0 0.35em;
   font-size: 0.85em;
-}
-.hieractivity #control-panel #gi-option-selector label .gi-label .gi-name {
-  font-family: 'Courier', 'Courier New', monospace;
 }
 .hieractivity #control-panel #gi-option-selector label .gi-label .gi-count {
   margin-top: 0.2em;
