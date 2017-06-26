@@ -11,7 +11,7 @@ $(document).ready(function() {
   var tapasScheme = 
     [ '#3274b8', '#7cbab0', '#ffffb3', '#bebada', '#fb8072', '#fdb462', 
       '#80b1d3', '#b3de69', '#fccde5', '#bc80bd', '#ccebc5', '#ffed6f' ]
-    .map(function (c) { c = d3.rgb(c); c.opacity = 0.75; return c; });
+    .map(function (c) { c = d3.rgb(c); c.opacity = 0.8; return c; });
   var color = d3.scaleOrdinal()
     .range(tapasScheme);
   /*var tapasScheme = d3.scaleSequential(d3.interpolatePlasma)

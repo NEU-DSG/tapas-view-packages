@@ -73,7 +73,7 @@
               type="range" min="20" max="100" step="1" value="100" />
             +
           </div>
-          <h3>Mark elements</h3>
+          <h3>Elements by frequency</h3>
           <form>
             <fieldset id="gi-option-selector">
               <legend>Mark</legend>
@@ -82,7 +82,7 @@
               </xsl:call-template>
             </fieldset>
           </form>
-          <h3>Current element</h3>
+          <h3>Clicked element</h3>
           <dl id="gi-properties"></dl>
         </div>
       </div>
