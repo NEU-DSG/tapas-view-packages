@@ -118,7 +118,7 @@
 .hieractivity [data-tapas-gi=p] {
   padding: 0.15em 0.5em;
   display: block;
-  background-color: #dddddd;
+  background-color: #ffffee;
 }
 .hieractivity [data-tapas-gi=p].selected-gi {
   border-left: 1em solid black;

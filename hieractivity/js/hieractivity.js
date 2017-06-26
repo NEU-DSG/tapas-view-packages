@@ -5,8 +5,12 @@ $(document).ready(function() {
     heightData.push($(obj).height());
   });
   
-  // View package color scheme
-  var tapasScheme = d3.schemeCategory20
+  // Set the view package color scheme for boxes. The color palette is a slightly 
+    // modified version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
+    // http://colorbrewer2.org/?type=qualitative&scheme=Set3&n=12
+  var tapasScheme = 
+    [ '#3274b8', '#7cbab0', '#ffffb3', '#bebada', '#fb8072', '#fdb462', 
+      '#80b1d3', '#b3de69', '#fccde5', '#bc80bd', '#ccebc5', '#ffed6f' ]
     .map(function (c) { c = d3.rgb(c); c.opacity = 0.75; return c; });
   var color = d3.scaleOrdinal()
     .range(tapasScheme);

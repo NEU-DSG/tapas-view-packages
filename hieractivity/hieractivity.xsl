@@ -52,8 +52,12 @@
 <!-- TEMPLATES -->
   
   <xsl:template match="/TEI" priority="92">
+    <xsl:variable name="lang" select="if ( @xml:lang ) then @xml:lang/data(.) else 'en'"/>
     <xsl:variable name="body" as="node()">
       <div class="hieractivity">
+        <xsl:if test="not($fullHTML)">
+          <xsl:attribute name="lang" select="$lang"/>
+        </xsl:if>
         <h1>
           <xsl:apply-templates select="teiHeader/fileDesc/titleStmt/title[1]"/>
         </h1>
@@ -65,15 +69,18 @@
           <h3>Zoom</h3>
           <div id="zoom-container">
             -
-            <input id="zoom-slide" type="range"
-              min="20" max="100" step="1" value="100" />
+            <input id="zoom-slide" title="Zoom control slider" 
+              type="range" min="20" max="100" step="1" value="100" />
             +
           </div>
           <h3>Mark elements</h3>
-          <form id="gi-option-selector">
-            <xsl:call-template name="gi-counting-robot">
-              <xsl:with-param name="start" select="text"/>
-            </xsl:call-template>
+          <form>
+            <fieldset id="gi-option-selector">
+              <legend>Mark</legend>
+              <xsl:call-template name="gi-counting-robot">
+                <xsl:with-param name="start" select="text"/>
+              </xsl:call-template>
+            </fieldset>
           </form>
           <h3>Current element</h3>
           <dl id="gi-properties"></dl>
@@ -83,6 +90,7 @@
     <xsl:choose>
       <xsl:when test="$fullHTML">
         <html>
+          <xsl:attribute name="lang" select="$lang"/>
           <head>
             <title>Testing</title>
             <meta charset="UTF-8" />
@@ -129,7 +137,6 @@
     <xsl:element name="{$wrapper}">
       <xsl:attribute name="class" select="'boxed'"/>
       <xsl:call-template name="set-data-attributes"/>
-<!--      <xsl:attribute name="onclick" select="'inspectElement(this, event);'"/>-->
       <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
