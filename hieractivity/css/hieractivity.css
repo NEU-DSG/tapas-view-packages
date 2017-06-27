@@ -85,6 +85,9 @@
   padding: 0.85em;
   color: black;
 }
+.hieractivity #tei-header .expandable-heading + .expandable[aria-hidden=true] {
+  display: none;
+}
 .hieractivity #tei-container {
   overflow: hidden;
 }

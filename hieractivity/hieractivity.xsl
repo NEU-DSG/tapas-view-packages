@@ -93,7 +93,9 @@
         <html>
           <xsl:attribute name="lang" select="$lang"/>
           <head>
-            <title>Testing</title>
+            <title>
+              <xsl:value-of select="teiHeader/fileDesc/titleStmt/title[1]/normalize-space(.)"/>
+            </title>
             <meta charset="UTF-8" />
             <link id="maincss" rel="stylesheet" type="text/css" href="{$css-base}hieractivity.css" />
             <script src="{$common-base}jquery/jquery-3.2.1.min.js"></script>
@@ -112,7 +114,11 @@
   </xsl:template>
   
   <xsl:template match="teiHeader" priority="91">
-    <xsl:apply-templates mode="teiheader"/>
+    <xsl:apply-templates select="fileDesc/titleStmt/title[1]" mode="teiheader"/>
+    <h2 class="expandable-heading">TEI Header</h2>
+    <div id="teiheader" class="expandable">
+      <xsl:apply-templates mode="teiheader"/>
+    </div>
   </xsl:template>
   
   <xsl:template match="@*" priority="-10"/>
@@ -438,7 +444,6 @@
   
   <xsl:template match="teiHeader/fileDesc/titleStmt" mode="teiheader">
     <div id="titleStmt">
-      <xsl:apply-templates select="title[1]" mode="#current"/>
       <dl>
         <xsl:apply-templates select="* except title[1]" mode="#current"/>
       </dl>
@@ -483,7 +488,7 @@
         <xsl:when test="self::sponsor">Sponsor</xsl:when>
       </xsl:choose>
     </dt>
-    <dd>
+    <dd><!-- XD: handle multiple names -->
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
       </xsl:apply-templates>
@@ -515,19 +520,20 @@
     </dd>
   </xsl:template>
   
-  <xsl:template match="teiHeader/fileDesc/publicationStmt" mode="teiheader">
-    <div id="publicationStmt">
-      <h2>Publication Statement</h2>
-      <xsl:apply-templates mode="#current"/>
-    </div>
-  </xsl:template>
-  
   <xsl:template match="p" mode="teiheader">
     <p>
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
       </xsl:apply-templates>
     </p>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/fileDesc/publicationStmt" mode="teiheader">
+    <h3 class="expandable-heading">Publication Statement</h3>
+    <div id="publicationstmt" class="expandable">
+      <xsl:apply-templates select="* except availability" mode="#current"/>
+      <xsl:apply-templates select="availability" mode="#current"/>
+    </div>
   </xsl:template>
   
   <xsl:template match="publicationStmt/availability" mode="teiheader">
@@ -586,8 +592,8 @@
   </xsl:template>
   
   <xsl:template match="seriesStmt" mode="teiheader">
-    <div>
-      <h2>Series Statement</h2>
+    <h3 class="expandable-heading">Series Statement</h3>
+    <div id="seriesstmt" class="expandable">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
@@ -603,22 +609,22 @@
   <xsl:template match="teiHeader/fileDesc/sourceDesc" mode="teiheader"/> <!-- XD -->
   
   <xsl:template match="teiHeader/encodingDesc" mode="teiheader">
-    <div>
-      <h2>Encoding Description</h2>
+    <h3 class="expandable-heading">Encoding Description</h3>
+    <div id="encodingdesc" class="expandable">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
   <xsl:template match="teiHeader/encodingDesc/projectDesc" mode="teiheader">
-    <div>
-      <h3>Project Description</h3>
+    <h4 class="expandable-heading">Project Description</h4>
+    <div id="projectdesc" class="expandable">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
   <xsl:template match="teiHeader/encodingDesc/editorialDecl" mode="teiheader">
-    <div>
-      <h3>Editorial Practice</h3>
+    <h4 class="expandable-heading">Editorial Practice</h4>
+    <div id="editorialdecl" class="expandable">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>

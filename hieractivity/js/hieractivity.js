@@ -40,6 +40,29 @@ $(document).ready(function() {
       })
       .on('click', inspectElement);
   
+  // Add buttons to all expandable headings. By adding accessibility options via 
+    // Javascript and not XSLT, we allow those without Javascript to see content 
+    // that would otherwise be hidden and inaccessible. Solution based on 
+    // 'Progressive Collapsibles' by @haydonworks:
+    // http://heydonworks.com/practical_aria_examples/#progressive-collapsibles
+  $('.expandable-heading').each(function() {
+    var heading = $(this),
+        nextDiv = heading.next(),
+        nextDivID = nextDiv.attr('id');
+    //console.log(nextDivID);
+    heading.wrapInner('<button aria-expanded="false" aria-controls="'+ nextDivID +'"></button>');
+    nextDiv.attr('aria-hidden','true');
+    var button = heading.children('button');
+    // Show or hide the expandable <div> when the associated button is pressed.
+    button.on('click', function() {
+      var isExpanding = $(this).attr('aria-expanded') === 'false' ? true : false;
+      nextDiv.slideToggle();
+      nextDiv.toggleClass('expandable-hidden');
+      nextDiv.attr('aria-hidden', !isExpanding);
+      $(this).attr('aria-expanded', isExpanding);
+    });
+  });
+  
   // When the radio buttons' input value changes, mark HTML elements that correspond 
     // to the chosen TEI element.
   $('input[name=element]').change(function(e) {
