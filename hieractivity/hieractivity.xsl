@@ -58,12 +58,15 @@
         <xsl:if test="not($fullHTML)">
           <xsl:attribute name="lang" select="$lang"/>
         </xsl:if>
-        <h1>
-          <xsl:apply-templates select="teiHeader/fileDesc/titleStmt/title[1]"/>
-        </h1>
+        <!-- Metadata from the <teiHeader> -->
+        <div id="tei-header">
+          <xsl:apply-templates select="teiHeader"/>
+        </div>
+        <!-- The HTML representation of <text> -->
         <div id="tei-container">
           <xsl:apply-templates select="text"/>
         </div>
+        <!-- The control panel -->
         <div id="control-panel">
           <h2>Controls</h2>
           <h3>Zoom</h3>
@@ -74,14 +77,12 @@
             +
           </div>
           <h3>Elements by frequency</h3>
-          <form>
-            <fieldset id="gi-option-selector">
-              <legend>Mark</legend>
-              <xsl:call-template name="gi-counting-robot">
-                <xsl:with-param name="start" select="text"/>
-              </xsl:call-template>
-            </fieldset>
-          </form>
+          <fieldset id="gi-option-selector">
+            <legend>Mark</legend>
+            <xsl:call-template name="gi-counting-robot">
+              <xsl:with-param name="start" select="text"/>
+            </xsl:call-template>
+          </fieldset>
           <h3>Clicked element</h3>
           <dl id="gi-properties"></dl>
         </div>
@@ -110,8 +111,9 @@
     </xsl:choose>
   </xsl:template>
   
-  <!-- We don't (yet) process the <teiHeader>. -->
-  <xsl:template match="teiHeader" priority="91"/>
+  <xsl:template match="teiHeader" priority="91">
+    <xsl:apply-templates mode="teiheader"/>
+  </xsl:template>
   
   <xsl:template match="@*" priority="-10"/>
   
@@ -412,6 +414,213 @@
     <span>
       <xsl:call-template name="keep-calm-and-carry-on"/>
     </span>
+  </xsl:template>
+  
+  
+<!-- MODE: TEIHEADER -->
+  
+  <xsl:template match="*" mode="teiheader" priority="-30">
+    <xsl:apply-templates mode="#current"/>
+  </xsl:template>
+  
+  <xsl:template match="text()" mode="teiheader">
+    <xsl:param name="textAllowed" select="false()" as="xs:boolean" tunnel="yes"/>
+    <xsl:if test="$textAllowed">
+      <xsl:copy/>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/fileDesc" mode="teiheader">
+    <div id="fileDesc">
+      <xsl:apply-templates mode="#current"/>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/fileDesc/titleStmt" mode="teiheader">
+    <div id="titleStmt">
+      <xsl:apply-templates select="title[1]" mode="#current"/>
+      <dl>
+        <xsl:apply-templates select="* except title[1]" mode="#current"/>
+      </dl>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/fileDesc/titleStmt/title[1]" mode="teiheader">
+    <h1>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+      <xsl:if test="following-sibling::title">
+        <small>
+          <xsl:for-each select="following-sibling::title">
+            <br></br>
+            <xsl:apply-templates select="." mode="#current">
+              <xsl:with-param name="isAllowed" select="true()"/>
+              <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+            </xsl:apply-templates>
+          </xsl:for-each>
+        </small>
+      </xsl:if>
+    </h1>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/fileDesc/titleStmt/title[not(position() eq 1)]" mode="teiheader">
+    <xsl:param name="isAllowed" select="false()" as="xs:boolean"/>
+    <xsl:if test="$isAllowed">
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="author | editor | funder | principal | sponsor" mode="teiheader">
+    <dt>
+      <xsl:choose>
+        <xsl:when test="self::author">Author</xsl:when>
+        <xsl:when test="self::editor">Editor</xsl:when>
+        <xsl:when test="self::funder">Funder</xsl:when>
+        <xsl:when test="self::principal">Principal researcher</xsl:when>
+        <xsl:when test="self::sponsor">Sponsor</xsl:when>
+      </xsl:choose>
+    </dt>
+    <dd>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </dd>
+  </xsl:template>
+  
+  <xsl:template match="respStmt" mode="teiheader">
+    <xsl:apply-templates select="resp" mode="#current">
+      <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+    </xsl:apply-templates>
+    <xsl:apply-templates select="* except resp" mode="#current">
+      <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+    </xsl:apply-templates>
+  </xsl:template>
+  
+  <xsl:template match="respStmt/resp" mode="teiheader">
+    <dt>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </dt>
+  </xsl:template>
+  
+  <xsl:template match="respStmt/name | respStmt/orgName | respStmt/persName" mode="teiheader">
+    <dd>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </dd>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/fileDesc/publicationStmt" mode="teiheader">
+    <div id="publicationStmt">
+      <h2>Publication Statement</h2>
+      <xsl:apply-templates mode="#current"/>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="p" mode="teiheader">
+    <p>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </p>
+  </xsl:template>
+  
+  <xsl:template match="publicationStmt/availability" mode="teiheader">
+    <div>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="availability/licence[descendant::p]" mode="teiheader">
+    <div>
+      <xsl:if test="@target">
+        <xsl:variable name="linkAddr" select="@target/data(.)"/>
+        <p>
+          <a href="{$linkAddr}" target="_blank">
+            <xsl:value-of select="$linkAddr"/>
+          </a>
+        </p>
+      </xsl:if>
+      <xsl:apply-templates mode="#current"/>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="availability/licence[not(descendant::p)]" mode="teiheader">
+    <xsl:variable name="content" as="node()*">
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </xsl:variable>
+    <div>
+      <p>
+        <xsl:choose>
+          <xsl:when test="@target">
+            <a href="{@target/data(.)}" target="_blank">
+              <xsl:copy-of select="$content"/>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:copy-of select="$content"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </p>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="address | publicationStmt/idno" mode="teiheader"/>
+  
+  <xsl:template match=" authority | publicationStmt/date | distributor 
+                      | publisher | pubPlace" mode="teiheader">
+    <span class="block">
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="seriesStmt" mode="teiheader">
+    <div>
+      <h2>Series Statement</h2>
+      <xsl:apply-templates mode="#current"/>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="title" mode="teiheader" priority="-10">
+    <span class="block">
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/fileDesc/sourceDesc" mode="teiheader"/> <!-- XD -->
+  
+  <xsl:template match="teiHeader/encodingDesc" mode="teiheader">
+    <div>
+      <h2>Encoding Description</h2>
+      <xsl:apply-templates mode="#current"/>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/encodingDesc/projectDesc" mode="teiheader">
+    <div>
+      <h3>Project Description</h3>
+      <xsl:apply-templates mode="#current"/>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/encodingDesc/editorialDecl" mode="teiheader">
+    <div>
+      <h3>Editorial Practice</h3>
+      <xsl:apply-templates mode="#current"/>
+    </div>
   </xsl:template>
   
   

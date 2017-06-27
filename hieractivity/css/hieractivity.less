@@ -23,10 +23,25 @@
     }
   } // .encoded
   
-  #tei-container {
-    width: 90%;
-    overflow: hidden;
+  .html-heading() {
+    font-family: @heading;
+    font-weight: normal;
   }
+  
+  h1, h2, h3, h4, h5, h6 {
+    .html-heading();
+  }
+  
+  dl {
+    
+    dd {
+      margin-left: 1.2em;
+    }
+    
+    dd + dt {
+      margin-top: 0.35em;
+    }
+  } // dl
 
   #control-panel {
     border: medium solid @gray-dark;
@@ -38,14 +53,12 @@
     z-index: 900;
     top: 10px;
     right: 10px;
-    background-color: #E0FFFF;
+    background-color: #9EAEC9;
     color: black;
     text-align: center;
     
     h2, h3, h4 {
       margin: 0.5em 0;
-      font-family: @heading;
-      font-weight: normal;
     }
     
     .component-inner() {
@@ -92,13 +105,25 @@
       .component-inner();
       padding: 0 1em;
       text-align: left;
-      
-      dt + dd {
-        margin-left: 1.2em;
-        margin-bottom: 0.35em;
-      }
-    } // #gi-properties
+    }
   } // .control-panel
+  
+  #tei-header,
+  #tei-container {
+    width: 90%;
+  }
+  
+  #tei-header {
+    margin: 1em 0;
+    padding: 0.85em;
+    color: black;
+    
+    
+  } // #tei-header
+  
+  #tei-container {
+    overflow: hidden;
+  }
 
 
   /* TEI-specific styles */
@@ -235,8 +260,11 @@
     .centered();
   }
   
-  [data-tapas-gi=head] {
+  [data-tapas-gi=head],
+  [data-tapas-gi=docTitle],
+  [data-tapas-gi=titlePart] {
     .centered();
+    .html-heading();
   }
 
 } // .hieractivity

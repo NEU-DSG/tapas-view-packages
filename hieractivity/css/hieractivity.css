@@ -8,9 +8,20 @@
 .hieractivity .encoded.encoded-att {
   font-size: 0.95em;
 }
-.hieractivity #tei-container {
-  width: 90%;
-  overflow: hidden;
+.hieractivity h1,
+.hieractivity h2,
+.hieractivity h3,
+.hieractivity h4,
+.hieractivity h5,
+.hieractivity h6 {
+  font-family: ‘Palatino Linotype’, ‘Book Antiqua’, Palatino, serif;
+  font-weight: normal;
+}
+.hieractivity dl dd {
+  margin-left: 1.2em;
+}
+.hieractivity dl dd + dt {
+  margin-top: 0.35em;
 }
 .hieractivity #control-panel {
   border: medium solid #555555;
@@ -21,7 +32,7 @@
   z-index: 900;
   top: 10px;
   right: 10px;
-  background-color: #E0FFFF;
+  background-color: #9EAEC9;
   color: black;
   text-align: center;
 }
@@ -29,8 +40,6 @@
 .hieractivity #control-panel h3,
 .hieractivity #control-panel h4 {
   margin: 0.5em 0;
-  font-family: ‘Palatino Linotype’, ‘Book Antiqua’, Palatino, serif;
-  font-weight: normal;
 }
 .hieractivity #control-panel #zoom-container {
   padding: 0.4em;
@@ -67,9 +76,17 @@
   padding: 0 1em;
   text-align: left;
 }
-.hieractivity #control-panel #gi-properties dt + dd {
-  margin-left: 1.2em;
-  margin-bottom: 0.35em;
+.hieractivity #tei-header,
+.hieractivity #tei-container {
+  width: 90%;
+}
+.hieractivity #tei-header {
+  margin: 1em 0;
+  padding: 0.85em;
+  color: black;
+}
+.hieractivity #tei-container {
+  overflow: hidden;
 }
 .hieractivity .selected-gi {
   background-color: black;
@@ -173,6 +190,10 @@
 .hieractivity [data-tapas-gi=titlePage] {
   text-align: center;
 }
-.hieractivity [data-tapas-gi=head] {
+.hieractivity [data-tapas-gi=head],
+.hieractivity [data-tapas-gi=docTitle],
+.hieractivity [data-tapas-gi=titlePart] {
   text-align: center;
+  font-family: ‘Palatino Linotype’, ‘Book Antiqua’, Palatino, serif;
+  font-weight: normal;
 }
