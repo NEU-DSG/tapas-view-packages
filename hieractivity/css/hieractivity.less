@@ -2,27 +2,27 @@
 
 /*  COLORS  */
 
-@cream:       #FFE;
-@gray-dark:   #555555;
-@gray:        #808080;
-@gray-light:  #DDDDDD;
-@slate:       #9EAEC9;
+@cream:         #FFE;
+@gray-dark:     #555555;
+@gray:          #808080;
+@gray-light:    #DDDDDD;
+@gray-lighter:  #F0F0F0;
+@slate:         #9EAEC9;
 // Color palette used for boxes at varying depths. This is a slightly modified 
   // version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
   // http://colorbrewer2.org/?type=qualitative&scheme=Set3&n=12
-@box01:       #3274B8;
-@box02:       #7CBAB0;
-@box03:       #FFFFB3;
-@box04:       #BEBADA;
-@box05:       #FB8072;
-@box06:       #FDB462;
-@box07:       #80B1D3;
-@box08:       #B3DE69;
-@box09:       #FCCDE5;
-@box10:       #BC80BD;
-@box11:       #CCEBC5;
-@box12:       #FFED6F;
-
+@box01:         rgba(50,  116, 184, 0.8);
+@box02:         rgba(124, 186, 176, 0.8);
+@box03:         rgba(255, 255, 179, 0.8);
+@box04:         rgba(190, 186, 218, 0.8);
+@box05:         rgba(251, 128, 114, 0.8);
+@box06:         rgba(253, 180, 98,  0.8);
+@box07:         rgba(128, 177, 211, 0.8);
+@box08:         rgba(179, 222, 105, 0.8);
+@box09:         rgba(252, 205, 229, 0.8);
+@box10:         rgba(188, 128, 189, 0.8);
+@box11:         rgba(204, 235, 197, 0.8);
+@box12:         rgba(255, 237, 111, 0.8);
 
 /*  FONTS  */
 
@@ -50,6 +50,7 @@
   
   h1, h2, h3, h4, h5, h6 {
     .html-heading();
+    color: black;
   }
   
   dl {
@@ -135,34 +136,44 @@
   
   #tei-header {
     margin: 1em 0;
-    //padding: 0.85em;
     color: black;
     
     .expandable-heading {
       margin: 0.5em 0 0;
-      padding: 0.2em 0;
-      background-color: lightblue;
+      border: thin solid @gray;
+      padding: 0.2em;
       
       > button {
+        border: thin solid @gray-dark;
         border-radius: 0.4em;
+        box-shadow: 0.1em 0.1em 0.2em @gray-dark;
+        background-color: @gray-lighter;
         cursor: pointer;
-        background-color: @slate;
         font-family: inherit;
         font-size: unset;
         
         &[aria-expanded=false]::before {
           content: '▸ ';
+          width: 28px;
+          display: inline-block;
         }
         
-        &[aria-expanded=true]::before {
-          content: '▾ ';
+        &[aria-expanded=true]{
+        box-shadow: unset;
+        
+          &::before {
+            content: '▾ ';
+            width: 28px;
+            display: inline-block;
+          }
         }
       } // .expandable-heading > button
     } // .expandable-heading
     
     .expandable {
-      border: thin solid lightblue;
-      padding: 0 0.5em 0.25em;
+      border: thin solid @gray;
+      border-top: none;
+      padding: 0.15em 0.75em 0.4em;
     } // .expandable
     
     .expandable-heading + .expandable[aria-hidden=true] {
@@ -179,6 +190,70 @@
   
   .centered() {
     text-align: center;
+  }
+  
+  [data-tapas-gi].boxed {
+    margin: 2em 1em;
+    padding: 0.85em;
+    display: block;
+    
+    &[data-tapas-gi=text] {
+      margin: 0;
+    }
+    
+    &.selected-gi {
+      border-left: 1em solid black;
+      background-color: unset;
+      color: unset;
+    }
+  } // [data-tapas-gi].boxed
+  
+  .box-c1 {
+    background-color: @box01;
+  }
+  
+  .box-c2 {
+    background-color: @box02;
+  }
+  
+  .box-c3 {
+    background-color: @box03;
+  }
+  
+  .box-c4 {
+    background-color: @box04;
+  }
+  
+  .box-c5 {
+    background-color: @box05;
+  }
+  
+  .box-c6 {
+    background-color: @box06;
+  }
+  
+  .box-c7 {
+    background-color: @box07;
+  }
+  
+  .box-c8 {
+    background-color: @box08;
+  }
+  
+  .box-c9 {
+    background-color: @box09;
+  }
+  
+  .box-c10 {
+    background-color: @box10;
+  }
+  
+  .box-c11 {
+    background-color: @box11;
+  }
+  
+  .box12 {
+    background-color: @box12;
   }
   
   // This style is applied to any element that is selected by the user.
@@ -223,22 +298,6 @@
       font-size: 0.7em;
     }
   } // [data-tapas-gi=lb]
-  
-  [data-tapas-gi].boxed {
-    margin: 2em 1em;
-    padding: 0.85em;
-    display: block;
-    
-    &[data-tapas-gi=text] {
-      margin: 0;
-    }
-    
-    &.selected-gi {
-      border-left: 1em solid black;
-      background-color: unset;
-      color: unset;
-    }
-  } // [data-tapas-gi].boxed
   
   [data-tapas-gi=p] {
     padding: 0.15em 0.5em;

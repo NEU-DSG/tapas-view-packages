@@ -35,12 +35,12 @@ $(document).ready(function() {
   // Set the view package color scheme for boxes. The color palette is a slightly 
     // modified version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
     // http://colorbrewer2.org/?type=qualitative&scheme=Set3&n=12
-  var tapasScheme = 
+  /*var tapasScheme = 
     [ '#3274b8', '#7cbab0', '#ffffb3', '#bebada', '#fb8072', '#fdb462', 
       '#80b1d3', '#b3de69', '#fccde5', '#bc80bd', '#ccebc5', '#ffed6f' ]
     .map(function (c) { c = d3.rgb(c); c.opacity = 0.8; return c; });
   var color = d3.scaleOrdinal()
-    .range(tapasScheme);
+    .range(tapasScheme);*/
   /*var tapasScheme = d3.scaleSequential(d3.interpolatePlasma)
     .domain([-1,6]);
   var color = tapasScheme;*/
@@ -61,10 +61,10 @@ $(document).ready(function() {
         //console.log(d);
         return d + 'px';
       })
-      .style('background-color', function() { 
+      /*.style('background-color', function() { 
         var depth = $(this).attr('data-tapas-box-depth');
         return color(depth);
-      })
+      })*/
       .on('click', inspectElement);
   
   // When the radio buttons' input value changes, mark HTML elements that correspond 

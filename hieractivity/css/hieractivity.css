@@ -19,6 +19,7 @@
 .hieractivity h6 {
   font-family: ‘Palatino Linotype’, ‘Book Antiqua’, Palatino, serif;
   font-weight: normal;
+  color: black;
 }
 .hieractivity dl dd {
   margin-left: 1.2em;
@@ -89,31 +90,90 @@
 }
 .hieractivity #tei-header .expandable-heading {
   margin: 0.5em 0 0;
-  padding: 0.2em 0;
-  background-color: lightblue;
+  border: thin solid #808080;
+  padding: 0.2em;
 }
 .hieractivity #tei-header .expandable-heading > button {
+  border: thin solid #555555;
   border-radius: 0.4em;
+  box-shadow: 0.1em 0.1em 0.2em #555555;
+  background-color: #f0f0f0;
   cursor: pointer;
-  background-color: #9eaec9;
   font-family: inherit;
   font-size: unset;
 }
 .hieractivity #tei-header .expandable-heading > button[aria-expanded=false]::before {
   content: '▸ ';
+  width: 28px;
+  display: inline-block;
+}
+.hieractivity #tei-header .expandable-heading > button[aria-expanded=true] {
+  box-shadow: unset;
 }
 .hieractivity #tei-header .expandable-heading > button[aria-expanded=true]::before {
   content: '▾ ';
+  width: 28px;
+  display: inline-block;
 }
 .hieractivity #tei-header .expandable {
-  border: thin solid lightblue;
-  padding: 0 0.5em 0.25em;
+  border: thin solid #808080;
+  border-top: none;
+  padding: 0.15em 0.75em 0.4em;
 }
 .hieractivity #tei-header .expandable-heading + .expandable[aria-hidden=true] {
   display: none;
 }
 .hieractivity #tei-container {
   overflow: hidden;
+}
+.hieractivity [data-tapas-gi].boxed {
+  margin: 2em 1em;
+  padding: 0.85em;
+  display: block;
+}
+.hieractivity [data-tapas-gi].boxed[data-tapas-gi=text] {
+  margin: 0;
+}
+.hieractivity [data-tapas-gi].boxed.selected-gi {
+  border-left: 1em solid black;
+  background-color: unset;
+  color: unset;
+}
+.hieractivity .box-c1 {
+  background-color: rgba(50, 116, 184, 0.8);
+}
+.hieractivity .box-c2 {
+  background-color: rgba(124, 186, 176, 0.8);
+}
+.hieractivity .box-c3 {
+  background-color: rgba(255, 255, 179, 0.8);
+}
+.hieractivity .box-c4 {
+  background-color: rgba(190, 186, 218, 0.8);
+}
+.hieractivity .box-c5 {
+  background-color: rgba(251, 128, 114, 0.8);
+}
+.hieractivity .box-c6 {
+  background-color: rgba(253, 180, 98, 0.8);
+}
+.hieractivity .box-c7 {
+  background-color: rgba(128, 177, 211, 0.8);
+}
+.hieractivity .box-c8 {
+  background-color: rgba(179, 222, 105, 0.8);
+}
+.hieractivity .box-c9 {
+  background-color: rgba(252, 205, 229, 0.8);
+}
+.hieractivity .box-c10 {
+  background-color: rgba(188, 128, 189, 0.8);
+}
+.hieractivity .box-c11 {
+  background-color: rgba(204, 235, 197, 0.8);
+}
+.hieractivity .box12 {
+  background-color: rgba(255, 237, 111, 0.8);
 }
 .hieractivity .selected-gi {
   background-color: black;
@@ -145,19 +205,6 @@
   content: '↵';
   opacity: 0.6;
   font-size: 0.7em;
-}
-.hieractivity [data-tapas-gi].boxed {
-  margin: 2em 1em;
-  padding: 0.85em;
-  display: block;
-}
-.hieractivity [data-tapas-gi].boxed[data-tapas-gi=text] {
-  margin: 0;
-}
-.hieractivity [data-tapas-gi].boxed.selected-gi {
-  border-left: 1em solid black;
-  background-color: unset;
-  color: unset;
 }
 .hieractivity [data-tapas-gi=p] {
   padding: 0.15em 0.5em;

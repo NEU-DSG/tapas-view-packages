@@ -113,14 +113,6 @@
     </xsl:choose>
   </xsl:template>
   
-  <xsl:template match="teiHeader" priority="91">
-    <xsl:apply-templates select="fileDesc/titleStmt/title[1]" mode="teiheader"/>
-    <h2 class="expandable-heading">TEI Header</h2>
-    <div id="teiheader" class="expandable expandable-hidden">
-      <xsl:apply-templates mode="teiheader"/>
-    </div>
-  </xsl:template>
-  
   <xsl:template match="@*" priority="-10"/>
   
   <xsl:template match="*" mode="#default table-complex">
@@ -136,6 +128,29 @@
     <xsl:attribute name="data-tapas-att-{$attrName}" select="data(.)"/>
   </xsl:template>
   
+  <xsl:template match="teiHeader" priority="91">
+    <xsl:apply-templates select="fileDesc/titleStmt/title[1]" mode="teiheader"/>
+    <h2 class="expandable-heading box-c1">TEI Header</h2>
+    <div id="teiheader" class="expandable expandable-hidden">
+      <xsl:apply-templates mode="teiheader"/>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="text" priority="90">
+    <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
+    <div>
+      <xsl:call-template name="set-box-classes-depthwise">
+        <xsl:with-param name="depth" select="$depth"/>
+      </xsl:call-template>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
+      <h2>TEI Text</h2>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+      </xsl:apply-templates>
+    </div>
+  </xsl:template>
+  
   <!-- Block-level TEI elements will be used to create boxes in the HTML output. 
     Since CSS doesn't allow selecting on ancestors of nodes, we calculate the depth 
     (nestedness) of the current node here. -->
@@ -143,7 +158,9 @@
     <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
     <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
     <xsl:element name="{$wrapper}">
-      <xsl:attribute name="class" select="'boxed'"/>
+      <xsl:call-template name="set-box-classes-depthwise">
+        <xsl:with-param name="depth" select="$depth"/>
+      </xsl:call-template>
       <xsl:call-template name="set-data-attributes"/>
       <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
       <xsl:apply-templates mode="#current">
@@ -437,14 +454,14 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc" mode="teiheader">
-    <h3 class="expandable-heading">File Description</h3>
+    <h3 class="expandable-heading box-c2">File Description</h3>
     <div id="fileDesc" class="expandable">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc/titleStmt" mode="teiheader">
-    <h4 class="expandable-heading">Title Statement</h4>
+    <h4 class="expandable-heading box-c3">Title Statement</h4>
     <div id="titleStmt" class="expandable">
       <dl>
         <xsl:apply-templates select="* except title[1]" mode="#current"/>
@@ -531,7 +548,7 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc/publicationStmt" mode="teiheader">
-    <h4 class="expandable-heading">Publication Statement</h4>
+    <h4 class="expandable-heading box-c3">Publication Statement</h4>
     <div id="publicationstmt" class="expandable expandable-hidden">
       <xsl:apply-templates select="* except availability" mode="#current"/>
       <xsl:apply-templates select="availability" mode="#current"/>
@@ -539,7 +556,7 @@
   </xsl:template>
   
   <xsl:template match="publicationStmt/availability" mode="teiheader">
-    <h5 class="expandable-heading">Availability</h5>
+    <h5 class="expandable-heading box-c4">Availability</h5>
     <div id="availability" class="expandable">
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
@@ -595,7 +612,7 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc/seriesStmt" mode="teiheader">
-    <h4 class="expandable-heading">Series Statement</h4>
+    <h4 class="expandable-heading box-c3">Series Statement</h4>
     <div id="seriesstmt" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
@@ -612,21 +629,21 @@
   <xsl:template match="teiHeader/fileDesc/sourceDesc" mode="teiheader"/> <!-- XD -->
   
   <xsl:template match="teiHeader/encodingDesc" mode="teiheader">
-    <h3 class="expandable-heading">Encoding Description</h3>
+    <h3 class="expandable-heading box-c2">Encoding Description</h3>
     <div id="encodingdesc" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
   <xsl:template match="teiHeader/encodingDesc/projectDesc" mode="teiheader">
-    <h4 class="expandable-heading">Project Description</h4>
+    <h4 class="expandable-heading box-c3">Project Description</h4>
     <div id="projectdesc" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
   <xsl:template match="teiHeader/encodingDesc/editorialDecl" mode="teiheader">
-    <h4 class="expandable-heading">Editorial Practice</h4>
+    <h4 class="expandable-heading box-c3">Editorial Practice</h4>
     <div id="editorialdecl" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
@@ -705,6 +722,15 @@
   <xsl:template name="save-gi">
     <xsl:param name="start" select="." as="node()"/>
     <xsl:attribute name="data-tapas-gi" select="local-name($start)"/>
+  </xsl:template>
+  
+  <!-- Set a color class for a boxed element, based on its depth in the hierarchy. -->
+  <xsl:template name="set-box-classes-depthwise">
+    <xsl:param name="depth" as="xs:integer" required="yes"/>
+    <xsl:variable name="colorNum" select="$depth mod 12"/>
+    <xsl:attribute name="class">
+      <xsl:text>boxed box-c</xsl:text><xsl:value-of select="$colorNum"/>
+    </xsl:attribute>
   </xsl:template>
   
   <!-- Set data attributes, saving the TEI element's name and attribute values. This 
