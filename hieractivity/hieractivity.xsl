@@ -116,7 +116,7 @@
   <xsl:template match="teiHeader" priority="91">
     <xsl:apply-templates select="fileDesc/titleStmt/title[1]" mode="teiheader"/>
     <h2 class="expandable-heading">TEI Header</h2>
-    <div id="teiheader" class="expandable">
+    <div id="teiheader" class="expandable expandable-hidden">
       <xsl:apply-templates mode="teiheader"/>
     </div>
   </xsl:template>
@@ -437,13 +437,15 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc" mode="teiheader">
-    <div id="fileDesc">
+    <h3 class="expandable-heading">File Description</h3>
+    <div id="fileDesc" class="expandable">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc/titleStmt" mode="teiheader">
-    <div id="titleStmt">
+    <h4 class="expandable-heading">Title Statement</h4>
+    <div id="titleStmt" class="expandable">
       <dl>
         <xsl:apply-templates select="* except title[1]" mode="#current"/>
       </dl>
@@ -529,15 +531,16 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc/publicationStmt" mode="teiheader">
-    <h3 class="expandable-heading">Publication Statement</h3>
-    <div id="publicationstmt" class="expandable">
+    <h4 class="expandable-heading">Publication Statement</h4>
+    <div id="publicationstmt" class="expandable expandable-hidden">
       <xsl:apply-templates select="* except availability" mode="#current"/>
       <xsl:apply-templates select="availability" mode="#current"/>
     </div>
   </xsl:template>
   
   <xsl:template match="publicationStmt/availability" mode="teiheader">
-    <div>
+    <h5 class="expandable-heading">Availability</h5>
+    <div id="availability" class="expandable">
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
       </xsl:apply-templates>
@@ -591,9 +594,9 @@
     </span>
   </xsl:template>
   
-  <xsl:template match="seriesStmt" mode="teiheader">
-    <h3 class="expandable-heading">Series Statement</h3>
-    <div id="seriesstmt" class="expandable">
+  <xsl:template match="teiHeader/fileDesc/seriesStmt" mode="teiheader">
+    <h4 class="expandable-heading">Series Statement</h4>
+    <div id="seriesstmt" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
@@ -610,21 +613,21 @@
   
   <xsl:template match="teiHeader/encodingDesc" mode="teiheader">
     <h3 class="expandable-heading">Encoding Description</h3>
-    <div id="encodingdesc" class="expandable">
+    <div id="encodingdesc" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
   <xsl:template match="teiHeader/encodingDesc/projectDesc" mode="teiheader">
     <h4 class="expandable-heading">Project Description</h4>
-    <div id="projectdesc" class="expandable">
+    <div id="projectdesc" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
   <xsl:template match="teiHeader/encodingDesc/editorialDecl" mode="teiheader">
     <h4 class="expandable-heading">Editorial Practice</h4>
-    <div id="editorialdecl" class="expandable">
+    <div id="editorialdecl" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>

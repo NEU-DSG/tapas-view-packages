@@ -1,17 +1,37 @@
 // hierarchy.less
 
-// COLORS
+/*  COLORS  */
+
+@cream:       #FFE;
 @gray-dark:   #555555;
 @gray:        #808080;
 @gray-light:  #DDDDDD;
-@cream:       #FFE;
+@slate:       #9EAEC9;
+// Color palette used for boxes at varying depths. This is a slightly modified 
+  // version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
+  // http://colorbrewer2.org/?type=qualitative&scheme=Set3&n=12
+@box01:       #3274B8;
+@box02:       #7CBAB0;
+@box03:       #FFFFB3;
+@box04:       #BEBADA;
+@box05:       #FB8072;
+@box06:       #FDB462;
+@box07:       #80B1D3;
+@box08:       #B3DE69;
+@box09:       #FCCDE5;
+@box10:       #BC80BD;
+@box11:       #CCEBC5;
+@box12:       #FFED6F;
 
-// FONTS
+
+/*  FONTS  */
+
 @code: 'Courier', 'Courier New', monospace;
 @heading: ‘Palatino Linotype’, ‘Book Antiqua’, Palatino, serif;
 
 
-// RULES
+/*  RULES  */
+
 .hieractivity {
   color: @gray;
   
@@ -53,7 +73,7 @@
     z-index: 900;
     top: 10px;
     right: 10px;
-    background-color: #9EAEC9;
+    background-color: @slate;
     color: black;
     text-align: center;
     
@@ -115,8 +135,35 @@
   
   #tei-header {
     margin: 1em 0;
-    padding: 0.85em;
+    //padding: 0.85em;
     color: black;
+    
+    .expandable-heading {
+      margin: 0.5em 0 0;
+      padding: 0.2em 0;
+      background-color: lightblue;
+      
+      > button {
+        border-radius: 0.4em;
+        cursor: pointer;
+        background-color: @slate;
+        font-family: inherit;
+        font-size: unset;
+        
+        &[aria-expanded=false]::before {
+          content: '▸ ';
+        }
+        
+        &[aria-expanded=true]::before {
+          content: '▾ ';
+        }
+      } // .expandable-heading > button
+    } // .expandable-heading
+    
+    .expandable {
+      border: thin solid lightblue;
+      padding: 0 0.5em 0.25em;
+    } // .expandable
     
     .expandable-heading + .expandable[aria-hidden=true] {
       display: none;

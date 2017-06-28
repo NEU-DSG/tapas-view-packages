@@ -1,3 +1,6 @@
+/*  COLORS  */
+/*  FONTS  */
+/*  RULES  */
 .hieractivity {
   color: #808080;
   /* TEI-specific styles */
@@ -32,7 +35,7 @@
   z-index: 900;
   top: 10px;
   right: 10px;
-  background-color: #9EAEC9;
+  background-color: #9eaec9;
   color: black;
   text-align: center;
 }
@@ -82,8 +85,29 @@
 }
 .hieractivity #tei-header {
   margin: 1em 0;
-  padding: 0.85em;
   color: black;
+}
+.hieractivity #tei-header .expandable-heading {
+  margin: 0.5em 0 0;
+  padding: 0.2em 0;
+  background-color: lightblue;
+}
+.hieractivity #tei-header .expandable-heading > button {
+  border-radius: 0.4em;
+  cursor: pointer;
+  background-color: #9eaec9;
+  font-family: inherit;
+  font-size: unset;
+}
+.hieractivity #tei-header .expandable-heading > button[aria-expanded=false]::before {
+  content: '▸ ';
+}
+.hieractivity #tei-header .expandable-heading > button[aria-expanded=true]::before {
+  content: '▾ ';
+}
+.hieractivity #tei-header .expandable {
+  border: thin solid lightblue;
+  padding: 0 0.5em 0.25em;
 }
 .hieractivity #tei-header .expandable-heading + .expandable[aria-hidden=true] {
   display: none;
