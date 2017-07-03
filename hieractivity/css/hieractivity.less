@@ -206,53 +206,65 @@
       background-color: unset;
       color: unset;
     }
+    
+    &.box-p {
+      margin: 1em 0;
+      padding: 0.15em 0.5em;
+      display: block;
+      background-color: @cream;
+    
+      &.selected-gi {
+        border-left: 1em solid black;
+        color: unset;
+      }
+    } // .box-p
   } // [data-tapas-gi].boxed
   
-  .box-c1 {
+  .box-outermost {
     background-color: @box01;
   }
   
-  .box-c2 {
+  .box-outer {
     background-color: @box02;
   }
   
-  .box-c3 {
+  .box-gen1 {
     background-color: @box03;
   }
   
-  .box-c4 {
+  .box-gen2 {
     background-color: @box04;
   }
   
-  .box-c5 {
+  .box-gen3 {
     background-color: @box05;
   }
   
-  .box-c6 {
+  .box-gen4 {
     background-color: @box06;
   }
   
-  .box-c7 {
+  .box-gen5 {
     background-color: @box07;
   }
   
-  .box-c8 {
+  .box-gen6 {
     background-color: @box08;
   }
   
-  .box-c9 {
+  .box-gen7 {
     background-color: @box09;
   }
   
-  .box-c10 {
+  .box-gen8 {
     background-color: @box10;
   }
   
-  .box-c11 {
+  .box-gen9 {
     background-color: @box11;
   }
   
-  .box12 {
+  .box-gen10 {
     background-color: @box12;
   }
   
@@ -298,17 +310,6 @@
       font-size: 0.7em;
     }
   } // [data-tapas-gi=lb]
-  
-  [data-tapas-gi=p] {
-    padding: 0.15em 0.5em;
-    display: block;
-    background-color: @cream;
-    
-    &.selected-gi {
-      border-left: 1em solid black;
-      color: unset;
-    }
-  } // [data-tapas-gi=p]
   
   .media-obj {
     display: inline-block;
