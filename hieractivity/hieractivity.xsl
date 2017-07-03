@@ -72,12 +72,12 @@
           <h3>Zoom</h3>
           <div id="zoom-container">
             -
-            <input id="zoom-slide" title="Zoom control slider" 
+            <input id="zoom-slide" title="Zoom control slider" tabindex="1"
               type="range" min="20" max="100" step="1" value="100" />
             +
           </div>
           <h3>Elements by frequency</h3>
-          <fieldset id="gi-option-selector">
+          <fieldset id="gi-option-selector" tabindex="2">
             <legend>Mark</legend>
             <xsl:call-template name="gi-counting-robot">
               <xsl:with-param name="start" select="text"/>
@@ -727,7 +727,7 @@
   <!-- Set a color class for a boxed element, based on its depth in the hierarchy. -->
   <xsl:template name="set-box-classes-depthwise">
     <xsl:param name="depth" as="xs:integer" required="yes"/>
-    <xsl:variable name="colorNum" select="$depth mod 12"/>
+    <xsl:variable name="colorNum" select="$depth mod 10"/>
     <xsl:attribute name="class">
       <xsl:text>boxed box-c</xsl:text><xsl:value-of select="$colorNum"/>
     </xsl:attribute>
