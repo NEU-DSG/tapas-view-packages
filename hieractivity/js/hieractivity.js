@@ -42,13 +42,14 @@ $(document).ready(function() {
   var giPropList = d3.select('#gi-properties');
   // Assign—explicitly—the divs' heights back to them. d3.js requires some absolute 
     // height value in order to zoom on HTML elements.
-  var containers = d3.selectAll('div[data-tapas-gi].boxed')
+  var containers = d3.selectAll('[data-tapas-gi].boxed')
+    .on('click', inspectElement);
+  containers.filter('div')
       .data(heightData)
       .style('height', function(d) {
         //console.log(d);
         return d + 'px';
-      })
-      .on('click', inspectElement);
+      });
   
   // When the radio buttons' input value changes, mark HTML elements that correspond 
     // to the chosen TEI element.
