@@ -32,7 +32,7 @@ $(document).ready(function() {
     heightData.push($(obj).height());
   });
   
-  // Set up relevant d3 selections.
+  // Set up variables with relevant d3 selections.
   var teiContainer = d3.select('#tei-container');
   var scrollElement = d3.select('div[data-tapas-gi].boxed');
   var scrollElementNode = scrollElement.node();
@@ -40,10 +40,12 @@ $(document).ready(function() {
     .on('input', slid)
     .on('mouseout', workedHeight);
   var giPropList = d3.select('#gi-properties');
-  // Assign—explicitly—the divs' heights back to them. d3.js requires some absolute 
-    // height value in order to zoom on HTML elements.
+  // Any HTML element with the class 'boxed' is a container which should trigger a 
+    // JS event when clicked.
   var containers = d3.selectAll('[data-tapas-gi].boxed')
     .on('click', inspectElement);
+  // Assign—explicitly—the container <div>s' heights back to them. d3.js requires 
+    // some absolute height value in order to zoom on HTML elements.
   containers.filter('div')
       .data(heightData)
       .style('height', function(d) {

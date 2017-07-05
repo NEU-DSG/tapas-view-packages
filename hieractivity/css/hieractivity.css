@@ -45,6 +45,10 @@
 .hieractivity #control-panel h4 {
   margin: 0.5em 0;
 }
+.hieractivity #control-panel .control-widget {
+  margin: 0.2em 0;
+  padding: 0.25em 0;
+}
 .hieractivity #control-panel #zoom-container {
   padding: 0.4em;
   display: flex;

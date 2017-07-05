@@ -67,24 +67,30 @@
           <xsl:apply-templates select="text"/>
         </div>
         <!-- The control panel -->
-        <div id="control-panel">
+        <div id="control-panel" lang="en">
           <h2>Controls</h2>
-          <h3>Zoom</h3>
-          <div id="zoom-container">
-            -
-            <input id="zoom-slide" title="Zoom control slider" tabindex="1"
-              type="range" min="20" max="100" step="1" value="100" />
-            +
+          <div class="control-widget">
+            <h3>Zoom</h3>
+            <div id="zoom-container">
+              -
+              <input id="zoom-slide" title="Zoom control slider" tabindex="1"
+                type="range" min="20" max="100" step="1" value="100" />
+              +
+            </div>
           </div>
-          <h3>Elements by frequency</h3>
-          <fieldset id="gi-option-selector" tabindex="2">
-            <legend>Mark</legend>
-            <xsl:call-template name="gi-counting-robot">
-              <xsl:with-param name="start" select="text"/>
-            </xsl:call-template>
-          </fieldset>
-          <h3>Clicked element</h3>
-          <dl id="gi-properties"></dl>
+          <div class="control-widget">
+            <h3>Elements by frequency</h3>
+            <fieldset id="gi-option-selector" tabindex="2">
+              <legend>Mark</legend>
+              <xsl:call-template name="gi-counting-robot">
+                <xsl:with-param name="start" select="text"/>
+              </xsl:call-template>
+            </fieldset>
+          </div>
+          <div class="control-widget">
+            <h3>Clicked element</h3>
+            <dl id="gi-properties"></dl>
+          </div>
         </div>
       </div>
     </xsl:variable>
