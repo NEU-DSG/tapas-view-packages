@@ -148,13 +148,20 @@
     <xsl:apply-templates select="fileDesc/titleStmt/title[1]" mode="teiheader"/>
     <xsl:variable name="useLang" 
       select="if ( @xml:lang ) then @xml:lang/data(.) else $language"/>
+    <xsl:variable name="changedLang" as="xs:boolean" select="$useLang ne $language"/>
     <h2 class="expandable-heading box-outermost">
+      <xsl:if test="$changedLang">
+        <xsl:attribute name="lang" select="$useLang"/>
+      </xsl:if>
       <xsl:call-template name="gloss-gi">
         <xsl:with-param name="isHeading" select="true()"/>
         <xsl:with-param name="language" select="$useLang" tunnel="yes"/>
       </xsl:call-template>
     </h2>
     <div id="teiheader" class="expandable expandable-hidden">
+      <xsl:if test="$changedLang">
+        <xsl:attribute name="lang" select="$useLang"/>
+      </xsl:if>
       <xsl:apply-templates mode="teiheader">
         <xsl:with-param name="language" select="$useLang" tunnel="yes"/>
       </xsl:apply-templates>
@@ -167,6 +174,9 @@
     <xsl:variable name="useLang" 
       select="if ( @xml:lang ) then @xml:lang/data(.) else $language"/>
     <div class="boxed box-outermost">
+      <xsl:if test="$useLang ne $language">
+        <xsl:attribute name="lang" select="$useLang"/>
+      </xsl:if>
       <xsl:call-template name="set-data-attributes"/>
       <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
       <h2>
