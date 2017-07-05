@@ -14,6 +14,7 @@
   exclude-result-prefixes="#all">
   
   <xsl:output indent="no" method="xhtml" omit-xml-declaration="yes"/>
+  <xsl:include href="../common/odd-interpretation/tei-odd-interpreter.xsl"/>
   
 <!-- PARAMETERS AND VARIABLES -->
   
@@ -26,7 +27,6 @@
   <xsl:variable name="interjectStart">&lt;[ </xsl:variable>
   <xsl:variable name="interjectEnd"> ]&gt;</xsl:variable>
   <xsl:variable name="nbsp" select="'&#160;'"/>
-  
   
 <!-- FUNCTIONS -->
   
@@ -52,19 +52,28 @@
 <!-- TEMPLATES -->
   
   <xsl:template match="/TEI" priority="92">
-    <xsl:variable name="lang" select="if ( @xml:lang ) then @xml:lang/data(.) else 'en'"/>
+    <xsl:variable name="language" 
+      select="if ( @xml:lang ) then @xml:lang/data(.) else $defaultLanguage"/>
+    <xsl:variable name="useLang" 
+      select="if ( not(@xml:id) and text/@xml:id ) then 
+                text/@xml:id/data(.)
+              else $language"/>
     <xsl:variable name="body" as="node()">
       <div class="hieractivity">
         <xsl:if test="not($fullHTML)">
-          <xsl:attribute name="lang" select="$lang"/>
+          <xsl:attribute name="lang" select="$useLang"/>
         </xsl:if>
         <!-- Metadata from the <teiHeader> -->
         <div id="tei-header">
-          <xsl:apply-templates select="teiHeader"/>
+          <xsl:apply-templates select="teiHeader">
+            <xsl:with-param name="language" select="$language"/>
+          </xsl:apply-templates>
         </div>
         <!-- The HTML representation of <text> -->
         <div id="tei-container">
-          <xsl:apply-templates select="text"/>
+          <xsl:apply-templates select="text">
+            <xsl:with-param name="language" select="$language"/>
+          </xsl:apply-templates>
         </div>
         <!-- The control panel -->
         <div id="control-panel" lang="en">
@@ -97,7 +106,7 @@
     <xsl:choose>
       <xsl:when test="$fullHTML">
         <html>
-          <xsl:attribute name="lang" select="$lang"/>
+          <xsl:attribute name="lang" select="$useLang"/>
           <head>
             <title>
               <xsl:value-of select="teiHeader/fileDesc/titleStmt/title[1]/normalize-space(.)"/>
@@ -135,21 +144,40 @@
   </xsl:template>
   
   <xsl:template match="teiHeader" priority="91">
+    <xsl:param name="language" as="xs:string" required="yes"/>
     <xsl:apply-templates select="fileDesc/titleStmt/title[1]" mode="teiheader"/>
-    <h2 class="expandable-heading box-outermost">TEI Header</h2>
+    <xsl:variable name="useLang" 
+      select="if ( @xml:lang ) then @xml:lang/data(.) else $language"/>
+    <h2 class="expandable-heading box-outermost">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+        <xsl:with-param name="language" select="$useLang" tunnel="yes"/>
+      </xsl:call-template>
+    </h2>
     <div id="teiheader" class="expandable expandable-hidden">
-      <xsl:apply-templates mode="teiheader"/>
+      <xsl:apply-templates mode="teiheader">
+        <xsl:with-param name="language" select="$useLang" tunnel="yes"/>
+      </xsl:apply-templates>
     </div>
   </xsl:template>
   
   <xsl:template match="text" priority="90">
     <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
+    <xsl:param name="language" as="xs:string" required="yes"/>
+    <xsl:variable name="useLang" 
+      select="if ( @xml:lang ) then @xml:lang/data(.) else $language"/>
     <div class="boxed box-outermost">
       <xsl:call-template name="set-data-attributes"/>
       <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
-      <h2>TEI Text</h2>
+      <h2>
+        <xsl:call-template name="gloss-gi">
+          <xsl:with-param name="isHeading" select="true()"/>
+          <xsl:with-param name="language" select="$useLang" tunnel="yes"/>
+        </xsl:call-template>
+      </h2>
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="depth" select="1" tunnel="yes"/>
+        <xsl:with-param name="language" select="$useLang" tunnel="yes"/>
       </xsl:apply-templates>
     </div>
   </xsl:template>
@@ -342,11 +370,7 @@
       <xsl:call-template name="set-data-attributes"/>
       <span class="label-explanatory">
         <xsl:value-of select="$interjectStart"/>
-        <xsl:choose>
-          <xsl:when test="self::cb">column</xsl:when>
-          <xsl:when test="self::pb">page</xsl:when>
-        </xsl:choose>
-        <xsl:text> break</xsl:text>
+        <xsl:call-template name="gloss-gi"/>
         <xsl:if test="@n">
           <xsl:text> </xsl:text>
           <xsl:value-of select="@n"/>
@@ -363,7 +387,7 @@
     <span class="label-explanatory">
       <xsl:call-template name="get-attributes"/>
       <xsl:value-of select="$interjectStart"/>
-      <xsl:value-of select="local-name(.)"/>
+      <xsl:call-template name="gloss-gi"/>
       <xsl:text> </xsl:text>
       <xsl:apply-templates select="@*"/>
       <xsl:value-of select="$interjectEnd"/>
@@ -376,10 +400,10 @@
       <xsl:call-template name="count-preceding-of-type"/>
       <xsl:choose>
         <xsl:when test="desc or following-sibling::figDesc">
-          <xsl:text>; described below.</xsl:text>
+          <xsl:text>; described below.</xsl:text> <!-- XD: uses English -->
         </xsl:when>
         <xsl:when test="preceding-sibling::figDesc">
-          <xsl:text>; described above.</xsl:text>
+          <xsl:text>; described above.</xsl:text> <!-- XD: uses English -->
         </xsl:when>
       </xsl:choose>
     </xsl:variable>
@@ -426,7 +450,7 @@
       <xsl:call-template name="set-data-attributes"/>
       <span class="label-explanatory">
         <xsl:value-of select="$interjectStart"/>
-        <xsl:text>gap</xsl:text>
+        <xsl:call-template name="gloss-gi"/>
         <xsl:choose>
           <xsl:when test="desc">
             <xsl:value-of select="$contentDivider"/>
@@ -454,7 +478,8 @@
     <span class="label-explanatory">
       <xsl:call-template name="set-data-attributes"/>
       <xsl:value-of select="$interjectStart"/>
-      <xsl:text>choice: </xsl:text>
+      <xsl:call-template name="gloss-gi"/>
+      <xsl:text>: </xsl:text>
       <xsl:apply-templates mode="#current"/>
       <xsl:value-of select="$interjectEnd"/>
     </span>
@@ -485,14 +510,22 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc" mode="teiheader">
-    <h3 class="expandable-heading box-outer">File Description</h3>
+    <h3 class="expandable-heading box-outer">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h3>
     <div id="fileDesc" class="expandable">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc/titleStmt" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">Title Statement</h4>
+    <h4 class="expandable-heading box-gen1">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h4>
     <div id="titleStmt" class="expandable">
       <dl>
         <xsl:apply-templates select="* except title[1]" mode="#current"/>
@@ -530,13 +563,9 @@
   
   <xsl:template match="author | editor | funder | principal | sponsor" mode="teiheader">
     <dt>
-      <xsl:choose>
-        <xsl:when test="self::author">Author</xsl:when>
-        <xsl:when test="self::editor">Editor</xsl:when>
-        <xsl:when test="self::funder">Funder</xsl:when>
-        <xsl:when test="self::principal">Principal researcher</xsl:when>
-        <xsl:when test="self::sponsor">Sponsor</xsl:when>
-      </xsl:choose>
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
     </dt>
     <dd><!-- XD: handle multiple names -->
       <xsl:apply-templates mode="#current">
@@ -579,7 +608,11 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc/publicationStmt" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">Publication Statement</h4>
+    <h4 class="expandable-heading box-gen1">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h4>
     <div id="publicationstmt" class="expandable expandable-hidden">
       <xsl:apply-templates select="* except availability" mode="#current"/>
       <xsl:apply-templates select="availability" mode="#current"/>
@@ -587,7 +620,11 @@
   </xsl:template>
   
   <xsl:template match="publicationStmt/availability" mode="teiheader">
-    <h5 class="expandable-heading box-gen2">Availability</h5>
+    <h5 class="expandable-heading box-gen2">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h5>
     <div id="availability" class="expandable">
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
@@ -643,7 +680,11 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc/seriesStmt" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">Series Statement</h4>
+    <h4 class="expandable-heading box-gen1">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h4>
     <div id="seriesstmt" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
@@ -660,21 +701,33 @@
   <xsl:template match="teiHeader/fileDesc/sourceDesc" mode="teiheader"/> <!-- XD -->
   
   <xsl:template match="teiHeader/encodingDesc" mode="teiheader">
-    <h3 class="expandable-heading box-outer">Encoding Description</h3>
+    <h3 class="expandable-heading box-outer">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h3>
     <div id="encodingdesc" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
   <xsl:template match="teiHeader/encodingDesc/projectDesc" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">Project Description</h4>
+    <h4 class="expandable-heading box-gen1">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h4>
     <div id="projectdesc" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
   </xsl:template>
   
   <xsl:template match="teiHeader/encodingDesc/editorialDecl" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">Editorial Practice</h4>
+    <h4 class="expandable-heading box-gen1">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h4>
     <div id="editorialdecl" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
@@ -685,11 +738,13 @@
   
   <xsl:template name="count-preceding-of-type">
     <xsl:param name="element" select="." as="node()"/>
-    <xsl:variable name="gi" select="local-name($element)"/>
-    <xsl:value-of select="$gi"/>
+    <xsl:variable name="gi" select="$element/local-name(.)"/>
+    <xsl:call-template name="gloss-gi">
+      <xsl:with-param name="start" select="$element"/>
+    </xsl:call-template>
     <xsl:text> #</xsl:text>
     <xsl:value-of select="count(preceding::*[local-name(.) eq $gi][ancestor::text]) + 1"/>
-    <xsl:text> of the TEI document</xsl:text>
+    <!--<xsl:text> of the TEI document</xsl:text>-->
   </xsl:template>
   
   <!-- Apply templates on attributes. -->

@@ -18,11 +18,15 @@
   
 <!-- PARAMETERS AND VARIABLES -->
   
+  <xsl:variable name="defaultLanguage" select="'en'"/>
   <xsl:variable name="teiODD" select="doc('p5subset.xml')"/>
   
   
 <!-- FUNCTIONS -->
   
+  <!-- Given an element name and an identifier for a transcription language, come up 
+    with a human-readable descriptor of the element, in the given language if 
+    possible. -->
   <xsl:function name="tps:get-element-gloss" as="xs:string?">
     <xsl:param name="element-name" as="xs:string"/>
     <xsl:param name="language" as="xs:string"/>
@@ -59,5 +63,15 @@
   
 <!-- TEMPLATES -->
   
+  <!-- Gloss a given element. -->
+  <xsl:template name="gloss-gi">
+    <xsl:param name="isHeading" select="false()" as="xs:boolean"/>
+    <xsl:param name="start" select="." as="node()"/>
+    <xsl:param name="language" as="xs:string" required="yes" tunnel="yes"/>
+    <xsl:variable name="gloss" select="tps:get-element-gloss(local-name($start), $language)"/>
+    <xsl:value-of select="if ( $isHeading ) then
+                            concat(upper-case(substring($gloss,1,1)), substring($gloss,2))
+                          else $gloss"/>
+  </xsl:template>
   
 </xsl:stylesheet>
