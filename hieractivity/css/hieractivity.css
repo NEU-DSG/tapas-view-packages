@@ -66,10 +66,11 @@
 }
 .hieractivity #control-panel #gi-option-selector {
   border: thin solid #dddddd;
+  padding: 0.15em 0;
   text-align: left;
 }
 .hieractivity #control-panel #gi-option-selector label {
-  display: block;
+  display: table-row;
 }
 .hieractivity #control-panel #gi-option-selector label .gi-label {
   margin: 0 0.35em;
