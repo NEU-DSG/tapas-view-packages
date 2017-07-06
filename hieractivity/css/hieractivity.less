@@ -229,7 +229,7 @@
     
       &.selected-gi {
         border-left: 1em solid black;
-        color: unset;
+        color: @gray;
       }
     } // .box-p
   } // [data-tapas-gi].boxed
@@ -298,7 +298,11 @@
   
   .label-explanatory {
     opacity: 0.95;
-    font-size: 0.8em;
+    font-size: 0.85em;
+    
+    code {
+      font-size: 1em;
+    }
     
     [data-tapas-gi] {
       opacity: unset;

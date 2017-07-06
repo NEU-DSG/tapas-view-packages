@@ -157,7 +157,7 @@
 }
 .hieractivity [data-tapas-gi].boxed.box-p.selected-gi {
   border-left: 1em solid black;
-  color: unset;
+  color: #808080;
 }
 .hieractivity .box-outermost {
   background-color: rgba(50, 116, 184, 0.8);
@@ -208,7 +208,10 @@
 }
 .hieractivity .label-explanatory {
   opacity: 0.95;
-  font-size: 0.8em;
+  font-size: 0.85em;
+}
+.hieractivity .label-explanatory code {
+  font-size: 1em;
 }
 .hieractivity .label-explanatory [data-tapas-gi] {
   opacity: unset;
@@ -228,7 +231,10 @@
 .hieractivity .media-obj .thumbnail {
   max-height: 50px;
   opacity: 0.95;
-  font-size: 0.8em;
+  font-size: 0.85em;
+}
+.hieractivity .media-obj .thumbnail code {
+  font-size: 1em;
 }
 .hieractivity .media-obj .thumbnail [data-tapas-gi] {
   opacity: unset;
