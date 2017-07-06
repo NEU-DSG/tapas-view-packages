@@ -85,6 +85,12 @@
     .control-widget {
       margin: 0.2em 0;
       padding: 0.25em 0;
+      
+      .control-widget-component {
+        .component-inner();
+        padding: 0.25em;
+        display: block;
+      }
     }
     
     .component-inner() {
@@ -104,9 +110,7 @@
     } // #zoom-container
     
     #gi-option-selector {
-      .component-inner();
-      padding: 0.25em;
-      display: block;
+      border: thin solid @gray-light;
       text-align: left;
       
       label {
@@ -335,7 +339,7 @@
   }
   
   [data-tapas-gi=list] {
-    padding-inline-start: 1em;
+    padding-left: 1em;
     display: block;
     
     span[data-tapas-gi=item] {

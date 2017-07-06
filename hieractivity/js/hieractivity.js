@@ -66,10 +66,10 @@ $(document).ready(function() {
       d3.selectAll('[data-tapas-gi='+ gi +']').classed('selected-gi', true);
     });
     // Get the first newly-selected element and scroll to it.
-    var instance1 = d3.select('.selected-gi[data-tapas-gi]').node();
+    /*var instance1 = d3.select('.selected-gi[data-tapas-gi]').node();
     if ( instance1 !== null && instance1 !== undefined ) {
       instance1.scrollIntoView();
-    }
+    }*/
   });
 
 
