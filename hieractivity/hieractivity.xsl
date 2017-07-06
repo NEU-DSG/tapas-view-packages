@@ -80,12 +80,14 @@
           </div>
           <div class="control-widget">
             <h3>Elements by frequency</h3>
-            <fieldset id="gi-option-selector" tabindex="2">
-              <legend>Mark</legend>
-              <xsl:call-template name="gi-counting-robot">
-                <xsl:with-param name="start" select="text"/>
-              </xsl:call-template>
-            </fieldset>
+            <div class="control-widget-component">
+              <fieldset id="gi-option-selector" tabindex="2">
+                <legend>Mark</legend>
+                <xsl:call-template name="gi-counting-robot">
+                  <xsl:with-param name="start" select="text"/>
+                </xsl:call-template>
+              </fieldset>
+            </div>
           </div>
           <div class="control-widget">
             <h3>Clicked element</h3>
@@ -719,7 +721,7 @@
     <xsl:variable name="allElements" select="$start/descendant-or-self::*/local-name(.)"/>
     <xsl:variable name="distinctGIs" select="distinct-values($allElements)"/>
     <label>
-      <input type="radio" name="element" value="none" checked="checked"></input>
+      <input type="radio" name="element" value="none" checked="checked" tabindex="3"></input>
       <span class="gi-label">defaults only</span>
     </label>
     <xsl:variable name="options" as="item()*">

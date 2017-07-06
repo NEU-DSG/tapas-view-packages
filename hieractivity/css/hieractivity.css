@@ -49,6 +49,14 @@
   margin: 0.2em 0;
   padding: 0.25em 0;
 }
+.hieractivity #control-panel .control-widget .control-widget-component {
+  border: thin solid #808080;
+  height: 130px;
+  background-color: white;
+  overflow-y: auto;
+  padding: 0.25em;
+  display: block;
+}
 .hieractivity #control-panel #zoom-container {
   padding: 0.4em;
   display: flex;
@@ -57,12 +65,7 @@
   width: 140px;
 }
 .hieractivity #control-panel #gi-option-selector {
-  border: thin solid #808080;
-  height: 130px;
-  background-color: white;
-  overflow-y: auto;
-  padding: 0.25em;
-  display: block;
+  border: thin solid #dddddd;
   text-align: left;
 }
 .hieractivity #control-panel #gi-option-selector label {
@@ -239,7 +242,7 @@
   text-align: center;
 }
 .hieractivity [data-tapas-gi=list] {
-  padding-inline-start: 1em;
+  padding-left: 1em;
   display: block;
 }
 .hieractivity [data-tapas-gi=list] span[data-tapas-gi=item] {
