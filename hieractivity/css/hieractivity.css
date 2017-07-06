@@ -133,6 +133,10 @@
 .hieractivity #tei-container {
   overflow: hidden;
 }
+.hieractivity .selected-gi {
+  background-color: black;
+  color: #dddddd;
+}
 .hieractivity [data-tapas-gi].boxed {
   margin: 2em 1em;
   padding: 0.85em;
@@ -143,12 +147,11 @@
 }
 .hieractivity [data-tapas-gi].boxed.selected-gi {
   border-left: 1em solid black;
-  background-color: unset;
-  color: unset;
+  color: #808080;
 }
 .hieractivity [data-tapas-gi].boxed.box-p {
   margin: 1em 0;
-  padding: 0.15em 0.5em;
+  padding: 0.5em;
   display: block;
   background-color: #ffffee;
 }
@@ -191,10 +194,6 @@
 }
 .hieractivity .box-gen10 {
   background-color: rgba(255, 237, 111, 0.8);
-}
-.hieractivity .selected-gi {
-  background-color: black;
-  color: #dddddd;
 }
 .hieractivity .block {
   display: block;
