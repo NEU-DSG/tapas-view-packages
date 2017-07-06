@@ -36,7 +36,7 @@
       select="exists($element[
                 self::TEI | self::text | self::front | self::body | self::back 
               | self::ab | self::floatingText | self::lg | self::div
-              | self::group | self::table
+              | self::argument | self::group | self::table
               | self::div1 | self::div2 | self::div3 | self::div4 | self::div5 
               | self::div6 | self::div7 | self::titlePage
               | self::listBibl | self::listEvent | self::listOrg | self::listPerson 
