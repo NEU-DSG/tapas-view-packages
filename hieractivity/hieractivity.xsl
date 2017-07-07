@@ -74,7 +74,7 @@
           <h2>Controls</h2>
           <div class="control-widget">
             <h3>Zoom</h3>
-            <div id="zoom-container">
+            <div id="zoom-container" class="control-widget-component">
               -
               <input id="zoom-slide" title="Zoom control slider" tabindex="1"
                 type="range" min="20" max="100" step="1" value="100" />
@@ -94,7 +94,7 @@
           </div>
           <div class="control-widget">
             <h3>Clicked element</h3>
-            <dl id="gi-properties"></dl>
+            <dl id="gi-properties" class="control-widget-component"></dl>
           </div>
         </div>
       </div>
