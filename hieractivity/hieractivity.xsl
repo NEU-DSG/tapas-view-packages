@@ -31,7 +31,7 @@
 <!-- FUNCTIONS -->
   
   <xsl:function name="tps:is-chunk-level" as="xs:boolean">
-    <xsl:param name="element" as="element()" required="yes"/>
+    <xsl:param name="element" as="element()"/>
     <xsl:value-of 
       select="exists($element[
                 self::TEI | self::text | self::front | self::body | self::back 
@@ -47,6 +47,7 @@
               | self::opener | self::closer | self::postscript
               | self::quote[descendant::p] | self::said[descendant::p]
               | self::figure | self::note | self::sp
+              | self::attDef | self::attList | self::elementSpec | self::schemaSpec
               ])"/>
   </xsl:function>
   
@@ -265,7 +266,7 @@
   </xsl:template>
   
   <xsl:template match="cell" mode="table-complex">
-    <xsl:variable name="cell" select="."/>
+    <xsl:variable name="start" select="."/>
     <xsl:variable name="columns" as="xs:integer" 
       select="if ( @cols and xs:integer(@cols) gt 1 ) then @cols/data(.) else 1"/>
     <xsl:variable name="rows" as="xs:integer" 
@@ -289,7 +290,7 @@
         <xsl:choose>
           <xsl:when test="position() eq last()">
             <xsl:call-template name="get-attributes">
-              <xsl:with-param name="start" select="$cell"/>
+              <xsl:with-param name="start" select="$start"/>
             </xsl:call-template>
             <xsl:copy-of select="$contents"/>
           </xsl:when>
@@ -312,7 +313,8 @@
                       | listBibl/bibl/* | biblFull/* | biblStruct/*
                       | event/* | org/* | person/* | place/*
                       | argument | byline | docAuthor | docDate | docEdition 
-                      | docImprint | docTitle[not(titlePart)] | titlePart" 
+                      | docImprint | docTitle[not(titlePart)] | titlePart
+                      | moduleRef" 
                 mode="#default inside-p" priority="-6">
     <span class="block">
       <xsl:choose>
@@ -743,6 +745,24 @@
         <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
       </xsl:apply-templates>
     </div>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/revisionDesc" mode="teiheader">
+    <h3 class="expandable-heading box-outer">Revision Description</h3> <!-- gloss -->
+    <div id="revisiondesc" class="expandable expandable-hidden">
+      <xsl:apply-templates mode="#current"/>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="revisionDesc//change" mode="teiheader">
+    <span>
+      <span class="change">
+        <xsl:apply-templates select="@*" mode="show-att"/>
+      </span>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </span>
   </xsl:template>
   
   
