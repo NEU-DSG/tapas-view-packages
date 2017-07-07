@@ -641,7 +641,11 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc/editionStmt" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">Edition Statement</h4> <!-- gloss -->
+    <h4 class="expandable-heading box-gen1">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h4>
     <div id="editionstmt" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
@@ -650,7 +654,11 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc/extent" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">Extent</h4> <!-- gloss -->
+    <h4 class="expandable-heading box-gen1">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h4>
     <div id="fileextent" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
@@ -742,7 +750,11 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/fileDesc/notesStmt" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">Notes Statement</h4> <!-- gloss -->
+    <h4 class="expandable-heading box-gen1">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h4>
     <div id="notesstmt" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
@@ -792,7 +804,11 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/profileDesc" mode="teiheader">
-    <h3 class="expandable-heading box-outer">Profile Description</h3> <!-- gloss -->
+    <h3 class="expandable-heading box-outer">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h3>
     <div id="profiledesc" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
@@ -800,7 +816,9 @@
   
   <xsl:template match="profileDesc/*" mode="teiheader">
     <h4 class="expandable-heading box-gen1">
-      <xsl:value-of select="local-name(.)"/> <!-- gloss -->
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
     </h4>
     <div id="{translate(lower-case(local-name(.)),'-','')}" 
       class="expandable expandable-hidden">
@@ -811,7 +829,11 @@
   </xsl:template>
   
   <xsl:template match="teiHeader/revisionDesc" mode="teiheader">
-    <h3 class="expandable-heading box-outer">Revision Description</h3> <!-- gloss -->
+    <h3 class="expandable-heading box-outer">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="isHeading" select="true()"/>
+      </xsl:call-template>
+    </h3>
     <div id="revisiondesc" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
