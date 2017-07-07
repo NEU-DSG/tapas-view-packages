@@ -2,12 +2,14 @@
 
 /*  COLORS  */
 
-@cream:         #FFE;
-@gray-dark:     #555555;
-@gray:          #808080;
-@gray-light:    #DDDDDD;
-@gray-lighter:  #F0F0F0;
-@slate:         #9EAEC9;
+@cream:             #FFE;
+@gray-dark:         #555555;
+@gray:              #808080;
+@gray-light:        #DDDDDD;
+@gray-lighter:      #F0F0F0;
+@raspberry:         #EE5368;
+@raspberry-light:   #F67788;
+@slate:             #9EAEC9;
 // Color palette used for boxes at varying depths. This is a slightly modified
   // version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
   // http://colorbrewer2.org/?type=qualitative&scheme=Set3&n=12
@@ -63,18 +65,65 @@
       margin-top: 0.35em;
     }
   } // dl
+  
+  /* Expandable headings */
+    
+  .expandable-heading {
+    margin: 0.5em 0 0;
+    border: thin solid @gray;
+    padding: 0.2em;
+    
+    > button {
+      border: thin solid @gray-dark;
+      border-radius: 0.4em;
+      box-shadow: 0.1em 0.1em 0.2em @gray-dark;
+      background-color: @gray-lighter;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: unset;
+      
+      &[aria-expanded=false]::before {
+        content: '▸ ';
+        width: 28px;
+        display: inline-block;
+      }
+      
+      &[aria-expanded=true]{
+      box-shadow: unset;
+      
+        &::before {
+          content: '▾ ';
+          width: 28px;
+          display: inline-block;
+        }
+      }
+    } // .expandable-heading > button
+  } // .expandable-heading
+  
+  .expandable {
+    border: thin solid @gray;
+    border-top: none;
+    padding: 0.15em 0.75em 0.4em;
+  } // .expandable
+  
+  .expandable-heading + .expandable[aria-hidden=true] {
+    display: none;
+  }
+  
+  
+  /* Control panel */
 
   #control-panel {
-    border: medium solid @gray-dark;
+    //border: medium solid @gray-dark;
     border-radius: 0.4em;
-    padding: 0.25em;
+    padding: 0.5em;
     //height: 150px;
     width: 180px;
     position: fixed;
     z-index: 900;
     top: 10px;
     right: 10px;
-    background-color: @cream;
+    background-color: @gray-dark;
     color: black;
     text-align: center;
     
@@ -86,30 +135,32 @@
     }
     
     h2 {
-      background-color: @slate;
+      margin-left: 0;
+      margin-right: 0;
+      background-color: @raspberry;
+    }
+    
+    .component-inner() {
+      margin: 0;
+      border: thin solid @gray-light;
+      height: 120px;
+      background-color: white;
+      overflow-y: auto;
     }
     
     .control-widget {
       margin: 0.4em 0;
-      border: thin solid @gray;
+      //border: thin solid @gray;
       border-radius: 0.25em;
       padding: 0.4em;
-      background-color: @slate;
+      background-color: @raspberry;
       
       .control-widget-component {
         .component-inner();
         padding: 0.25em;
         display: block;
       }
-    }
-    
-    .component-inner() {
-      margin: 0;
-      border: thin solid @gray-light;
-      height: 130px;
-      background-color: white;
-      overflow-y: auto;
-    }
+    } // .control-widget
     
     #zoom-container {
       padding: 0.4em;
@@ -148,8 +199,11 @@
       .component-inner();
       padding: 0 1em;
       text-align: left;
-    }
+    } // #gi-properties
   } // .control-panel
+  
+  
+  /* Containers for the <teiHeader> and <text> */
   
   #tei-header,
   #tei-container {
@@ -159,56 +213,14 @@
   #tei-header {
     margin: 1em 0;
     color: black;
-    
-    .expandable-heading {
-      margin: 0.5em 0 0;
-      border: thin solid @gray;
-      padding: 0.2em;
-      
-      > button {
-        border: thin solid @gray-dark;
-        border-radius: 0.4em;
-        box-shadow: 0.1em 0.1em 0.2em @gray-dark;
-        background-color: @gray-lighter;
-        cursor: pointer;
-        font-family: inherit;
-        font-size: unset;
-        
-        &[aria-expanded=false]::before {
-          content: '▸ ';
-          width: 28px;
-          display: inline-block;
-        }
-        
-        &[aria-expanded=true]{
-        box-shadow: unset;
-        
-          &::before {
-            content: '▾ ';
-            width: 28px;
-            display: inline-block;
-          }
-        }
-      } // .expandable-heading > button
-    } // .expandable-heading
-    
-    .expandable {
-      border: thin solid @gray;
-      border-top: none;
-      padding: 0.15em 0.75em 0.4em;
-    } // .expandable
-    
-    .expandable-heading + .expandable[aria-hidden=true] {
-      display: none;
-    }
-  } // #tei-header
+  }
   
   #tei-container {
     overflow: hidden;
   }
 
 
-  /* TEI-specific styles */
+  /* <text>-specific styles */
   
   .centered() {
     text-align: center;
