@@ -66,10 +66,11 @@
 }
 .hieractivity #control-panel #gi-option-selector {
   border: thin solid #dddddd;
+  padding: 0.15em 0;
   text-align: left;
 }
 .hieractivity #control-panel #gi-option-selector label {
-  display: block;
+  display: table-row;
 }
 .hieractivity #control-panel #gi-option-selector label .gi-label {
   margin: 0 0.35em;
@@ -133,6 +134,10 @@
 .hieractivity #tei-container {
   overflow: hidden;
 }
+.hieractivity .selected-gi {
+  background-color: black;
+  color: #dddddd;
+}
 .hieractivity [data-tapas-gi].boxed {
   margin: 2em 1em;
   padding: 0.85em;
@@ -143,18 +148,17 @@
 }
 .hieractivity [data-tapas-gi].boxed.selected-gi {
   border-left: 1em solid black;
-  background-color: unset;
-  color: unset;
+  color: #808080;
 }
 .hieractivity [data-tapas-gi].boxed.box-p {
   margin: 1em 0;
-  padding: 0.15em 0.5em;
+  padding: 0.5em;
   display: block;
   background-color: #ffffee;
 }
 .hieractivity [data-tapas-gi].boxed.box-p.selected-gi {
   border-left: 1em solid black;
-  color: unset;
+  color: #808080;
 }
 .hieractivity .box-outermost {
   background-color: rgba(50, 116, 184, 0.8);
@@ -192,10 +196,6 @@
 .hieractivity .box-gen10 {
   background-color: rgba(255, 237, 111, 0.8);
 }
-.hieractivity .selected-gi {
-  background-color: black;
-  color: #dddddd;
-}
 .hieractivity .block {
   display: block;
 }
@@ -209,7 +209,10 @@
 }
 .hieractivity .label-explanatory {
   opacity: 0.95;
-  font-size: 0.8em;
+  font-size: 0.85em;
+}
+.hieractivity .label-explanatory code {
+  font-size: 1em;
 }
 .hieractivity .label-explanatory [data-tapas-gi] {
   opacity: unset;
@@ -229,7 +232,10 @@
 .hieractivity .media-obj .thumbnail {
   max-height: 50px;
   opacity: 0.95;
-  font-size: 0.8em;
+  font-size: 0.85em;
+}
+.hieractivity .media-obj .thumbnail code {
+  font-size: 1em;
 }
 .hieractivity .media-obj .thumbnail [data-tapas-gi] {
   opacity: unset;

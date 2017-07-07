@@ -31,20 +31,23 @@
 <!-- FUNCTIONS -->
   
   <xsl:function name="tps:is-chunk-level" as="xs:boolean">
-    <xsl:param name="element" as="element()" required="yes"/>
+    <xsl:param name="element" as="element()"/>
     <xsl:value-of 
       select="exists($element[
                 self::TEI | self::text | self::front | self::body | self::back 
               | self::ab | self::floatingText | self::lg | self::div
-              | self::group
+              | self::argument | self::group | self::table
               | self::div1 | self::div2 | self::div3 | self::div4 | self::div5 
               | self::div6 | self::div7 | self::titlePage
               | self::listBibl | self::listEvent | self::listOrg | self::listPerson 
               | self::listPlace | self::castList
+              | self::bibl[parent::listBibl] | self::biblFull | self::biblStruct 
+              | self::event | self::org | self::person | self::place
               | self::performance | self::prologue | self::epilogue | self::set 
               | self::opener | self::closer | self::postscript
               | self::quote[descendant::p] | self::said[descendant::p]
               | self::figure | self::note | self::sp
+              | self::attDef | self::attList | self::elementSpec | self::schemaSpec
               ])"/>
   </xsl:function>
   
@@ -132,7 +135,7 @@
   
   <xsl:template match="@*" priority="-10"/>
   
-  <xsl:template match="*" mode="#default table-complex">
+  <xsl:template match="*" mode="#default table-complex" priority="-7">
     <span>
       <xsl:call-template name="keep-calm-and-carry-on"/>
     </span>
@@ -301,7 +304,7 @@
   </xsl:template>
   
   <xsl:template match="cell" mode="table-complex">
-    <xsl:variable name="cell" select="."/>
+    <xsl:variable name="start" select="."/>
     <xsl:variable name="columns" as="xs:integer" 
       select="if ( @cols and xs:integer(@cols) gt 1 ) then @cols/data(.) else 1"/>
     <xsl:variable name="rows" as="xs:integer" 
@@ -325,7 +328,7 @@
         <xsl:choose>
           <xsl:when test="position() eq last()">
             <xsl:call-template name="get-attributes">
-              <xsl:with-param name="start" select="$cell"/>
+              <xsl:with-param name="start" select="$start"/>
             </xsl:call-template>
             <xsl:copy-of select="$contents"/>
           </xsl:when>
@@ -344,13 +347,22 @@
   
   <!-- TEI elements which do not warrant an <html:div> or <html:p>, but should have 
     "display: block". -->
-  <xsl:template match=" head | l | stage 
-                      | salute | signed
+  <xsl:template match=" head | l | stage | salute | signed
+                      | listBibl/bibl/* | biblFull/* | biblStruct/*
+                      | event/* | org/* | person/* | place/*
                       | argument | byline | docAuthor | docDate | docEdition 
-                      | docImprint | docTitle[not(titlePart)] | titlePart" 
-                mode="#default inside-p">
+                      | docImprint | docTitle[not(titlePart)] | titlePart
+                      | moduleRef" 
+                mode="#default inside-p" priority="-6">
     <span class="block">
-      <xsl:call-template name="keep-calm-and-carry-on"/>
+      <xsl:choose>
+        <xsl:when test="not(*) and not(text())">
+          <xsl:call-template name="gloss-empty"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="keep-calm-and-carry-on"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </span>
   </xsl:template>
   
@@ -395,13 +407,14 @@
   <!-- Empty elements require placeholders. If no other template matches an element
     that happens to be empty, this one simply outputs a label with the TEI element 
     name. -->
-  <xsl:template match="*[not(*)][normalize-space(.) eq '']" priority="-5" mode="#default inside-p">
+  <xsl:template name="gloss-empty" match="*[not(*)][not(text())]" priority="-8" mode="#default inside-p">
     <span class="label-explanatory">
       <xsl:call-template name="get-attributes"/>
+      <xsl:apply-templates select="@*"/>
       <xsl:value-of select="$interjectStart"/>
       <xsl:call-template name="gloss-gi"/>
       <xsl:text> </xsl:text>
-      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="@*" mode="show-att"/>
       <xsl:value-of select="$interjectEnd"/>
     </span>
   </xsl:template>
@@ -431,7 +444,7 @@
               visual indicator. -->
             <xsl:choose>
               <xsl:when test="self::graphic or contains(@mimeType,'image')">
-                <img class="thumbnail" src="{$url}" 
+                <img class="thumbnail" src="{$url}" lang="en" 
                   alt="{$interjectStart}{$description}{$interjectEnd}"/>
               </xsl:when>
               <xsl:otherwise>
@@ -468,17 +481,9 @@
             <xsl:value-of select="$contentDivider"/>
             <xsl:apply-templates/>
           </xsl:when>
-          <xsl:when test="@extent">
-            <xsl:value-of select="$contentDivider"/>
-            <xsl:value-of select="@extent"/>
-          </xsl:when>
-          <xsl:when test="@quantity">
-            <xsl:value-of select="$contentDivider"/>
-            <xsl:value-of select="@quantity"/>
-            <xsl:if test="@unit">
-              <xsl:text> </xsl:text>
-              <xsl:value-of select="@unit"/>
-            </xsl:if>
+          <xsl:when test="@*">
+            <!--<xsl:value-of select="$contentDivider"/>-->
+            <xsl:apply-templates select="@*" mode="show-att"/>
           </xsl:when>
         </xsl:choose>
         <xsl:value-of select="$interjectEnd"/>
@@ -508,6 +513,22 @@
   </xsl:template>
   
   
+<!-- MODE: SHOW-ATT -->
+
+  <xsl:template match="@*" mode="show-att">
+    <code>
+      <xsl:text>@</xsl:text>
+      <xsl:value-of select="name(.)"/>
+    </code>
+    <xsl:text>: "</xsl:text>
+    <xsl:value-of select="data(.)"/>
+    <xsl:text>"</xsl:text>
+    <xsl:if test="position() ne last()">
+      <xsl:text>; </xsl:text>
+    </xsl:if>
+  </xsl:template>
+
+
 <!-- MODE: TEIHEADER -->
   
   <xsl:template match="*" mode="teiheader" priority="-30">
@@ -619,13 +640,31 @@
     </p>
   </xsl:template>
   
+  <xsl:template match="teiHeader/fileDesc/editionStmt" mode="teiheader">
+    <h4 class="expandable-heading box-gen1">Edition Statement</h4> <!-- gloss -->
+    <div id="editionstmt" class="expandable expandable-hidden">
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/fileDesc/extent" mode="teiheader">
+    <h4 class="expandable-heading box-gen1">Extent</h4> <!-- gloss -->
+    <div id="fileextent" class="expandable expandable-hidden">
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </div>
+  </xsl:template>
+  
   <xsl:template match="teiHeader/fileDesc/publicationStmt" mode="teiheader">
     <h4 class="expandable-heading box-gen1">
       <xsl:call-template name="gloss-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h4>
-    <div id="publicationstmt" class="expandable expandable-hidden">
+    <div id="publicationstmt" class="expandable">
       <xsl:apply-templates select="* except availability" mode="#current"/>
       <xsl:apply-templates select="availability" mode="#current"/>
     </div>
@@ -702,6 +741,13 @@
     </div>
   </xsl:template>
   
+  <xsl:template match="teiHeader/fileDesc/notesStmt" mode="teiheader">
+    <h4 class="expandable-heading box-gen1">Notes Statement</h4> <!-- gloss -->
+    <div id="notesstmt" class="expandable expandable-hidden">
+      <xsl:apply-templates mode="#current"/>
+    </div>
+  </xsl:template>
+  
   <xsl:template match="title" mode="teiheader" priority="-10">
     <span class="block">
       <xsl:apply-templates mode="#current">
@@ -743,6 +789,43 @@
     <div id="editorialdecl" class="expandable expandable-hidden">
       <xsl:apply-templates mode="#current"/>
     </div>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/profileDesc" mode="teiheader">
+    <h3 class="expandable-heading box-outer">Profile Description</h3> <!-- gloss -->
+    <div id="profiledesc" class="expandable expandable-hidden">
+      <xsl:apply-templates mode="#current"/>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="profileDesc/*" mode="teiheader">
+    <h4 class="expandable-heading box-gen1">
+      <xsl:value-of select="local-name(.)"/> <!-- gloss -->
+    </h4>
+    <div id="{translate(lower-case(local-name(.)),'-','')}" 
+      class="expandable expandable-hidden">
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="teiHeader/revisionDesc" mode="teiheader">
+    <h3 class="expandable-heading box-outer">Revision Description</h3> <!-- gloss -->
+    <div id="revisiondesc" class="expandable expandable-hidden">
+      <xsl:apply-templates mode="#current"/>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="revisionDesc//change" mode="teiheader">
+    <span>
+      <span class="change">
+        <xsl:apply-templates select="@*" mode="show-att"/>
+      </span>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </span>
   </xsl:template>
   
   
