@@ -109,7 +109,8 @@
             </title>
             <meta charset="UTF-8" />
             <link id="maincss" rel="stylesheet" type="text/css" href="{$css-base}hieractivity.css" />
-            <script src="{$common-base}jquery/jquery-3.2.1.min.js"></script>
+            <script src="{$common-base}jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
+            <script src="{$common-base}jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
             <script src="{$common-base}d3/d3.v4.min.js" type="text/javascript"></script>
             <script src="{$js-base}hieractivity.js" type="text/javascript"></script>
           </head>
