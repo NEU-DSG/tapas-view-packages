@@ -72,6 +72,18 @@ $(document).ready(function() {
     }*/
   });
   
+  /* Use the text-to-background visibility setting selected by the user. */
+  $('input[name=contrast-type]').change(function(e) {
+    e.preventDefault();
+    // Remove previous selection.
+    teiContainer.classed('text-contrast-high text-contrast-mid text-contrast-low text-contrast-none', false);
+    // Get the selected visibility setting.
+    var checked = d3.select('input[name=contrast-type]:checked');
+    console.log(checked);
+    type = checked.attr('value');
+    teiContainer.classed('text-contrast-'+type, true);
+  });
+  
   // Make the control panel draggable.
   $('#control-panel').draggable({
     cancel: 'h2, #controls-container',

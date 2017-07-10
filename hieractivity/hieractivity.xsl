@@ -22,6 +22,7 @@
   <xsl:variable name="css-base" select="concat($assets-base,'css/')"/>
   <xsl:variable name="js-base" select="concat($assets-base,'js/')"/>
   <xsl:param name="fullHTML"   select="'false'"/> <!-- set to 'true' to get browsable output for debugging -->
+  <xsl:param name="contrast-default" select="'low'"/>
   
   <xsl:variable name="interjectStart">&lt;[ </xsl:variable>
   <xsl:variable name="interjectEnd"> ]&gt;</xsl:variable>
@@ -67,6 +68,23 @@
         </div>
         <!-- The HTML representation of <text> -->
         <div id="tei-container">
+          <xsl:attribute name="class">
+            <xsl:text>text-contrast-</xsl:text>
+            <xsl:choose>
+              <xsl:when test="$contrast-default eq 'high'">
+                <xsl:text>high</xsl:text>
+              </xsl:when>
+              <xsl:when test="$contrast-default eq 'mid'">
+                <xsl:text>mid</xsl:text>
+              </xsl:when>
+              <xsl:when test="$contrast-default eq 'none'">
+                <xsl:text>none</xsl:text>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text>low</xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
           <xsl:apply-templates select="text"/>
         </div>
         <!-- The control panel -->
@@ -83,9 +101,33 @@
               </div>
             </div>
             <div class="control-widget">
+              <h3 class="expandable-heading">Text contrast</h3>
+              <div id="text-contrasts" class="control-widget-component expandable">
+                <fieldset id="text-contrast-selector" tabindex="2">
+                  <legend>Visibility</legend>
+                  <label>
+                    <input type="radio" name="contrast-type" value="high"></input>
+                    <span class="label-desc">high</span>
+                  </label>
+                  <label>
+                    <input type="radio" name="contrast-type" value="mid"></input>
+                    <span class="label-desc">mid</span>
+                  </label>
+                  <label> <!-- XD: change the 'checked' property depending on $contrast-default -->
+                    <input type="radio" name="contrast-type" value="low" checked="checked" tabindex="2"></input>
+                    <span class="label-desc">low</span>
+                  </label>
+                  <label>
+                    <input type="radio" name="contrast-type" value="none"></input>
+                    <span class="label-desc">none (invisible text)</span>
+                  </label>
+                </fieldset>
+              </div>
+            </div>
+            <div class="control-widget">
               <h3 class="expandable-heading">Elements by frequency</h3>
               <div id="gi-frequencies" class="control-widget-component expandable">
-                <fieldset id="gi-option-selector" tabindex="2">
+                <fieldset id="gi-option-selector" tabindex="3">
                   <legend>Mark</legend>
                   <xsl:call-template name="gi-counting-robot">
                     <xsl:with-param name="start" select="text"/>
@@ -807,8 +849,8 @@
     <xsl:variable name="allElements" select="$start/descendant-or-self::*/local-name(.)"/>
     <xsl:variable name="distinctGIs" select="distinct-values($allElements)"/>
     <label>
-      <input type="radio" name="element" value="none" checked="checked" tabindex="3"></input>
-      <span class="gi-label">defaults only</span>
+      <input type="radio" name="element" value="none" checked="checked" tabindex="4"></input>
+      <span class="label-desc">defaults only</span>
     </label>
     <xsl:variable name="options" as="item()*">
       <xsl:for-each select="$distinctGIs">
@@ -816,7 +858,7 @@
         <xsl:variable name="count" select="count($allElements[. eq $gi])"/>
         <label>
           <input type="radio" name="element" value="{$gi}"></input>
-          <span class="gi-label">
+          <span class="label-desc">
             <span class="gi-name encoded encoded-gi"><xsl:value-of select="$gi"/></span>
             <xsl:text> </xsl:text>
             <span class="gi-count"><xsl:value-of select="$count"/></span>
