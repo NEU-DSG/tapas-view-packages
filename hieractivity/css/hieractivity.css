@@ -1,11 +1,13 @@
 /*  COLORS  */
 /*  FONTS  */
+/*  OTHER VARIABLES  */
 /*  RULES  */
 .hieractivity {
   color: #808080;
   /* Expandable headings */
   /* Control panel */
   /* Containers for the <teiHeader> and <text> */
+  /* TEI header */
   /* <text>-specific styles */
 }
 .hieractivity .encoded {
@@ -32,7 +34,6 @@
 }
 .hieractivity .expandable-heading {
   margin: 0.5em 0 0;
-  border: thin solid #808080;
   padding: 0.2em;
 }
 .hieractivity .expandable-heading > button {
@@ -43,19 +44,26 @@
   cursor: pointer;
   font-family: inherit;
   font-size: unset;
-}
-.hieractivity .expandable-heading > button[aria-expanded=false]::before {
-  content: '▸ ';
-  width: 28px;
-  display: inline-block;
+  text-align: left;
 }
 .hieractivity .expandable-heading > button[aria-expanded=true] {
   box-shadow: unset;
 }
 .hieractivity .expandable-heading > button[aria-expanded=true]::before {
-  content: '▾ ';
-  width: 28px;
+  content: '▾';
+  margin: 0 0.4em;
   display: inline-block;
+  line-height: 1.2em;
+  margin-left: 0.2em;
+  float: left;
+}
+.hieractivity .expandable-heading > button[aria-expanded=false]::before {
+  content: '▸';
+  margin: 0 0.4em;
+  display: inline-block;
+  line-height: 1.2em;
+  margin-left: 0.2em;
+  float: left;
 }
 .hieractivity .expandable {
   border: thin solid #808080;
@@ -68,33 +76,54 @@
 .hieractivity #control-panel {
   border-radius: 0.4em;
   padding: 0.5em;
-  width: 180px;
+  width: 185px;
   position: fixed;
   z-index: 900;
   top: 10px;
   right: 10px;
   background-color: #555555;
   color: black;
-  text-align: center;
+}
+.hieractivity #control-panel .expandable-heading > button {
+  padding: 0.25em;
+  width: 100%;
+}
+.hieractivity #control-panel .expandable-heading > button[aria-expanded=true] {
+  box-shadow: unset;
 }
 .hieractivity #control-panel h2,
 .hieractivity #control-panel h3,
 .hieractivity #control-panel h4 {
-  margin: 0 0.4em 0.25em;
-  border-radius: 0.25em;
-  padding: 0.4em 0.25em;
-  background-color: #f0f0f0;
+  margin: 0 0 0.25em;
+  padding: 0;
+  display: block;
 }
 .hieractivity #control-panel h2 {
   margin-left: 0;
   margin-right: 0;
-  background-color: #ee5368;
+  cursor: move;
+  font-variant: small-caps;
+  text-align: center;
+}
+.hieractivity #control-panel h2 > button {
+  border: medium solid #cc4d5e;
+  padding: 0.25em 0.5em;
+  background-color: #e35668;
+  box-shadow: 0.1em 0.1em 0.2em black;
+  font-variant: inherit;
+}
+.hieractivity #control-panel #controls-container {
+  border: none;
+  border-radius: 0.4em;
+  padding: 0;
+  background-color: #cc4d5e;
 }
 .hieractivity #control-panel .control-widget {
-  margin: 0.4em 0;
-  border-radius: 0.25em;
+  border-top: medium solid brown;
   padding: 0.4em;
-  background-color: #ee5368;
+}
+.hieractivity #control-panel .control-widget:first-child {
+  border-top: none;
 }
 .hieractivity #control-panel .control-widget .control-widget-component {
   margin: 0;
@@ -142,12 +171,29 @@
 .hieractivity #tei-container {
   width: 90%;
 }
+.hieractivity #tei-container {
+  overflow: hidden;
+}
 .hieractivity #tei-header {
   margin: 1em 0;
   color: black;
 }
-.hieractivity #tei-container {
-  overflow: hidden;
+.hieractivity #tei-header .expandable-heading {
+  border: thin solid #808080;
+}
+.hieractivity #tei-header .expandable-heading > button[aria-expanded=false]::before {
+  content: '▸';
+  margin: 0 0.4em;
+  display: inline-block;
+  line-height: 1.2em;
+  margin-left: 0;
+}
+.hieractivity #tei-header .expandable-heading > button[aria-expanded=true]::before {
+  content: '▾';
+  margin: 0 0.4em;
+  display: inline-block;
+  line-height: 1.2em;
+  margin-left: 0;
 }
 .hieractivity .selected-gi {
   background-color: black;

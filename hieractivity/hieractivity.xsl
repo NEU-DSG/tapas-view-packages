@@ -71,30 +71,32 @@
         </div>
         <!-- The control panel -->
         <div id="control-panel" lang="en">
-          <h2>Controls</h2>
-          <div class="control-widget">
-            <h3>Zoom</h3>
-            <div id="zoom-container" class="control-widget-component">
-              -
-              <input id="zoom-slide" title="Zoom control slider" tabindex="1"
-                type="range" min="20" max="100" step="1" value="100" />
-              +
+          <h2 class="expandable-heading">Controls</h2>
+          <div id="controls-container" class="expandable">
+            <div class="control-widget">
+              <h3 class="expandable-heading">Zoom</h3>
+              <div id="zoom-container" class="control-widget-component expandable">
+                -
+                <input id="zoom-slide" title="Zoom control slider" tabindex="1"
+                  type="range" min="20" max="100" step="1" value="100" />
+                +
+              </div>
             </div>
-          </div>
-          <div class="control-widget">
-            <h3>Elements by frequency</h3>
-            <div class="control-widget-component">
-              <fieldset id="gi-option-selector" tabindex="2">
-                <legend>Mark</legend>
-                <xsl:call-template name="gi-counting-robot">
-                  <xsl:with-param name="start" select="text"/>
-                </xsl:call-template>
-              </fieldset>
+            <div class="control-widget">
+              <h3 class="expandable-heading">Elements by frequency</h3>
+              <div id="gi-frequencies" class="control-widget-component expandable">
+                <fieldset id="gi-option-selector" tabindex="2">
+                  <legend>Mark</legend>
+                  <xsl:call-template name="gi-counting-robot">
+                    <xsl:with-param name="start" select="text"/>
+                  </xsl:call-template>
+                </fieldset>
+              </div>
             </div>
-          </div>
-          <div class="control-widget">
-            <h3>Clicked element</h3>
-            <dl id="gi-properties" class="control-widget-component"></dl>
+            <div class="control-widget">
+              <h3 class="expandable-heading">Clicked element</h3>
+              <dl id="gi-properties" class="control-widget-component expandable"></dl>
+            </div>
           </div>
         </div>
       </div>

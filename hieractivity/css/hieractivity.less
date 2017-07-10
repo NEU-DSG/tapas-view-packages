@@ -7,8 +7,9 @@
 @gray:              #808080;
 @gray-light:        #DDDDDD;
 @gray-lighter:      #F0F0F0;
-@raspberry:         #EE5368;
-@raspberry-light:   #F67788;
+@raspberry:         #CC4D5E;
+@raspberry-light:   #E35668;//de5466
+@raspberry-lighter: #F67788;
 @slate:             #9EAEC9;
 // Color palette used for boxes at varying depths. This is a slightly modified
   // version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
@@ -30,6 +31,10 @@
 
 @code: 'Courier', 'Courier New', monospace;
 @heading: ‘Palatino Linotype’, ‘Book Antiqua’, Palatino, serif;
+
+/*  OTHER VARIABLES  */
+
+@button-shadow: 0.1em 0.1em 0.2em;
 
 
 /*  RULES  */
@@ -67,35 +72,52 @@
   } // dl
   
   /* Expandable headings */
-    
+  
+  .expandable-caret() {
+    margin: 0 0.4em;
+    display: inline-block;
+    line-height: 1.2em;
+    //font-size: 0.85em;
+  }
+  
+  .expandable-caret-down() {
+    content: '▾';
+    .expandable-caret();
+  }
+  
+  .expandable-caret-right() {
+    content: '▸';
+    .expandable-caret();
+  }
+  
   .expandable-heading {
     margin: 0.5em 0 0;
-    border: thin solid @gray;
     padding: 0.2em;
     
     > button {
       border: thin solid @gray-dark;
       border-radius: 0.4em;
-      box-shadow: 0.1em 0.1em 0.2em @gray-dark;
+      box-shadow: @button-shadow @gray-dark;
       background-color: @gray-lighter;
       cursor: pointer;
       font-family: inherit;
       font-size: unset;
+      text-align: left;
       
-      &[aria-expanded=false]::before {
-        content: '▸ ';
-        width: 28px;
-        display: inline-block;
+      &[aria-expanded=true] {
+        box-shadow: unset;
+        
+        &::before {
+          .expandable-caret-down();
+          margin-left: 0.2em;
+          float: left;
+        }
       }
       
-      &[aria-expanded=true]{
-      box-shadow: unset;
-      
-        &::before {
-          content: '▾ ';
-          width: 28px;
-          display: inline-block;
-        }
+      &[aria-expanded=false]::before {
+        .expandable-caret-right();
+        margin-left: 0.2em;
+        float: left;
       }
     } // .expandable-heading > button
   } // .expandable-heading
@@ -117,26 +139,53 @@
     //border: medium solid @gray-dark;
     border-radius: 0.4em;
     padding: 0.5em;
-    //height: 150px;
-    width: 180px;
+    width: 185px;
     position: fixed;
     z-index: 900;
     top: 10px;
     right: 10px;
     background-color: @gray-dark;
     color: black;
-    text-align: center;
+    
+    .expandable-heading {
+      
+      > button {
+        padding: 0.25em;
+        width: 100%;
+        //box-shadow: @button-shadow #6F0E52;
+        
+        &[aria-expanded=true] {
+          box-shadow: unset;
+        }
+      }
+    } // .expandable-heading
     
     h2, h3, h4 {
-      margin: 0 0.4em 0.25em;
-      border-radius: 0.25em;
-      padding: 0.4em 0.25em;
-      background-color: @gray-lighter;
+      margin: 0 0 0.25em;
+      padding: 0;
+      display: block;
     }
     
     h2 {
       margin-left: 0;
       margin-right: 0;
+      cursor: move;
+      font-variant: small-caps;
+      text-align: center;
+      
+      > button {
+        border: medium solid @raspberry;
+        padding: 0.25em 0.5em;
+        background-color: @raspberry-light;
+        box-shadow: @button-shadow black;
+        font-variant: inherit;
+      } // h2 > button
+    } // h2
+    
+    #controls-container {
+      border: none;
+      border-radius: 0.4em;
+      padding: 0;
       background-color: @raspberry;
     }
     
@@ -149,11 +198,15 @@
     }
     
     .control-widget {
-      margin: 0.4em 0;
-      //border: thin solid @gray;
-      border-radius: 0.25em;
+      //margin: 0.4em 0;
+      border-top: medium solid brown;
+      //border-radius: 0.25em;
       padding: 0.4em;
-      background-color: @raspberry;
+      //background-color: @raspberry;
+      
+      &:first-child {
+        border-top: none;
+      }
       
       .control-widget-component {
         .component-inner();
@@ -210,16 +263,38 @@
     width: 90%;
   }
   
-  #tei-header {
-    margin: 1em 0;
-    color: black;
-  }
-  
   #tei-container {
     overflow: hidden;
   }
-
-
+  
+  /* TEI header */
+  
+  #tei-header {
+    margin: 1em 0;
+    color: black;
+    
+    .expandable-heading {
+      border: thin solid @gray;
+      
+      > button {
+        
+        &[aria-expanded=false]::before {
+          .expandable-caret-right();
+          margin-left: 0;
+        }
+      
+        &[aria-expanded=true] {
+        
+          &::before {
+            .expandable-caret-down();
+            margin-left: 0;
+          }
+        }
+      } // .expandable-heading > button
+    } // .expandable-heading
+  } // #tei-header
+  
+  
   /* <text>-specific styles */
   
   .centered() {
