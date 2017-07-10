@@ -7,9 +7,11 @@
 @gray:              #808080;
 @gray-light:        #DDDDDD;
 @gray-lighter:      #F0F0F0;
+@raspberry-darker:  #8B1122;
+@raspberry-dark:    #B02B3D;
 @raspberry:         #CC4D5E;
-@raspberry-light:   #E35668;//de5466
-@raspberry-lighter: #F67788;
+@raspberry-light:   #EF7C8C;
+@raspberry-lighter: #F7AAB5;
 @slate:             #9EAEC9;
 // Color palette used for boxes at varying depths. This is a slightly modified
   // version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
@@ -147,24 +149,28 @@
     background-color: @gray-dark;
     color: black;
     
+    h2, h3, h4 {
+      margin: 0 0 0.25em;
+      padding: 0;
+      display: block;
+      color: white;
+    }
+    
     .expandable-heading {
       
       > button {
+        border-color: @raspberry-darker;
         padding: 0.25em;
         width: 100%;
-        //box-shadow: @button-shadow #6F0E52;
+        background-color: #F8E6DB;
+        box-shadow: @button-shadow @raspberry-darker;
+        color: black;
         
         &[aria-expanded=true] {
           box-shadow: unset;
         }
       }
     } // .expandable-heading
-    
-    h2, h3, h4 {
-      margin: 0 0 0.25em;
-      padding: 0;
-      display: block;
-    }
     
     h2 {
       margin-left: 0;
@@ -174,9 +180,8 @@
       text-align: center;
       
       > button {
-        border: medium solid @raspberry;
+        border: medium solid @raspberry-dark;
         padding: 0.25em 0.5em;
-        background-color: @raspberry-light;
         box-shadow: @button-shadow black;
         font-variant: inherit;
       } // h2 > button
@@ -186,8 +191,8 @@
       border: none;
       border-radius: 0.4em;
       padding: 0;
-      background-color: @raspberry;
-    }
+      background-color: @raspberry-dark;
+    } // #controls-container
     
     .component-inner() {
       margin: 0;
@@ -198,11 +203,8 @@
     }
     
     .control-widget {
-      //margin: 0.4em 0;
-      border-top: medium solid brown;
-      //border-radius: 0.25em;
+      border-top: medium solid @raspberry-darker;
       padding: 0.4em;
-      //background-color: @raspberry;
       
       &:first-child {
         border-top: none;

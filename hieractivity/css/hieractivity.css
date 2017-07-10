@@ -84,19 +84,24 @@
   background-color: #555555;
   color: black;
 }
-.hieractivity #control-panel .expandable-heading > button {
-  padding: 0.25em;
-  width: 100%;
-}
-.hieractivity #control-panel .expandable-heading > button[aria-expanded=true] {
-  box-shadow: unset;
-}
 .hieractivity #control-panel h2,
 .hieractivity #control-panel h3,
 .hieractivity #control-panel h4 {
   margin: 0 0 0.25em;
   padding: 0;
   display: block;
+  color: white;
+}
+.hieractivity #control-panel .expandable-heading > button {
+  border-color: #8b1122;
+  padding: 0.25em;
+  width: 100%;
+  background-color: #F8E6DB;
+  box-shadow: 0.1em 0.1em 0.2em #8b1122;
+  color: black;
+}
+.hieractivity #control-panel .expandable-heading > button[aria-expanded=true] {
+  box-shadow: unset;
 }
 .hieractivity #control-panel h2 {
   margin-left: 0;
@@ -106,9 +111,8 @@
   text-align: center;
 }
 .hieractivity #control-panel h2 > button {
-  border: medium solid #cc4d5e;
+  border: medium solid #b02b3d;
   padding: 0.25em 0.5em;
-  background-color: #e35668;
   box-shadow: 0.1em 0.1em 0.2em black;
   font-variant: inherit;
 }
@@ -116,10 +120,10 @@
   border: none;
   border-radius: 0.4em;
   padding: 0;
-  background-color: #cc4d5e;
+  background-color: #b02b3d;
 }
 .hieractivity #control-panel .control-widget {
-  border-top: medium solid brown;
+  border-top: medium solid #8b1122;
   padding: 0.4em;
 }
 .hieractivity #control-panel .control-widget:first-child {
