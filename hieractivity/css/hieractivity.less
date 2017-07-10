@@ -149,6 +149,16 @@
     background-color: @gray-dark;
     color: black;
     
+    &.ui-draggable:hover {
+      cursor: move;
+      cursor: grab;
+    }
+    
+    &.ui-draggable-dragging {
+      cursor: move !important;
+      cursor: grabbing !important;
+    }
+    
     h2, h3, h4 {
       margin: 0 0 0.25em;
       padding: 0;
@@ -169,13 +179,12 @@
         &[aria-expanded=true] {
           box-shadow: unset;
         }
-      }
+      } // .expandable-heading > button
     } // .expandable-heading
     
     h2 {
       margin-left: 0;
       margin-right: 0;
-      cursor: move;
       font-variant: small-caps;
       text-align: center;
       
@@ -183,6 +192,7 @@
         border: medium solid @raspberry-dark;
         padding: 0.25em 0.5em;
         box-shadow: @button-shadow black;
+        //text-transform: lowercase;
         font-variant: inherit;
       } // h2 > button
     } // h2
@@ -192,6 +202,7 @@
       border-radius: 0.4em;
       padding: 0;
       background-color: @raspberry-dark;
+      cursor: default;
     } // #controls-container
     
     .component-inner() {

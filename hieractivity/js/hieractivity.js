@@ -74,7 +74,8 @@ $(document).ready(function() {
   
   // Make the control panel draggable.
   $('#control-panel').draggable({
-    cancel: '.control-widget'
+    cancel: 'h2, #controls-container',
+    containment: 'window'
   });
 
 

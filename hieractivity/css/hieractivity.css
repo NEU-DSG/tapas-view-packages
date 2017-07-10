@@ -84,6 +84,14 @@
   background-color: #555555;
   color: black;
 }
+.hieractivity #control-panel.ui-draggable:hover {
+  cursor: move;
+  cursor: grab;
+}
+.hieractivity #control-panel.ui-draggable-dragging {
+  cursor: move !important;
+  cursor: grabbing !important;
+}
 .hieractivity #control-panel h2,
 .hieractivity #control-panel h3,
 .hieractivity #control-panel h4 {
@@ -106,7 +114,6 @@
 .hieractivity #control-panel h2 {
   margin-left: 0;
   margin-right: 0;
-  cursor: move;
   font-variant: small-caps;
   text-align: center;
 }
@@ -121,6 +128,7 @@
   border-radius: 0.4em;
   padding: 0;
   background-color: #b02b3d;
+  cursor: default;
 }
 .hieractivity #control-panel .control-widget {
   border-top: medium solid #8b1122;
