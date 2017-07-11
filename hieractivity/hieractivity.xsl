@@ -98,7 +98,7 @@
               | self::listBibl | self::listEvent | self::listOrg | self::listPerson 
               | self::listPlace | self::castList
               | self::bibl[parent::listBibl] | self::biblFull | self::biblStruct 
-              | self::event | self::org | self::person | self::place
+              | self::event | self::org | self::person | self::persona | self::place
               | self::performance | self::prologue | self::epilogue | self::set 
               | self::opener | self::closer | self::postscript
               | self::quote[descendant::p] | self::said[descendant::p]
@@ -111,7 +111,10 @@
 <!-- TEMPLATES -->
   
   <xsl:template match="/TEI" priority="92">
-    <xsl:variable name="lang" select="if ( @xml:lang ) then @xml:lang/data(.) else 'en'"/>
+    <xsl:variable name="lang" 
+      select=" if ( @xml:lang ) then @xml:lang/data(.) 
+          else if ( text/@xml:lang ) then text/@xml:lang/data(.) 
+          else 'en'"/>
     <xsl:variable name="body" as="node()">
       <div class="hieractivity">
         <xsl:if test="not($render-full-html)">

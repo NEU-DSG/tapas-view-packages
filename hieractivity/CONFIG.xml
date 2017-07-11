@@ -4,7 +4,10 @@
   version="0.0.1" xml:id="hieractivity" dynamic="false" scope="file">
   
   <human_name>Hieractivity</human_name>
-  <description></description>
+  <description>This view package draws attention to the hierarchical structures of a TEI 
+    document by rendering its elements as nested boxes. Readers can explore the TEI 
+    representation through a number of control widgets, including zooming and selecting 
+    TEI elements for examination.</description>
   
   <file_types>
     <file_type>tei</file_type>
