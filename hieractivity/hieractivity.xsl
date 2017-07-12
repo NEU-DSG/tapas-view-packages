@@ -147,7 +147,9 @@
               </xsl:otherwise>
             </xsl:choose>
           </xsl:attribute>
-          <xsl:apply-templates select="text"/>
+          <xsl:apply-templates select="text">
+            <xsl:with-param name="language" select="$useLang"/>
+          </xsl:apply-templates>
         </div>
         <!-- The control panel -->
         <xsl:call-template name="control-box"/>
