@@ -13,6 +13,61 @@
   xmlns:tps="http://tapas.northeastern.edu"
   exclude-result-prefixes="#all">
   
+  <xd:doc scope="stylesheet">
+    <xd:desc>
+      <xd:p>This stylesheet performs a relatively simple mapping of TEI to HTML, using 
+        data attributes to retain information about the TEI structure. A control box with 
+        manipulatable form components allows reader exploration of a TEI document via 
+        HTML and Javascript.</xd:p>
+      <xd:p>Created by Ashley M. Clark for the 
+        <xd:a href="http://tapas.northeastern.edu">TAPAS Project</xd:a>, 2017.</xd:p>
+      
+      <xd:p>Changelog:</xd:p>
+      <xd:ul><!--
+        <xd:li>DATE(, VERSION)?:
+          <xd:ul>
+            <xd:li></xd:li>
+          </xd:ul>
+        </xd:li>-->
+        <xd:li>2017-07-10: Added 'Text contrast' widget, as well as an XSLT parameter 
+          $contrast-default to change the default visibility of the text.</xd:li>
+        <xd:li>2017-06-27, 2017-06-28:
+          <xd:ul>
+            <xd:li>Included select information from the &lt;teiHeader&gt; in 
+              collapse-able sections separate from &lt;text&gt;.</xd:li>
+            <xd:li>Moved some functionality to this XSLT from the Javascript so that no 
+              information is hidden when Javascript is turned off or unavailable.</xd:li>
+            <xd:li>Moved color palette for boxes to the LESS file, and moved the 
+              algorithm for determining box color from the Javascript to this XSLT, in 
+              the form of using the 'depth' parameter to assign classes to each 'box'.</xd:li>
+          </xd:ul>
+        </xd:li>
+        <xd:li>2017-06-22: 
+          <xd:ul>
+            <xd:li>Added rules for displaying tables, and for faking tables when the TEI 
+              structure isn't clean enough, or when the table occurs as a descendant of 
+              &lt;p&gt;.</xd:li>
+            <xd:li>Added 'Clicked element' widget: an empty list into which Javascript 
+              will add a profile of the TEI element represented by the topmost clicked 
+              div-box.</xd:li>
+          </xd:ul>
+        </xd:li>
+        <xd:li>2017-06-21: Added rules for displaying images and other media, including 
+          alt text (treated as interjectory).</xd:li>
+        <xd:li>2017-06-19: Added 'Elements by frequency' widget, which includes radio 
+          buttons for showing all instances of a given TEI element (as rendered in HTML).</xd:li>
+        <xd:li>2017-06-16:
+          <xd:ul>
+            <xd:li>Marked empty elements with 'interjectory' labels.</xd:li>
+            <xd:li>Added 'inside-p' mode to exclusively use &lt;html:span&gt;s inside 
+              TEI/HTML paragraphs.</xd:li>
+          </xd:ul>
+        </xd:li>
+        <xd:li>2017-06-09, v0.0.1: Created stylesheet and zoom controls.</xd:li>
+      </xd:ul>
+    </xd:desc>
+  </xd:doc>
+  
   <xsl:output indent="no" method="xhtml" omit-xml-declaration="yes"/>
   <xsl:include href="../common/odd-interpretation/tei-odd-interpreter.xsl"/>
   
@@ -22,7 +77,8 @@
   <xsl:variable name="common-base" select="concat($assets-base,'../common/')"/>
   <xsl:variable name="css-base" select="concat($assets-base,'css/')"/>
   <xsl:variable name="js-base" select="concat($assets-base,'js/')"/>
-  <xsl:param name="fullHTML"   select="'false'"/> <!-- set to 'true' to get browsable output for debugging -->
+  <xsl:param name="render-full-html"   select="false()" as="xs:boolean"/> <!-- set to 'true' to get browsable output for debugging -->
+  <xsl:param name="contrast-default" select="'mid'" as="xs:string"/>
   
   <xsl:variable name="interjectStart">&lt;[ </xsl:variable>
   <xsl:variable name="interjectEnd"> ]&gt;</xsl:variable>
@@ -42,7 +98,7 @@
               | self::listBibl | self::listEvent | self::listOrg | self::listPerson 
               | self::listPlace | self::castList
               | self::bibl[parent::listBibl] | self::biblFull | self::biblStruct 
-              | self::event | self::org | self::person | self::place
+              | self::event | self::org | self::person | self::persona | self::place
               | self::performance | self::prologue | self::epilogue | self::set 
               | self::opener | self::closer | self::postscript
               | self::quote[descendant::p] | self::said[descendant::p]
@@ -63,7 +119,7 @@
               else $language"/>
     <xsl:variable name="body" as="node()">
       <div class="hieractivity">
-        <xsl:if test="not($fullHTML)">
+        <xsl:if test="not($render-full-html)">
           <xsl:attribute name="lang" select="$useLang"/>
         </xsl:if>
         <!-- Metadata from the <teiHeader> -->
@@ -74,42 +130,31 @@
         </div>
         <!-- The HTML representation of <text> -->
         <div id="tei-container">
-          <xsl:apply-templates select="text">
-            <xsl:with-param name="language" select="$language"/>
-          </xsl:apply-templates>
+          <xsl:attribute name="class">
+            <xsl:text>text-contrast-</xsl:text>
+            <xsl:choose>
+              <xsl:when test="$contrast-default eq 'high'">
+                <xsl:text>high</xsl:text>
+              </xsl:when>
+              <xsl:when test="$contrast-default eq 'mid'">
+                <xsl:text>mid</xsl:text>
+              </xsl:when>
+              <xsl:when test="$contrast-default eq 'none'">
+                <xsl:text>none</xsl:text>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text>low</xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+          <xsl:apply-templates select="text"/>
         </div>
         <!-- The control panel -->
-        <div id="control-panel" lang="en">
-          <h2>Controls</h2>
-          <div class="control-widget">
-            <h3>Zoom</h3>
-            <div id="zoom-container">
-              -
-              <input id="zoom-slide" title="Zoom control slider" tabindex="1"
-                type="range" min="20" max="100" step="1" value="100" />
-              +
-            </div>
-          </div>
-          <div class="control-widget">
-            <h3>Elements by frequency</h3>
-            <div class="control-widget-component">
-              <fieldset id="gi-option-selector" tabindex="2">
-                <legend>Mark</legend>
-                <xsl:call-template name="gi-counting-robot">
-                  <xsl:with-param name="start" select="text"/>
-                </xsl:call-template>
-              </fieldset>
-            </div>
-          </div>
-          <div class="control-widget">
-            <h3>Clicked element</h3>
-            <dl id="gi-properties"></dl>
-          </div>
-        </div>
+        <xsl:call-template name="control-box"/>
       </div>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$fullHTML">
+      <xsl:when test="$render-full-html">
         <html>
           <xsl:attribute name="lang" select="$useLang"/>
           <head>
@@ -118,7 +163,8 @@
             </title>
             <meta charset="UTF-8" />
             <link id="maincss" rel="stylesheet" type="text/css" href="{$css-base}hieractivity.css" />
-            <script src="{$common-base}jquery/jquery-3.2.1.min.js"></script>
+            <script src="{$common-base}jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
+            <script src="{$common-base}jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
             <script src="{$common-base}d3/d3.v4.min.js" type="text/javascript"></script>
             <script src="{$js-base}hieractivity.js" type="text/javascript"></script>
           </head>
@@ -853,6 +899,67 @@
   
 <!-- SUPPLEMENTAL TEMPLATES -->
   
+  <!-- Build out the control box and its widgets. -->
+  <xsl:template name="control-box">
+    <div id="control-panel" lang="en">
+      <h2 class="expandable-heading">Controls</h2>
+      <div id="controls-container" class="expandable">
+        <!-- Zoom -->
+        <div class="control-widget">
+          <h3 class="expandable-heading">Zoom</h3>
+          <div id="zoom-container" class="control-widget-component expandable">
+            -
+            <input id="zoom-slide" title="Zoom control slider" tabindex="1"
+              type="range" min="20" max="100" step="1" value="100" />
+            +
+          </div>
+        </div>
+        <!-- Text contrast -->
+        <div class="control-widget">
+          <h3 class="expandable-heading">Text contrast</h3>
+          <div id="text-contrasts" class="control-widget-component expandable">
+            <xsl:variable name="tabIndex" select="2"/>
+            <fieldset id="text-contrast-selector" tabindex="2">
+              <legend>Visibility</legend>
+              <xsl:for-each select="( 'high', 'mid', 'low', 'none' )">
+                <xsl:variable name="value" select="."/>
+                <xsl:call-template name="make-radio-button">
+                  <xsl:with-param name="fieldsetName" select="'contrast-type'"/>
+                  <xsl:with-param name="value" select="$value"/>
+                  <xsl:with-param name="isChecked" 
+                    select="if ( $contrast-default eq $value ) then true() else false()"/>
+                  <xsl:with-param name="tabIndex" 
+                    select="if ( $contrast-default eq $value ) then $tabIndex else 9999"/>
+                  <xsl:with-param name="label"
+                    select="if ( $value eq 'none' ) then 'none (invisible text)' else $value"/>
+                </xsl:call-template>
+              </xsl:for-each>
+            </fieldset>
+          </div>
+        </div>
+        <!-- Elements by frequency -->
+        <div class="control-widget">
+          <h3 class="expandable-heading">Elements by frequency</h3>
+          <div id="gi-frequencies" class="control-widget-component expandable">
+            <fieldset id="gi-option-selector" tabindex="3">
+              <legend>Mark</legend>
+              <xsl:call-template name="gi-counting-robot">
+                <xsl:with-param name="start" select="text"/>
+              </xsl:call-template>
+            </fieldset>
+          </div>
+        </div>
+        <!-- Clicked element properties -->
+        <div class="control-widget">
+          <h3 class="expandable-heading">Clicked element</h3>
+          <dl id="gi-properties" class="control-widget-component expandable"></dl>
+        </div>
+      </div>
+    </div>
+  </xsl:template>
+  
+  <!-- For a given element, determine the number of preceding elements of the same 
+    type that exist within <text>. -->
   <xsl:template name="count-preceding-of-type">
     <xsl:param name="element" select="." as="node()"/>
     <xsl:variable name="gi" select="$element/local-name(.)"/>
@@ -888,24 +995,29 @@
     the current node). -->
   <xsl:template name="gi-counting-robot">
     <xsl:param name="start" select="." as="node()"/>
+    <xsl:variable name="fieldsetName" select="'element'"/>
     <xsl:variable name="allElements" select="$start/descendant-or-self::*/local-name(.)"/>
     <xsl:variable name="distinctGIs" select="distinct-values($allElements)"/>
-    <label>
-      <input type="radio" name="element" value="none" checked="checked" tabindex="3"></input>
-      <span class="gi-label">defaults only</span>
-    </label>
+    <xsl:call-template name="make-radio-button">
+      <xsl:with-param name="fieldsetName" select="$fieldsetName"/>
+      <xsl:with-param name="value" select="'none'"/>
+      <xsl:with-param name="label">defaults only</xsl:with-param>
+      <xsl:with-param name="isChecked" select="true()"/>
+      <xsl:with-param name="tabIndex" select="4"/>
+    </xsl:call-template>
     <xsl:variable name="options" as="item()*">
       <xsl:for-each select="$distinctGIs">
         <xsl:variable name="gi" select="."/>
         <xsl:variable name="count" select="count($allElements[. eq $gi])"/>
-        <label>
-          <input type="radio" name="element" value="{$gi}"></input>
-          <span class="gi-label">
+        <xsl:call-template name="make-radio-button">
+          <xsl:with-param name="fieldsetName" select="$fieldsetName"/>
+          <xsl:with-param name="value" select="$gi"/>
+          <xsl:with-param name="label">
             <span class="gi-name encoded encoded-gi"><xsl:value-of select="$gi"/></span>
             <xsl:text> </xsl:text>
             <span class="gi-count"><xsl:value-of select="$count"/></span>
-          </span>
-        </label>
+          </xsl:with-param>
+        </xsl:call-template>
       </xsl:for-each>
     </xsl:variable>
     <xsl:perform-sort select="$options">
@@ -919,6 +1031,28 @@
   <xsl:template name="keep-calm-and-carry-on">
     <xsl:call-template name="set-data-attributes"/>
     <xsl:apply-templates mode="#current"/>
+  </xsl:template>
+  
+  <!-- Create a labelled radio button for the control box. -->
+  <xsl:template name="make-radio-button">
+    <xsl:param name="fieldsetName" as="xs:string" required="yes"/>
+    <xsl:param name="value" as="xs:string" required="yes"/>
+    <xsl:param name="label" select="$value"/>
+    <xsl:param name="isChecked" select="false()" as="xs:boolean"/>
+    <xsl:param name="tabIndex" select="9999" as="xs:integer"/>
+    <label>
+      <input type="radio" name="{$fieldsetName}" value="{$value}">
+        <xsl:if test="$isChecked">
+          <xsl:attribute name="checked" select="'checked'"/>
+        </xsl:if>
+        <xsl:if test="$tabIndex ne 9999">
+          <xsl:attribute name="tabindex" select="$tabIndex"/>
+        </xsl:if>
+      </input>
+      <span class="label-desc">
+        <xsl:copy-of select="$label"/>
+      </span>
+    </label>
   </xsl:template>
   
   <!-- Create a data attribute to store the name of the current TEI element. -->

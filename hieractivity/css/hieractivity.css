@@ -1,9 +1,13 @@
 /*  COLORS  */
 /*  FONTS  */
+/*  OTHER VARIABLES  */
 /*  RULES  */
 .hieractivity {
-  color: #808080;
-  /* TEI-specific styles */
+  /* Expandable headings */
+  /* Control panel */
+  /* Containers for the <teiHeader> and <text> */
+  /* TEI header */
+  /* <text>-specific styles */
 }
 .hieractivity .encoded {
   font-family: 'Courier', 'Courier New', monospace;
@@ -27,62 +31,152 @@
 .hieractivity dl dd + dt {
   margin-top: 0.35em;
 }
-.hieractivity #control-panel {
-  border: medium solid #555555;
+.hieractivity .expandable-heading {
+  margin: 0.5em 0 0;
+  padding: 0.2em;
+}
+.hieractivity .expandable-heading > button {
+  border: thin solid #555555;
   border-radius: 0.4em;
-  padding: 0.25em;
-  width: 180px;
+  box-shadow: 0.1em 0.1em 0.2em #555555;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: unset;
+  text-align: left;
+}
+.hieractivity .expandable-heading > button[aria-expanded=true] {
+  box-shadow: unset;
+}
+.hieractivity .expandable-heading > button[aria-expanded=true]::before {
+  content: '▾';
+  margin: 0 0.4em;
+  display: inline-block;
+  line-height: 1.2em;
+  margin-left: 0.2em;
+  float: left;
+}
+.hieractivity .expandable-heading > button[aria-expanded=false]::before {
+  content: '▸';
+  margin: 0 0.4em;
+  display: inline-block;
+  line-height: 1.2em;
+  margin-left: 0.2em;
+  float: left;
+}
+.hieractivity .expandable {
+  border: thin solid #808080;
+  border-top: none;
+  padding: 0.15em 0.75em 0.4em;
+}
+.hieractivity .expandable-heading + .expandable[aria-hidden=true] {
+  display: none;
+}
+.hieractivity #control-panel {
+  border-radius: 0.4em;
+  padding: 0.5em;
+  width: 185px;
   position: fixed;
   z-index: 900;
   top: 10px;
   right: 10px;
-  background-color: #9eaec9;
+  background-color: #555555;
   color: black;
-  text-align: center;
+}
+.hieractivity #control-panel.ui-draggable:hover {
+  cursor: move;
+  cursor: grab;
+}
+.hieractivity #control-panel.ui-draggable-dragging {
+  cursor: move !important;
+  cursor: grabbing !important;
 }
 .hieractivity #control-panel h2,
 .hieractivity #control-panel h3,
 .hieractivity #control-panel h4 {
-  margin: 0.5em 0;
+  margin: 0 0 0.25em;
+  padding: 0;
+  display: block;
+  color: white;
 }
-.hieractivity #control-panel .control-widget {
-  margin: 0.2em 0;
-  padding: 0.25em 0;
+.hieractivity #control-panel .expandable-heading > button {
+  border-color: #8b1122;
+  padding: 0.25em;
+  width: 100%;
+  background-color: #F8E6DB;
+  box-shadow: 0.1em 0.1em 0.2em #8b1122;
+  color: black;
 }
-.hieractivity #control-panel .control-widget .control-widget-component {
-  border: thin solid #808080;
-  height: 130px;
+.hieractivity #control-panel .expandable-heading > button[aria-expanded=true] {
+  box-shadow: unset;
+}
+.hieractivity #control-panel h2.expandable-heading {
+  margin-left: 0;
+  margin-right: 0;
+  font-variant: small-caps;
+  text-align: center;
+}
+.hieractivity #control-panel h2.expandable-heading > button {
+  border: medium solid #b02b3d;
+  padding: 0.25em 0.5em;
+  box-shadow: 0.1em 0.1em 0.2em black;
+  font-variant: inherit;
+}
+.hieractivity #control-panel #controls-container {
+  border: none;
+  border-radius: 0.4em;
+  padding: 0;
+  background-color: #b02b3d;
+  cursor: default;
+  /* Widget customizations */
+}
+.hieractivity #control-panel #controls-container .control-widget {
+  border-top: medium solid #8b1122;
+  padding: 0.4em;
+}
+.hieractivity #control-panel #controls-container .control-widget:first-child {
+  border-top: none;
+}
+.hieractivity #control-panel #controls-container .control-widget .control-widget-component {
+  margin: 0;
+  border: thin solid #dddddd;
+  height: 120px;
   background-color: white;
   overflow-y: auto;
   padding: 0.25em;
   display: block;
 }
-.hieractivity #control-panel #zoom-container {
-  padding: 0.4em;
-  display: flex;
-}
-.hieractivity #control-panel #zoom-container #zoom-slide {
-  width: 140px;
-}
-.hieractivity #control-panel #gi-option-selector {
+.hieractivity #control-panel #controls-container fieldset {
   border: thin solid #dddddd;
   padding: 0.15em 0;
   text-align: left;
 }
-.hieractivity #control-panel #gi-option-selector label {
+.hieractivity #control-panel #controls-container fieldset label {
   display: table-row;
 }
-.hieractivity #control-panel #gi-option-selector label .gi-label {
+.hieractivity #control-panel #controls-container fieldset label .label-desc {
   margin: 0 0.35em;
   font-size: 0.85em;
 }
-.hieractivity #control-panel #gi-option-selector label .gi-label .gi-count {
+.hieractivity #control-panel #controls-container #zoom-container {
+  padding: 0.4em;
+  display: flex;
+  height: initial;
+}
+.hieractivity #control-panel #controls-container #zoom-container #zoom-slide {
+  width: 140px;
+}
+.hieractivity #control-panel #controls-container #text-contrasts {
+  height: unset;
+}
+.hieractivity #control-panel #controls-container #gi-option-selector .gi-count {
   margin-top: 0.2em;
   float: right;
 }
-.hieractivity #control-panel #gi-properties {
-  border: thin solid #808080;
-  height: 130px;
+.hieractivity #control-panel #controls-container #gi-properties {
+  margin: 0;
+  border: thin solid #dddddd;
+  height: 120px;
   background-color: white;
   overflow-y: auto;
   padding: 0 1em;
@@ -97,42 +191,36 @@
   color: black;
 }
 .hieractivity #tei-header .expandable-heading {
-  margin: 0.5em 0 0;
   border: thin solid #808080;
-  padding: 0.2em;
-}
-.hieractivity #tei-header .expandable-heading > button {
-  border: thin solid #555555;
-  border-radius: 0.4em;
-  box-shadow: 0.1em 0.1em 0.2em #555555;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: unset;
 }
 .hieractivity #tei-header .expandable-heading > button[aria-expanded=false]::before {
-  content: '▸ ';
-  width: 28px;
+  content: '▸';
+  margin: 0 0.4em;
   display: inline-block;
-}
-.hieractivity #tei-header .expandable-heading > button[aria-expanded=true] {
-  box-shadow: unset;
+  line-height: 1.2em;
+  margin-left: 0;
 }
 .hieractivity #tei-header .expandable-heading > button[aria-expanded=true]::before {
-  content: '▾ ';
-  width: 28px;
+  content: '▾';
+  margin: 0 0.4em;
   display: inline-block;
-}
-.hieractivity #tei-header .expandable {
-  border: thin solid #808080;
-  border-top: none;
-  padding: 0.15em 0.75em 0.4em;
-}
-.hieractivity #tei-header .expandable-heading + .expandable[aria-hidden=true] {
-  display: none;
+  line-height: 1.2em;
+  margin-left: 0;
 }
 .hieractivity #tei-container {
   overflow: hidden;
+  color: black;
+  /*&.text-contrast-high {
+    }*/
+}
+.hieractivity #tei-container.text-contrast-none {
+  color: rgba(255, 255, 255, 0);
+}
+.hieractivity #tei-container.text-contrast-low {
+  color: #808080;
+}
+.hieractivity #tei-container.text-contrast-mid {
+  color: #555555;
 }
 .hieractivity .selected-gi {
   background-color: black;
@@ -148,7 +236,7 @@
 }
 .hieractivity [data-tapas-gi].boxed.selected-gi {
   border-left: 1em solid black;
-  color: #808080;
+  color: black;
 }
 .hieractivity [data-tapas-gi].boxed.box-p {
   margin: 1em 0;

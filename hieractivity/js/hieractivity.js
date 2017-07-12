@@ -1,7 +1,7 @@
 $(document).ready(function() {
-  // Add buttons to all expandable headings. By adding accessibility options via 
-    // Javascript and not XSLT, we allow those without Javascript to see content 
-    // that would otherwise be hidden and inaccessible. Solution based on 
+  // Add buttons to all expandable headings. By adding accessibility options via
+    // Javascript and not XSLT, we allow those without Javascript to see content
+    // that would otherwise be hidden and inaccessible. Solution based on
     // 'Progressive Collapsibles' by @haydonworks:
     // http://heydonworks.com/practical_aria_examples/#progressive-collapsibles
   $('.expandable-heading').each(function() {
@@ -9,10 +9,10 @@ $(document).ready(function() {
         nextDiv = heading.next(),
         nextDivID = nextDiv.attr('id');
     //console.log(nextDivID);
-    // If the next <div> has a class of 'expandable-hidden', treat it as 
+    // If the next <div> has a class of 'expandable-hidden', treat it as
       // collapsed, and mark the button as not expanded.
     var isAutoCollapsed = nextDiv.is('[class~=expandable-hidden]');
-    heading.wrapInner('<button aria-expanded="'+ !isAutoCollapsed 
+    heading.wrapInner('<button aria-expanded="'+ !isAutoCollapsed
       +'" aria-controls="'+ nextDivID +'"></button>');
     nextDiv.attr('aria-hidden', isAutoCollapsed);
     var button = heading.children('button');
@@ -26,9 +26,9 @@ $(document).ready(function() {
     });
   });
   
-  // Get the calculated heights of each div with a @data-tapas-gi on it. 
+  // Get the calculated heights of each div with a @data-tapas-gi on it.
   var heightData = [];
-  $('div[data-tapas-gi].boxed').toArray().forEach(function(obj) { 
+  $('div[data-tapas-gi].boxed').toArray().forEach(function(obj) {
     heightData.push($(obj).height());
   });
   
@@ -40,11 +40,11 @@ $(document).ready(function() {
     .on('input', slid)
     .on('mouseout', workedHeight);
   var giPropList = d3.select('#gi-properties');
-  // Any HTML element with the class 'boxed' is a container which should trigger a 
+  // Any HTML element with the class 'boxed' is a container which should trigger a
     // JS event when clicked.
   var containers = d3.selectAll('[data-tapas-gi].boxed')
     .on('click', inspectElement);
-  // Assign—explicitly—the container <div>s' heights back to them. d3.js requires 
+  // Assign—explicitly—the container <div>s' heights back to them. d3.js requires
     // some absolute height value in order to zoom on HTML elements.
   containers.filter('div')
       .data(heightData)
@@ -53,7 +53,7 @@ $(document).ready(function() {
         return d + 'px';
       });
   
-  // When the radio buttons' input value changes, mark HTML elements that correspond 
+  // When the radio buttons' input value changes, mark HTML elements that correspond
     // to the chosen TEI element.
   $('input[name=element]').change(function(e) {
     e.preventDefault();
@@ -71,6 +71,24 @@ $(document).ready(function() {
       instance1.scrollIntoView();
     }*/
   });
+  
+  /* Use the text-to-background visibility setting selected by the user. */
+  $('input[name=contrast-type]').change(function(e) {
+    e.preventDefault();
+    // Remove previous selection.
+    teiContainer.classed('text-contrast-high text-contrast-mid text-contrast-low text-contrast-none', false);
+    // Get the selected visibility setting.
+    var checked = d3.select('input[name=contrast-type]:checked');
+    console.log(checked);
+    type = checked.attr('value');
+    teiContainer.classed('text-contrast-'+type, true);
+  });
+  
+  // Make the control panel draggable.
+  $('#control-panel').draggable({
+    cancel: 'h2, #controls-container',
+    containment: 'window'
+  });
 
 
 /*  FUNCTIONS  */
@@ -81,13 +99,13 @@ $(document).ready(function() {
         w = $(scrollElementNode).width(),
         xNew = w / 2 * (-1 + scale),
         yNew = h / 2 * (-1 + scale);
-    scrollElement.style('transform', 
+    scrollElement.style('transform',
         "translate("+ xNew + "px,"+ yNew +"px)"
       + "scale(" + scale + ")");
     workedHeight();
   }
   
-  // When the zoom slider value is changed, convert the integer into a decimal and 
+  // When the zoom slider value is changed, convert the integer into a decimal and
     // call transformed().
   function slid(d) {
     var k = d3.select(this).property('value') / 100;
@@ -95,9 +113,9 @@ $(document).ready(function() {
     transformed(k);
   }
 
-  // Change the height of the teiContainer to match the working (scaled) height of 
-    // scrollElement. This is necessary in order to keep the scrollbar from 
-    // registering the 'actual' height of scrollElement, which is unaffected by 
+  // Change the height of the teiContainer to match the working (scaled) height of
+    // scrollElement. This is necessary in order to keep the scrollbar from
+    // registering the 'actual' height of scrollElement, which is unaffected by
     // CSS transformations.
   function workedHeight() {
     var hNew = scrollElementNode.getBoundingClientRect().height + 10;
