@@ -87,8 +87,8 @@
   width: 185px;
   position: fixed;
   z-index: 900;
-  top: 10px;
-  right: 10px;
+  top: 4px;
+  right: 4px;
   background-color: #555555;
   color: black;
 }
@@ -112,7 +112,7 @@
   border-color: #8b1122;
   padding: 0.25em;
   width: 100%;
-  background-color: #F8E6DB;
+  background-color: #FFF5EE;
   box-shadow: 0.1em 0.1em 0.2em #8b1122;
   color: black;
 }

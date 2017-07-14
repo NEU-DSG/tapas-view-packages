@@ -29,6 +29,8 @@
             <xd:li></xd:li>
           </xd:ul>
         </xd:li>-->
+        <xd:li>2017-07-14, v0.1.0: Tweaked tunnelled depth parameters and added a legend 
+          to boxed elements by color in 'Elements by frequency'.</xd:li>
         <xd:li>2017-07-10: Added 'Text contrast' widget, as well as an XSLT parameter 
           $contrast-default to change the default visibility of the text.</xd:li>
         <xd:li>2017-06-27, 2017-06-28:
@@ -1041,7 +1043,7 @@
         </div>
         <!-- Clicked element properties -->
         <div class="control-widget">
-          <h3 class="expandable-heading">Clicked element</h3>
+          <h3 class="expandable-heading">Clicked box</h3>
           <dl id="gi-properties" class="control-widget-component expandable"></dl>
         </div>
       </div>
