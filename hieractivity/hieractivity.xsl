@@ -233,7 +233,7 @@
   </xsl:template>
   
   <xsl:template match="text" priority="90">
-    <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
+    <xsl:param name="depth" select="0" as="xs:integer" tunnel="yes"/>
     <xsl:param name="language" as="xs:string" required="yes"/>
     <xsl:variable name="useLang" 
       select="if ( @xml:lang ) then @xml:lang/data(.) else $language"/>
@@ -250,14 +250,14 @@
         </xsl:call-template>
       </h2>
       <xsl:apply-templates mode="#current">
-        <xsl:with-param name="depth" select="1" tunnel="yes"/>
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
         <xsl:with-param name="language" select="$useLang" tunnel="yes"/>
       </xsl:apply-templates>
     </div>
   </xsl:template>
   
   <xsl:template match="floatingText" mode="#default inside-p" priority="89">
-    <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
+    <xsl:param name="depth" select="0" as="xs:integer" tunnel="yes"/>
     <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
     <xsl:element name="{$wrapper}">
       <xsl:attribute name="class" select="'boxed box-outermost'"/>
@@ -270,14 +270,14 @@
   </xsl:template>
   
   <xsl:template match="front | body | back" mode="#default inside-p" priority="88">
-    <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
+    <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
     <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
     <xsl:element name="{$wrapper}">
       <xsl:attribute name="class" select="'boxed box-outer'"/>
       <xsl:call-template name="set-data-attributes"/>
       <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
       <xsl:apply-templates mode="#current">
-        <xsl:with-param name="depth" select="1" tunnel="yes"/>
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
       </xsl:apply-templates>
     </xsl:element>
   </xsl:template>
@@ -286,7 +286,7 @@
     Since CSS doesn't allow selecting on ancestors of nodes, we calculate the depth 
     (nestedness) of the current node here. -->
   <xsl:template match="*[tps:is-chunk-level(.)]" mode="#default inside-p">
-    <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
+    <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
     <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
     <xsl:element name="{$wrapper}">
       <xsl:call-template name="set-box-classes-depthwise">
@@ -942,6 +942,7 @@
                 transform="translate(1 1)">
                 <xsl:call-template name="set-legend-tooltip">
                   <xsl:with-param name="boxedElements" select="$boxedElements"/>
+                  <xsl:with-param name="currentGI" select="$currentValue"/>
                   <xsl:with-param name="currentType" select="'box-p'"/>
                 </xsl:call-template>
               </rect>
@@ -973,6 +974,7 @@
                   transform="translate({$translateX} 1)">
                   <xsl:call-template name="set-legend-tooltip">
                     <xsl:with-param name="boxedElements" select="$boxedElements"/>
+                    <xsl:with-param name="currentGI" select="$currentValue"/>
                     <xsl:with-param name="currentType" select="$thisType"/>
                   </xsl:call-template>
                 </rect>
@@ -1110,7 +1112,7 @@
     </xsl:variable>
     <xsl:perform-sort select="$options">
       <xsl:sort select="xs:integer(descendant::*:span[@class eq 'gi-count']/text())" order="descending"/>
-      <xsl:sort select="descendant::*:span[@class eq 'gi-name']/text()"/>
+      <xsl:sort select="descendant::html:span[contains(@class, 'gi-name')]/text()"/>
     </xsl:perform-sort>
   </xsl:template>
   
@@ -1152,7 +1154,7 @@
   <!-- Set a color class for a boxed element, based on its depth in the hierarchy. -->
   <xsl:template name="set-box-classes-depthwise">
     <xsl:param name="depth" as="xs:integer" required="yes"/>
-    <xsl:variable name="colorNum" select="$depth mod 10"/>
+    <xsl:variable name="colorNum" select="($depth - 1) mod 10"/>
     <xsl:attribute name="class">
       <xsl:text>boxed box-gen</xsl:text><xsl:value-of select="$colorNum"/>
     </xsl:attribute>
@@ -1169,15 +1171,17 @@
     used to populate a tooltip. -->
   <xsl:template name="set-legend-tooltip">
     <xsl:param name="boxedElements" as="attribute()+" required="yes"/>
+    <xsl:param name="currentGI" as="xs:string" required="yes"/>
     <xsl:param name="currentType" as="xs:string+" required="yes"/>
     <xsl:variable name="sortedDepths" as="xs:string+">
       <xsl:variable name="depths" 
         select="distinct-values($boxedElements/parent::html:*
+                  [matches(@data-tapas-gi/data(.), $currentGI)]
                   [matches(@class/data(.), concat($currentType,'( +.*)?$'))]
-                /@data-tapas-box-depth/data(.))"/>
+                /@data-tapas-box-depth/data(.))" as="xs:integer+"/>
       <xsl:for-each select="$depths">
         <xsl:sort select="." order="ascending"/>
-        <xsl:copy-of select="."/>
+        <xsl:copy-of select="xs:string(.)"/>
       </xsl:for-each>
     </xsl:variable>
     <xsl:attribute name="title">
