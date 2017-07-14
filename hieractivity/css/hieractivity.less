@@ -32,7 +32,8 @@
 /*  FONTS  */
 
 @code: 'Courier', 'Courier New', monospace;
-@heading: ‘Palatino Linotype’, ‘Book Antiqua’, Palatino, serif;
+@heading: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+@plain: 'Times', 'Times New Roman', serif;
 
 /*  OTHER VARIABLES  */
 
@@ -41,7 +42,20 @@
 
 /*  RULES  */
 
+/* Tooltips */
+
+.hieractive-tooltip {
+  border: thin solid @slate;
+  padding: 1em;
+  max-width: 180px;
+  //background-color: @cream;
+  font-family: @plain;
+}
+
+/* Hieractivity */
+
 .hieractivity {
+  font-family: @plain;
   
   .encoded {
     font-family: @code;
@@ -263,6 +277,15 @@
           margin-top: 0.2em;
           float: right;
         }
+        
+        .legend {
+          float: right;
+          
+          .legend-key {
+            stroke-width: 1px;
+            stroke: @gray-dark;
+          }
+        } // .legend
       } // #gi-option-selector
       
       #gi-properties {
@@ -341,6 +364,12 @@
     color: @gray-light;
   }
   
+  // Use the same class for HTML 'boxes' and SVG rectangles.
+  .box-of-color(@color) {
+    background-color: @color;
+    fill: @color;
+  }
+  
   [data-tapas-gi].boxed {
     margin: 2em 1em;
     padding: 0.85em;
@@ -359,7 +388,6 @@
       margin: 1em 0;
       padding: 0.5em;
       display: block;
-      background-color: @cream;
     
       &.selected-gi {
         border-left: 1em solid black;
@@ -369,51 +397,55 @@
   } // [data-tapas-gi].boxed
   
   .box-outermost {
-    background-color: @box01;
+    .box-of-color(@box01);
   }
   
   .box-outer {
-    background-color: @box02;
+    .box-of-color(@box02);
+  }
+  
+  .box-p {
+    .box-of-color(@cream);
   }
   
   .box-gen1 {
-    background-color: @box03;
+    .box-of-color(@box03);
   }
   
   .box-gen2 {
-    background-color: @box04;
+    .box-of-color(@box04);
   }
   
   .box-gen3 {
-    background-color: @box05;
+    .box-of-color(@box05);
   }
   
   .box-gen4 {
-    background-color: @box06;
+    .box-of-color(@box06);
   }
   
   .box-gen5 {
-    background-color: @box07;
+    .box-of-color(@box07);
   }
   
   .box-gen6 {
-    background-color: @box08;
+    .box-of-color(@box08);
   }
   
   .box-gen7 {
-    background-color: @box09;
+    .box-of-color(@box09);
   }
   
   .box-gen8 {
-    background-color: @box10;
+    .box-of-color(@box10);
   }
   
   .box-gen9 {
-    background-color: @box11;
+    .box-of-color(@box11);
   }
   
   .box-gen10 {
-    background-color: @box12;
+    .box-of-color(@box12);
   }
   
   .block {

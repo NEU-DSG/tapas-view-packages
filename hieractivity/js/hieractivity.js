@@ -1,4 +1,11 @@
 $(document).ready(function() {
+  // Turn on tooltip functionality from the jQueryUI library.
+  $('.legend-key').tooltip({
+    classes: {
+      "ui-tooltip": "hieractive-tooltip"
+    }
+  });
+  
   // Add buttons to all expandable headings. By adding accessibility options via
     // Javascript and not XSLT, we allow those without Javascript to see content
     // that would otherwise be hidden and inaccessible. Solution based on
@@ -37,13 +44,13 @@ $(document).ready(function() {
   var scrollElement = d3.select('div[data-tapas-gi].boxed');
   var scrollElementNode = scrollElement.node();
   var zoomSlider = d3.select('#zoom-slide')
-    .on('input', slid)
-    .on('mouseout', workedHeight);
+      .on('input', slid)
+      .on('mouseout', workedHeight);
   var giPropList = d3.select('#gi-properties');
   // Any HTML element with the class 'boxed' is a container which should trigger a
     // JS event when clicked.
   var containers = d3.selectAll('[data-tapas-gi].boxed')
-    .on('click', inspectElement);
+      .on('click', inspectElement);
   // Assign—explicitly—the container <div>s' heights back to them. d3.js requires
     // some absolute height value in order to zoom on HTML elements.
   containers.filter('div')

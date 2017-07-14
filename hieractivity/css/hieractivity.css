@@ -2,7 +2,16 @@
 /*  FONTS  */
 /*  OTHER VARIABLES  */
 /*  RULES  */
+/* Tooltips */
+.hieractive-tooltip {
+  border: thin solid #9eaec9;
+  padding: 1em;
+  max-width: 180px;
+  font-family: 'Times', 'Times New Roman', serif;
+}
+/* Hieractivity */
 .hieractivity {
+  font-family: 'Times', 'Times New Roman', serif;
   /* Expandable headings */
   /* Control panel */
   /* Containers for the <teiHeader> and <text> */
@@ -21,7 +30,7 @@
 .hieractivity h4,
 .hieractivity h5,
 .hieractivity h6 {
-  font-family: ‘Palatino Linotype’, ‘Book Antiqua’, Palatino, serif;
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
   font-weight: normal;
   color: black;
 }
@@ -173,6 +182,13 @@
   margin-top: 0.2em;
   float: right;
 }
+.hieractivity #control-panel #controls-container #gi-option-selector .legend {
+  float: right;
+}
+.hieractivity #control-panel #controls-container #gi-option-selector .legend .legend-key {
+  stroke-width: 1px;
+  stroke: #555555;
+}
 .hieractivity #control-panel #controls-container #gi-properties {
   margin: 0;
   border: thin solid #dddddd;
@@ -242,7 +258,6 @@
   margin: 1em 0;
   padding: 0.5em;
   display: block;
-  background-color: #ffffee;
 }
 .hieractivity [data-tapas-gi].boxed.box-p.selected-gi {
   border-left: 1em solid black;
@@ -250,39 +265,55 @@
 }
 .hieractivity .box-outermost {
   background-color: rgba(50, 116, 184, 0.8);
+  fill: rgba(50, 116, 184, 0.8);
 }
 .hieractivity .box-outer {
   background-color: rgba(124, 186, 176, 0.8);
+  fill: rgba(124, 186, 176, 0.8);
+}
+.hieractivity .box-p {
+  background-color: #ffffee;
+  fill: #ffffee;
 }
 .hieractivity .box-gen1 {
   background-color: rgba(255, 255, 179, 0.8);
+  fill: rgba(255, 255, 179, 0.8);
 }
 .hieractivity .box-gen2 {
   background-color: rgba(190, 186, 218, 0.8);
+  fill: rgba(190, 186, 218, 0.8);
 }
 .hieractivity .box-gen3 {
   background-color: rgba(251, 128, 114, 0.8);
+  fill: rgba(251, 128, 114, 0.8);
 }
 .hieractivity .box-gen4 {
   background-color: rgba(253, 180, 98, 0.8);
+  fill: rgba(253, 180, 98, 0.8);
 }
 .hieractivity .box-gen5 {
   background-color: rgba(128, 177, 211, 0.8);
+  fill: rgba(128, 177, 211, 0.8);
 }
 .hieractivity .box-gen6 {
   background-color: rgba(179, 222, 105, 0.8);
+  fill: rgba(179, 222, 105, 0.8);
 }
 .hieractivity .box-gen7 {
   background-color: rgba(252, 205, 229, 0.8);
+  fill: rgba(252, 205, 229, 0.8);
 }
 .hieractivity .box-gen8 {
   background-color: rgba(188, 128, 189, 0.8);
+  fill: rgba(188, 128, 189, 0.8);
 }
 .hieractivity .box-gen9 {
   background-color: rgba(204, 235, 197, 0.8);
+  fill: rgba(204, 235, 197, 0.8);
 }
 .hieractivity .box-gen10 {
   background-color: rgba(255, 237, 111, 0.8);
+  fill: rgba(255, 237, 111, 0.8);
 }
 .hieractivity .block {
   display: block;
@@ -370,6 +401,6 @@
 .hieractivity [data-tapas-gi=docTitle],
 .hieractivity [data-tapas-gi=titlePart] {
   text-align: center;
-  font-family: ‘Palatino Linotype’, ‘Book Antiqua’, Palatino, serif;
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
   font-weight: normal;
 }
