@@ -360,8 +360,8 @@
   
   // This style is applied to any element that is selected by the user.
   .selected-gi {
-    background-color: black;
-    color: @gray-light;
+    background-color: @raspberry-darker;
+    color: @gray-lighter;
   }
   
   // Use the same class for HTML 'boxes' and SVG rectangles.
@@ -380,7 +380,7 @@
     }
     
     &.selected-gi {
-      border-left: 1em solid black;
+      border-left: 1em solid @raspberry-darker;
       color: black;
     }
     
@@ -406,6 +406,13 @@
   
   .box-p {
     .box-of-color(@cream);
+  }
+  
+  // .box-gen0 should only occur when a box-like element (not <body>, <front> or 
+    // <back>) occurs as a child of <text>. Which is invalid TEI, so using a sharp 
+    // black instead of our usual palette should be fine.
+  .box-gen0 {
+    .box-of-color(black);
   }
   
   .box-gen1 {

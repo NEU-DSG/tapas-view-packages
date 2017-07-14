@@ -239,8 +239,8 @@
   color: #555555;
 }
 .hieractivity .selected-gi {
-  background-color: black;
-  color: #dddddd;
+  background-color: #8b1122;
+  color: #f0f0f0;
 }
 .hieractivity [data-tapas-gi].boxed {
   margin: 2em 1em;
@@ -251,7 +251,7 @@
   margin: 0;
 }
 .hieractivity [data-tapas-gi].boxed.selected-gi {
-  border-left: 1em solid black;
+  border-left: 1em solid #8b1122;
   color: black;
 }
 .hieractivity [data-tapas-gi].boxed.box-p {
@@ -274,6 +274,10 @@
 .hieractivity .box-p {
   background-color: #ffffee;
   fill: #ffffee;
+}
+.hieractivity .box-gen0 {
+  background-color: black;
+  fill: black;
 }
 .hieractivity .box-gen1 {
   background-color: rgba(255, 255, 179, 0.8);
