@@ -8,37 +8,37 @@ namespace html ="http://www.w3.org/1999/xhtml"
 
 start = element tapas:view_package {
 
-   # the version number of the *package* document
+   ## the version number of the *package* document
    attribute version { xs:string { pattern = "[0-9]+(\.[0-9]+(\.[0-9]+[αβ]?)?)?" } },
 
-   # the ID is the name of this package from the computer's point of view (e.g., "color-blocks")
+   ## the ID is the name of this package from the computer's point of view (e.g., "color-blocks")
    attribute xml:id { xs:ID },
 
-   # the name from a human's point of view (e.g., "Color Blocks")
+   ## the name from a human's point of view (e.g., "Color Blocks")
    element tapas:human_name { text },
 
-   # false means static, i.e. there is an HTML or other output file sitting around ready to
-   # be served out
+   ## false means static, i.e. there is an HTML or other output file sitting around ready to
+   ## be served out
    attribute dynamic { xs:boolean },
 
-   # whether the usable or expected input is:
-   #  * a single TEI file,
-   #  * a selected set of TEI files, 
-   #  * an entire collection, or
-   #  * all the collections in an entire project
-   #  * all of the publicly viewable documents in TAPAS 
+   ## whether the usable or expected input is:
+   ##  * a single TEI file,
+   ##  * a selected set of TEI files, 
+   ##  * an entire collection, or
+   ##  * all the collections in an entire project
+   ##  * all of the publicly viewable documents in TAPAS 
    attribute scope { "file" | "found_set" | "collection" | "project" | "public" },
 
-   # Short (1 para) human-readable description to be published; can use in-line HTML elements
+   ## Short (1 para) human-readable description to be published; can use in-line HTML elements
    element tapas:description { phrase* },
 
-   # the kind(s) of files this view package can handle as the main input
+   ## The kind(s) of files this view package can handle as the main input
    element tapas:file_types { file_type+ },
 
-   # the git branch that should be pulled to production hydra/rails and eXist
-   # only used for sub-modules that are their own repo; we always use 'master'
-   # for those that are directly in the tapas-viewpackages repo, in which case
-   # this element can be empty
+   ## The git branch that should be pulled to production hydra/rails and eXist
+   ## only used for sub-modules that are their own repo; we always use 'master'
+   ## for those that are directly in the tapas-viewpackages repo, in which case
+   ## this element can be empty.
    # Here we only enforce that characters
    #    U+00-U+1F, U+7F, U+20, ~, ^, :, ?, *, \, and [
    # are not allowed. There are other restrictions to branch names, for which see
@@ -48,16 +48,16 @@ start = element tapas:view_package {
    #   <param name="pattern">[^&#x09;&#x7F; ~^:?*\\\[]*</param>
    # in a little test file and converting to RNC with trang. :-)
 
-   # the CSS files(s) that should be explicitly loaded by the generated HTML
+   ## The CSS files(s) that should be explicitly loaded by the generated HTML
    element tapas:css_files { css_file* },
 
-   # the Javascript file(s) that should be explicitly loaded by the generated HTML
+   ## The Javascript file(s) that should be explicitly loaded by the generated HTML
    element tapas:js_files { js_file* },
 
-   # parameters from Hydra to eXist
+   ## Parameters from Hydra to eXist
    element tapas:parameters { parameter* },
 
-   # EITHER use XProc or direct execution of ( constraints, ( XQuery+ | XSLT+ ) )
+   ## EITHER use XProc or direct execution of ( constraints, ( XQuery+ | XSLT+ ) )
    # HOWEVER note that for the moment XQuery is not supported (because it's a pain
    # to execute an XQuery from within the tapas-xq XQuery that is handling the 
    # request in eXist).
@@ -77,19 +77,25 @@ manual =
    ( xquery+ | xslt+ )
 
 
-# The program to be run to generate output from input file(s)
+# The XQuery to be run to generate output from input file(s).
 # Currently presumed to be a file in the same directory as this
-# config file
+# config file.
 xquery = element tapas:run {
    attribute type {"xquery"},
    attribute pgm { xs:NMTOKEN },
    parameter*
 }
+# The XSLT to be run to generate output from input file(s).
+# Currently presumed to be a file in the same directory as this
+# config file.
 xslt = element tapas:run {
    attribute type {"xslt"},
    attribute pgm { xs:NMTOKEN },
    parameter*
 }
+# The XProc to be run to generate output from input file(s).
+# Currently presumed to be a file in the same directory as this
+# config file.
 xproc = element tapas:run {
    attribute type {"xproc"},
    attribute pgm { xs:NMTOKEN },
@@ -97,10 +103,16 @@ xproc = element tapas:run {
 }
 
 
-file_type = element tapas:file_type { "ography" | "tei" | "odd" | "xslt" }
+file_type = 
+## A type of TAPAS file. Allowed values are 'odd', 'ography', 'tei', or 'xslt'.
+element tapas:file_type { "ography" | "tei" | "odd" | "xslt" }
 
-parameter = element tapas:parameter {
+parameter = 
+## A description of an HTTP request parameter
+element tapas:parameter {
+   ## The name of the parameter
    attribute name { xs:NMTOKEN },
+   ## The datatype to be used for the parameter's value
    attribute as { xs:string },
    text
    }
@@ -110,9 +122,11 @@ Pparameter = element tapas:parameter {
    text
    }
 
-# Relative path to a single schema, for now either RELAX NG or ISO Schematron.
-# The system may either differentiate by extension, or use the value of the
-# @scheme attribute. Possibilities are:
+constraint = 
+## Relative path to a single schema, for now either RELAX NG or ISO Schematron.
+## The system may either differentiate by extension, or use the value of the
+## @scheme attribute.
+# Possibilities are:
 #    extn     @scheme      kind
 #    ----     --------     ----------------
 #  * .rnc     RNC          RELAX NG compact syntax
@@ -123,13 +137,18 @@ Pparameter = element tapas:parameter {
 # Note that ODD files are not in the list. If you need to validate against the
 # output of an ODD, for now you need to generate that separately and include
 # the output here.)
-constraint = element tapas:constraint {
+element tapas:constraint {
    attribute scheme { "RNC" | "RNG" | "Schematron" },
    filepath
 }
 
-css_file = element tapas:css_file { filepath }
-js_file = element tapas:js_file { filepath }
+css_file = 
+## Relative path to a CSS file
+element tapas:css_file { filepath }
+
+js_file = 
+## Relative path to a Javascript file
+element tapas:js_file { filepath }
 
 # a path in our universe is always a relative filepath; if you want characters
 # in the filename that are not allowed in a URI, you would have to use the %HEX
