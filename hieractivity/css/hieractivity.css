@@ -109,11 +109,11 @@
   color: white;
 }
 .hieractivity #control-panel .expandable-heading > button {
-  border-color: #8b1122;
+  border-color: #b02b3d;
   padding: 0.25em;
   width: 100%;
   background-color: #FFF5EE;
-  box-shadow: 0.1em 0.1em 0.2em #8b1122;
+  box-shadow: 0.1em 0.1em 0.2em #b02b3d;
   color: black;
 }
 .hieractivity #control-panel .expandable-heading > button[aria-expanded=true] {
@@ -126,7 +126,7 @@
   text-align: center;
 }
 .hieractivity #control-panel h2.expandable-heading > button {
-  border: medium solid #b02b3d;
+  border: medium solid #8b1122;
   padding: 0.25em 0.5em;
   box-shadow: 0.1em 0.1em 0.2em black;
   font-variant: inherit;
@@ -135,12 +135,12 @@
   border: none;
   border-radius: 0.4em;
   padding: 0;
-  background-color: #b02b3d;
+  background-color: #8b1122;
   cursor: default;
   /* Widget customizations */
 }
 .hieractivity #control-panel #controls-container .control-widget {
-  border-top: medium solid #8b1122;
+  border-top: medium solid #b02b3d;
   padding: 0.4em;
 }
 .hieractivity #control-panel #controls-container .control-widget:first-child {

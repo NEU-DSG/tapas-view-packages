@@ -3,6 +3,7 @@
 /*  COLORS  */
 
 @cream:             #FFE;
+@gray-darker:       #202020;
 @gray-dark:         #555555;
 @gray:              #808080;
 @gray-light:        #DDDDDD;
@@ -182,11 +183,11 @@
     .expandable-heading {
       
       > button {
-        border-color: @raspberry-darker;
+        border-color: @raspberry-dark;
         padding: 0.25em;
         width: 100%;
         background-color: #FFF5EE;
-        box-shadow: @button-shadow @raspberry-darker;
+        box-shadow: @button-shadow @raspberry-dark;
         color: black;
         
         &[aria-expanded=true] {
@@ -202,7 +203,7 @@
       text-align: center;
       
       > button {
-        border: medium solid @raspberry-dark;
+        border: medium solid @raspberry-darker;
         padding: 0.25em 0.5em;
         box-shadow: @button-shadow black;
         //text-transform: lowercase;
@@ -214,7 +215,7 @@
       border: none;
       border-radius: 0.4em;
       padding: 0;
-      background-color: @raspberry-dark;
+      background-color: @raspberry-darker;
       cursor: default;
       
       .component-inner() {
@@ -226,7 +227,7 @@
       }
       
       .control-widget {
-        border-top: medium solid @raspberry-darker;
+        border-top: medium solid @raspberry-dark;
         padding: 0.4em;
       
         &:first-child {
