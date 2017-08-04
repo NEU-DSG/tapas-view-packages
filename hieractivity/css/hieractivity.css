@@ -370,11 +370,22 @@
   display: block;
   text-align: center;
 }
-.hieractivity [data-tapas-gi=list] {
+.hieractivity ul,
+.hieractivity .list-ul,
+.hieractivity ol,
+.hieractivity .list-ol {
+  margin: 0.8em 0;
   padding-left: 1em;
   display: block;
 }
-.hieractivity [data-tapas-gi=list] span[data-tapas-gi=item] {
+.hieractivity ul li,
+.hieractivity .list-ul li,
+.hieractivity ol li,
+.hieractivity .list-ol li,
+.hieractivity ul .list-item-li,
+.hieractivity .list-ul .list-item-li,
+.hieractivity ol .list-item-li,
+.hieractivity .list-ol .list-item-li {
   display: list-item;
 }
 .hieractivity span[data-tapas-gi=table] {

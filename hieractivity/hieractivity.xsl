@@ -92,20 +92,20 @@
     <xsl:param name="element" as="element()"/>
     <xsl:value-of 
       select="exists($element[
-                self::TEI | self::text | self::front | self::body | self::back 
-              | self::ab | self::floatingText | self::lg | self::div
-              | self::argument | self::group | self::table
-              | self::div1 | self::div2 | self::div3 | self::div4 | self::div5 
-              | self::div6 | self::div7 | self::titlePage
-              | self::listBibl | self::listEvent | self::listOrg | self::listPerson 
-              | self::listPlace | self::castList
-              | self::bibl[parent::listBibl] | self::biblFull | self::biblStruct 
-              | self::event | self::org | self::person | self::persona | self::place
-              | self::performance | self::prologue | self::epilogue | self::set 
-              | self::opener | self::closer | self::postscript
-              | self::quote[descendant::p] | self::said[descendant::p]
-              | self::figure | self::note | self::sp
-              | self::attDef | self::attList | self::elementSpec | self::schemaSpec
+                self::TEI or self::text or self::front or self::body or self::back 
+              or self::ab or self::floatingText or self::lg or self::div
+              or self::argument or self::group or self::table
+              or self::div1 or self::div2 or self::div3 or self::div4 or self::div5 
+              or self::div6 or self::div7 or self::titlePage
+              or self::listBibl or self::listEvent or self::listOrg or self::listPerson 
+              or self::listPlace or self::castList
+              or self::bibl[parent::listBibl] or self::biblFull or self::biblStruct 
+              or self::event or self::org or self::person or self::persona or self::place
+              or self::performance or self::prologue or self::epilogue or self::set 
+              or self::opener or self::closer or self::postscript
+              or self::quote[descendant::p] or self::said[descendant::p]
+              or self::figure or self::note or self::sp
+              or self::attDef or self::attList or self::elementSpec or self::schemaSpec
               ])"/>
   </xsl:function>
   
@@ -297,11 +297,9 @@
     <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
     <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
     <xsl:element name="{$wrapper}">
-      <xsl:call-template name="set-box-classes-depthwise">
+      <xsl:call-template name="set-box-attributes-by-depth">
         <xsl:with-param name="depth" select="$depth"/>
       </xsl:call-template>
-      <xsl:call-template name="set-data-attributes"/>
-      <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
       </xsl:apply-templates>
@@ -310,17 +308,68 @@
 
 <!-- LISTS -->
 
-  <!-- Handle simple lists, those containing only <item>s. -->
-  <xsl:template match="list[not(*[not(self::item)])]">
-    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'ul'"/>
+  <!-- For the purposes of this view package, the HTML element associated with 
+    <tei:list> is not <ul>, but a wrapper <div> or <span>. This is because TEI 
+    allows elements inside <list> that HTML would have no capacity to represent. -->
+  <xsl:template match="list" mode="#default inside-p">
+    <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
+    <xsl:variable name="isDescendantOfP" select="exists(ancestor::p)"/>
+    <xsl:variable name="boxWrapper" select="if ( $isDescendantOfP ) then 'span' else 'div'"/>
+    <xsl:variable name="listType" 
+      select="if ( exists(label) ) then 'dl'
+              else 'ul'"/>
+    <xsl:variable name="listWrapper" select="if ( $isDescendantOfP ) then 'span' else $listType"/>
+    <xsl:element name="{$boxWrapper}">
+      <xsl:call-template name="set-box-attributes-by-depth">
+        <xsl:with-param name="depth" select="$depth"/>
+      </xsl:call-template>
+      <!-- Process any instances of model.divTop. -->
+      <xsl:apply-templates select=" head | opener | signed | argument | byline 
+                                  | dateline | docAuthor | docDate | epigraph 
+                                  | meeting | salute" mode="#current">
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+      </xsl:apply-templates>
+      <!-- Process what should be list items. -->
+      <xsl:element name="{$listWrapper}">
+        <xsl:if test="$isDescendantOfP">
+          <xsl:attribute name="class" select="concat('list-', $listType)"/>
+        </xsl:if>
+        <!-- XD: model.global can also be used anywhere in list. -->
+        <xsl:apply-templates select="label | item" mode="#current">
+          <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+        </xsl:apply-templates>
+      </xsl:element>
+      <!-- Process any instances of model.divBottom. -->
+      <xsl:apply-templates select=" closer | postscript | signed | trailer | argument 
+                                  | byline | dateline | docAuthor | docDate | epigraph 
+                                  | meeting | salute" mode="#current">
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+      </xsl:apply-templates>
+    </xsl:element>
+  </xsl:template>
+  
+  <xsl:template match="list/item" mode="#default inside-p">
+    <xsl:variable name="isDescendantOfP" select="exists(ancestor::p)"/>
+    <xsl:variable name="listItemType"
+      select="if ( parent::list[label] ) then 'dd' else 'li'"/>
+    <xsl:variable name="wrapper" 
+      select=" if ( $isDescendantOfP ) then 'span' else $listItemType"/>
     <xsl:element name="{$wrapper}">
+      <xsl:if test="$isDescendantOfP">
+        <xsl:attribute name="class" select="concat('list-item-',$listItemType)"/>
+      </xsl:if>
       <xsl:call-template name="keep-calm-and-carry-on"/>
     </xsl:element>
   </xsl:template>
   
-  <xsl:template match="list[not(*[not(self::item)])]/item">
-    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'li'"/>
+  <xsl:template match="list/label" mode="#default inside-p">
+    <xsl:variable name="isDescendantOfP" select="exists(ancestor::p)"/>
+    <xsl:variable name="wrapper" 
+      select=" if ( $isDescendantOfP ) then 'span' else 'dt'"/>
     <xsl:element name="{$wrapper}">
+      <xsl:if test="$isDescendantOfP">
+        <xsl:attribute name="class" select="'list-item-dt'"/>
+      </xsl:if>
       <xsl:call-template name="keep-calm-and-carry-on"/>
     </xsl:element>
   </xsl:template>
@@ -1157,6 +1206,15 @@
   <xsl:template name="save-gi">
     <xsl:param name="start" select="." as="node()"/>
     <xsl:attribute name="data-tapas-gi" select="local-name($start)"/>
+  </xsl:template>
+  
+  <xsl:template name="set-box-attributes-by-depth">
+    <xsl:param name="depth" as="xs:integer" required="yes"/>
+    <xsl:call-template name="set-box-classes-depthwise">
+      <xsl:with-param name="depth" select="$depth"/>
+    </xsl:call-template>
+    <xsl:call-template name="set-data-attributes"/>
+    <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
   </xsl:template>
   
   <!-- Set a color class for a boxed element, based on its depth in the hierarchy. -->

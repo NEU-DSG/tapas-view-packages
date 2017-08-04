@@ -516,14 +516,20 @@
     text-align: center;
   }
   
-  [data-tapas-gi=list] {
+  ul, .list-ul,
+  ol, .list-ol {
+    margin: 0.8em 0;
     padding-left: 1em;
     display: block;
     
-    span[data-tapas-gi=item] {
+    li, .list-item-li {
       display: list-item;
     }
-  } // [data-tapas-gi=list]
+  } // ul, .list-type-ul, ol, .list-type-ol
+  
+  dl, .list-dl {
+    
+  }
   
   span[data-tapas-gi=table] {
     width: 100%;
