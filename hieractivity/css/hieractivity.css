@@ -388,24 +388,32 @@
 .hieractivity .list-ol .list-item-li {
   display: list-item;
 }
-.hieractivity span[data-tapas-gi=table] {
+.hieractivity table,
+.hieractivity .table {
   width: 100%;
   display: table;
+  color: inherit;
 }
-.hieractivity span[data-tapas-gi=table] > span[data-tapas-gi=head] {
+.hieractivity table > span[data-tapas-gi=head],
+.hieractivity .table > span[data-tapas-gi=head] {
   display: table-caption;
 }
-.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row] {
+.hieractivity table span[data-tapas-gi=row],
+.hieractivity .table span[data-tapas-gi=row] {
   display: table-row;
 }
-.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row] span[data-tapas-gi=cell],
-.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row] .colspanned {
+.hieractivity table span[data-tapas-gi=row] span[data-tapas-gi=cell],
+.hieractivity .table span[data-tapas-gi=row] span[data-tapas-gi=cell],
+.hieractivity table span[data-tapas-gi=row] .colspanned,
+.hieractivity .table span[data-tapas-gi=row] .colspanned {
   border-top: thin solid #555555;
   padding: 0.15em 0.2em;
   display: table-cell;
 }
-.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row]:first-child span[data-tapas-gi=cell],
-.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row]:first-child .colspanned {
+.hieractivity table span[data-tapas-gi=row]:first-child span[data-tapas-gi=cell],
+.hieractivity .table span[data-tapas-gi=row]:first-child span[data-tapas-gi=cell],
+.hieractivity table span[data-tapas-gi=row]:first-child .colspanned,
+.hieractivity .table span[data-tapas-gi=row]:first-child .colspanned {
   border-top: none;
   display: table-cell;
 }

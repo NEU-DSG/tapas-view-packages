@@ -376,20 +376,34 @@
   
 <!-- TABLES -->
   
-  <xsl:template match="table" mode="#default inside-p">
-    <span class="block">
-      <span>
-        <xsl:call-template name="get-attributes"/>
-        <xsl:apply-templates mode="table-complex"/>
-      </span>
-    </span>
-  </xsl:template>
-  
-  <xsl:template match="table[not(*[not(self::head) and not(self::row)])]" priority="23" mode="#default">
-    <table>
-      <xsl:call-template name="get-attributes"/>
-      <xsl:apply-templates mode="table-simple"/>
-    </table>
+  <xsl:template match="table" priority="23" mode="#default inside-p">
+    <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
+    <xsl:variable name="isDescendantOfP" select="exists(ancestor::p)"/>
+    <xsl:variable name="isTableComplex" 
+      select="if ( not(ancestor::p) and not(*[not(self::head | self::row)]) ) then false() else true()"/>
+    <xsl:variable name="wrapper" 
+      select=" if ( $isDescendantOfP ) then 'span' else 'div'"/>
+    <xsl:element name="{$wrapper}">
+      <xsl:call-template name="set-box-attributes-by-depth">
+        <xsl:with-param name="depth" select="$depth"/>
+      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="$isTableComplex">
+          <span class="table">
+            <xsl:apply-templates mode="table-complex">
+              <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+            </xsl:apply-templates>
+          </span>
+        </xsl:when>
+        <xsl:otherwise>
+          <table>
+            <xsl:apply-templates mode="table-simple">
+              <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+            </xsl:apply-templates>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:element>
   </xsl:template>
   
   <xsl:template match="table/head" mode="table-simple">
