@@ -13,7 +13,7 @@
   xmlns:tps="http://tapas.northeastern.edu"
   exclude-result-prefixes="#all">
   
-  <xd:doc scope="stylesheet">
+  <!--<xd:doc scope="stylesheet">
     <xd:desc>
       <xd:p>This stylesheet performs a relatively simple mapping of TEI to HTML, using 
         data attributes to retain information about the TEI structure. A control box with 
@@ -23,12 +23,12 @@
         <xd:a href="http://tapas.northeastern.edu">TAPAS Project</xd:a>, 2017.</xd:p>
       
       <xd:p>Changelog:</xd:p>
-      <xd:ul><!--
+      <xd:ul><!-\-
         <xd:li>DATE(, VERSION)?:
           <xd:ul>
             <xd:li></xd:li>
           </xd:ul>
-        </xd:li>-->
+        </xd:li>-\->
         <xd:li>2017-07-14, v0.1.0: Tweaked tunnelled depth parameters and added a legend 
           to boxed elements by color in 'Elements by frequency'.</xd:li>
         <xd:li>2017-07-10: Added 'Text contrast' widget, as well as an XSLT parameter 
@@ -68,7 +68,7 @@
         <xd:li>2017-06-09, v0.0.1: Created stylesheet and zoom controls.</xd:li>
       </xd:ul>
     </xd:desc>
-  </xd:doc>
+  </xd:doc>-->
   
   <xsl:output indent="no" method="xhtml" omit-xml-declaration="yes"/>
   <xsl:include href="../common/odd-interpretation/tei-odd-interpreter.xsl"/>
@@ -107,6 +107,12 @@
               | self::figure | self::note | self::sp
               | self::attDef | self::attList | self::elementSpec | self::schemaSpec
               ])"/>
+  </xsl:function>
+  
+  <xsl:function name="tps:has-only-element-children" as="xs:boolean">
+    <xsl:param name="element" as="element()"/>
+    <xsl:value-of select="exists($element/*) 
+                      and not(exists($element/text()[normalize-space(.) ne '']))"/>
   </xsl:function>
   
   
@@ -321,12 +327,13 @@
   
 <!-- TABLES -->
   
-  <xsl:template match="cell/@rows | cell/@cols" mode="#default">
-    <xsl:variable name="data" select="data(.)"/>
-    <xsl:if test="$data castable as xs:integer and xs:integer($data) gt 1">
-      <xsl:variable name="attrName" select="substring-before(local-name(),'s')"/>
-      <xsl:attribute name="{$attrName}span" select="$data"/>
-    </xsl:if>
+  <xsl:template match="table" mode="#default inside-p">
+    <span class="block">
+      <span>
+        <xsl:call-template name="get-attributes"/>
+        <xsl:apply-templates mode="table-complex"/>
+      </span>
+    </span>
   </xsl:template>
   
   <xsl:template match="table[not(*[not(self::head) and not(self::row)])]" priority="23" mode="#default">
@@ -353,15 +360,6 @@
       <xsl:call-template name="get-attributes"/>
       <xsl:apply-templates select="@* | node()" mode="#default"/>
     </td>
-  </xsl:template>
-  
-  <xsl:template match="table" mode="#default inside-p">
-    <span class="block">
-      <span>
-        <xsl:call-template name="get-attributes"/>
-        <xsl:apply-templates mode="table-complex"/>
-      </span>
-    </span>
   </xsl:template>
   
   <xsl:template match="cell" mode="table-complex">
@@ -404,12 +402,20 @@
     </xsl:for-each>
   </xsl:template>
   
+  <xsl:template match="cell/@rows | cell/@cols" mode="#default">
+    <xsl:variable name="data" select="data(.)"/>
+    <xsl:if test="$data castable as xs:integer and xs:integer($data) gt 1">
+      <xsl:variable name="attrName" select="substring-before(local-name(),'s')"/>
+      <xsl:attribute name="{$attrName}span" select="$data"/>
+    </xsl:if>
+  </xsl:template>
+  
 <!-- ELEMENTS THAT REQUIRE JUST A NEWLINE -->
   
   <!-- TEI elements which do not warrant an <html:div> or <html:p>, but should have 
     "display: block". -->
   <xsl:template match=" head | l | stage | salute | signed
-                      | listBibl/bibl/* | biblFull/* | biblStruct/*
+                      | listBibl/bibl[tps:has-only-element-children(.)]/* | biblFull/* | biblStruct/*
                       | event/* | org/* | person/* | place/*
                       | argument | byline | docAuthor | docDate | docEdition 
                       | docImprint | docTitle[not(titlePart)] | titlePart
@@ -1009,7 +1015,7 @@
         <!-- Text contrast -->
         <div class="control-widget">
           <h3 class="expandable-heading">Text contrast</h3>
-          <div id="text-contrasts" class="control-widget-component expandable">
+          <div id="text-contrasts" class="control-widget-component expandable expandable-hidden">
             <xsl:variable name="tabIndex" select="2"/>
             <fieldset id="text-contrast-selector" tabindex="2">
               <legend>Visibility</legend>

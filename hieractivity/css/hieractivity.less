@@ -86,67 +86,6 @@
     }
   } // dl
   
-  /* Expandable headings */
-  
-  .expandable-caret() {
-    margin: 0 0.4em;
-    display: inline-block;
-    line-height: 1.2em;
-    //font-size: 0.85em;
-  }
-  
-  .expandable-caret-down() {
-    content: '▾';
-    .expandable-caret();
-  }
-  
-  .expandable-caret-right() {
-    content: '▸';
-    .expandable-caret();
-  }
-  
-  .expandable-heading {
-    margin: 0.5em 0 0;
-    padding: 0.2em;
-    
-    > button {
-      border: thin solid @gray-dark;
-      border-radius: 0.4em;
-      box-shadow: @button-shadow @gray-dark;
-      background-color: @gray-lighter;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: unset;
-      text-align: left;
-      
-      &[aria-expanded=true] {
-        box-shadow: unset;
-        
-        &::before {
-          .expandable-caret-down();
-          margin-left: 0.2em;
-          float: left;
-        }
-      }
-      
-      &[aria-expanded=false]::before {
-        .expandable-caret-right();
-        margin-left: 0.2em;
-        float: left;
-      }
-    } // .expandable-heading > button
-  } // .expandable-heading
-  
-  .expandable {
-    border: thin solid @gray;
-    border-top: none;
-    padding: 0.15em 0.75em 0.4em;
-  } // .expandable
-  
-  .expandable-heading + .expandable[aria-hidden=true] {
-    display: none;
-  }
-  
   
   /* Control panel */
 
@@ -297,6 +236,69 @@
   } // .control-panel
   
   
+  
+  
+  /* Expandable headings */
+  
+  .expandable-caret() {
+    margin: 0 0.4em;
+    display: inline-block;
+    line-height: 1.2em;
+    //font-size: 0.85em;
+  }
+  
+  .expandable-caret-down() {
+    content: '▾';
+    .expandable-caret();
+  }
+  
+  .expandable-caret-right() {
+    content: '▸';
+    .expandable-caret();
+  }
+  
+  .expandable-heading {
+    margin: 0.5em 0 0;
+    padding: 0.2em;
+    
+    > button {
+      border: thin solid @gray-dark;
+      border-radius: 0.4em;
+      box-shadow: @button-shadow @gray-dark;
+      background-color: @gray-lighter;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: unset;
+      text-align: left;
+      
+      &[aria-expanded=true] {
+        box-shadow: unset;
+        
+        &::before {
+          .expandable-caret-down();
+          margin-left: 0.2em;
+          float: left;
+        }
+      }
+      
+      &[aria-expanded=false]::before {
+        .expandable-caret-right();
+        margin-left: 0.2em;
+        float: left;
+      }
+    } // .expandable-heading > button
+  } // .expandable-heading
+  
+  .expandable {
+    border: thin solid @gray;
+    border-top: none;
+    padding: 0.15em 0.75em 0.4em;
+  } // .expandable
+  
+  .expandable-heading + .expandable[aria-hidden=true] {
+    display: none !important;
+  }
+  
   /* Containers for the <teiHeader> and <text> */
   
   #tei-header,
@@ -408,8 +410,8 @@
     .box-of-color(@cream);
   }
   
-  // .box-gen0 should only occur when a box-like element (not <body>, <front> or 
-    // <back>) occurs as a child of <text>. Which is invalid TEI, so using a sharp 
+  // .box-gen0 should only occur when a box-like element (not <body>, <front> or
+    // <back>) occurs as a child of <text>. Which is invalid TEI, so using a sharp
     // black instead of our usual palette should be fine.
   .box-gen0 {
     .box-of-color(black);
