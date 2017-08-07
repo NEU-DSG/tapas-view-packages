@@ -12,8 +12,8 @@
 /* Hieractivity */
 .hieractivity {
   font-family: 'Times', 'Times New Roman', serif;
-  /* Expandable headings */
   /* Control panel */
+  /* Expandable headings */
   /* Containers for the <teiHeader> and <text> */
   /* TEI header */
   /* <text>-specific styles */
@@ -39,47 +39,6 @@
 }
 .hieractivity dl dd + dt {
   margin-top: 0.35em;
-}
-.hieractivity .expandable-heading {
-  margin: 0.5em 0 0;
-  padding: 0.2em;
-}
-.hieractivity .expandable-heading > button {
-  border: thin solid #555555;
-  border-radius: 0.4em;
-  box-shadow: 0.1em 0.1em 0.2em #555555;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: unset;
-  text-align: left;
-}
-.hieractivity .expandable-heading > button[aria-expanded=true] {
-  box-shadow: unset;
-}
-.hieractivity .expandable-heading > button[aria-expanded=true]::before {
-  content: '▾';
-  margin: 0 0.4em;
-  display: inline-block;
-  line-height: 1.2em;
-  margin-left: 0.2em;
-  float: left;
-}
-.hieractivity .expandable-heading > button[aria-expanded=false]::before {
-  content: '▸';
-  margin: 0 0.4em;
-  display: inline-block;
-  line-height: 1.2em;
-  margin-left: 0.2em;
-  float: left;
-}
-.hieractivity .expandable {
-  border: thin solid #808080;
-  border-top: none;
-  padding: 0.15em 0.75em 0.4em;
-}
-.hieractivity .expandable-heading + .expandable[aria-hidden=true] {
-  display: none;
 }
 .hieractivity #control-panel {
   border-radius: 0.4em;
@@ -128,7 +87,7 @@
 .hieractivity #control-panel h2.expandable-heading > button {
   border: medium solid #8b1122;
   padding: 0.25em 0.5em;
-  box-shadow: 0.1em 0.1em 0.2em black;
+  box-shadow: 0.1em 0.1em 0.2em #000000;
   font-variant: inherit;
 }
 .hieractivity #control-panel #controls-container {
@@ -197,6 +156,47 @@
   overflow-y: auto;
   padding: 0 1em;
   text-align: left;
+}
+.hieractivity .expandable-heading {
+  margin: 0.5em 0 0;
+  padding: 0.2em;
+}
+.hieractivity .expandable-heading > button {
+  border: thin solid #555555;
+  border-radius: 0.4em;
+  box-shadow: 0.1em 0.1em 0.2em #555555;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: unset;
+  text-align: left;
+}
+.hieractivity .expandable-heading > button[aria-expanded=true] {
+  box-shadow: unset;
+}
+.hieractivity .expandable-heading > button[aria-expanded=true]::before {
+  content: '▾';
+  margin: 0 0.4em;
+  display: inline-block;
+  line-height: 1.2em;
+  margin-left: 0.2em;
+  float: left;
+}
+.hieractivity .expandable-heading > button[aria-expanded=false]::before {
+  content: '▸';
+  margin: 0 0.4em;
+  display: inline-block;
+  line-height: 1.2em;
+  margin-left: 0.2em;
+  float: left;
+}
+.hieractivity .expandable {
+  border: thin solid #808080;
+  border-top: none;
+  padding: 0.15em 0.75em 0.4em;
+}
+.hieractivity .expandable-heading + .expandable[aria-hidden=true] {
+  display: none !important;
 }
 .hieractivity #tei-header,
 .hieractivity #tei-container {
@@ -276,8 +276,8 @@
   fill: #ffffee;
 }
 .hieractivity .box-gen0 {
-  background-color: black;
-  fill: black;
+  background-color: #000000;
+  fill: #000000;
 }
 .hieractivity .box-gen1 {
   background-color: rgba(255, 255, 179, 0.8);
@@ -370,31 +370,50 @@
   display: block;
   text-align: center;
 }
-.hieractivity [data-tapas-gi=list] {
+.hieractivity ul,
+.hieractivity .list-ul,
+.hieractivity ol,
+.hieractivity .list-ol {
+  margin: 0.8em 0;
   padding-left: 1em;
   display: block;
 }
-.hieractivity [data-tapas-gi=list] span[data-tapas-gi=item] {
+.hieractivity ul li,
+.hieractivity .list-ul li,
+.hieractivity ol li,
+.hieractivity .list-ol li,
+.hieractivity ul .list-item-li,
+.hieractivity .list-ul .list-item-li,
+.hieractivity ol .list-item-li,
+.hieractivity .list-ol .list-item-li {
   display: list-item;
 }
-.hieractivity span[data-tapas-gi=table] {
+.hieractivity table,
+.hieractivity .table {
   width: 100%;
   display: table;
+  color: inherit;
 }
-.hieractivity span[data-tapas-gi=table] > span[data-tapas-gi=head] {
+.hieractivity table > span[data-tapas-gi=head],
+.hieractivity .table > span[data-tapas-gi=head] {
   display: table-caption;
 }
-.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row] {
+.hieractivity table span[data-tapas-gi=row],
+.hieractivity .table span[data-tapas-gi=row] {
   display: table-row;
 }
-.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row] span[data-tapas-gi=cell],
-.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row] .colspanned {
+.hieractivity table span[data-tapas-gi=row] span[data-tapas-gi=cell],
+.hieractivity .table span[data-tapas-gi=row] span[data-tapas-gi=cell],
+.hieractivity table span[data-tapas-gi=row] .colspanned,
+.hieractivity .table span[data-tapas-gi=row] .colspanned {
   border-top: thin solid #555555;
   padding: 0.15em 0.2em;
   display: table-cell;
 }
-.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row]:first-child span[data-tapas-gi=cell],
-.hieractivity span[data-tapas-gi=table] span[data-tapas-gi=row]:first-child .colspanned {
+.hieractivity table span[data-tapas-gi=row]:first-child span[data-tapas-gi=cell],
+.hieractivity .table span[data-tapas-gi=row]:first-child span[data-tapas-gi=cell],
+.hieractivity table span[data-tapas-gi=row]:first-child .colspanned,
+.hieractivity .table span[data-tapas-gi=row]:first-child .colspanned {
   border-top: none;
   display: table-cell;
 }
