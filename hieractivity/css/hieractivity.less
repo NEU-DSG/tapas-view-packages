@@ -1,5 +1,10 @@
 // hierarchy.less
 
+/*  MISC. VARIABLES  */
+
+@box-opacity: 0.8;
+@button-shadow: 0.1em 0.1em 0.2em;
+
 /*  COLORS  */
 
 @cream:             #FFE;
@@ -18,28 +23,24 @@
 // Color palette used for boxes at varying depths. This is a slightly modified
   // version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
   // http://colorbrewer2.org/?type=qualitative&scheme=Set3&n=12
-@box01:         rgba(50,  116, 184, 0.8);
-@box02:         rgba(124, 186, 176, 0.8);
-@box03:         rgba(255, 255, 179, 0.8);
-@box04:         rgba(190, 186, 218, 0.8);
-@box05:         rgba(251, 128, 114, 0.8);
-@box06:         rgba(253, 180, 98,  0.8);
-@box07:         rgba(128, 177, 211, 0.8);
-@box08:         rgba(179, 222, 105, 0.8);
-@box09:         rgba(252, 205, 229, 0.8);
-@box10:         rgba(188, 128, 189, 0.8);
-@box11:         rgba(204, 235, 197, 0.8);
-@box12:         rgba(255, 237, 111, 0.8);
+@box01:         rgba(50,  116, 184, @box-opacity);
+@box02:         rgba(124, 186, 176, @box-opacity);
+@box03:         rgba(255, 255, 179, @box-opacity);
+@box04:         rgba(190, 186, 218, @box-opacity);
+@box05:         rgba(251, 128, 114, @box-opacity);
+@box06:         rgba(253, 180, 98,  @box-opacity);
+@box07:         rgba(128, 177, 211, @box-opacity);
+@box08:         rgba(179, 222, 105, @box-opacity);
+@box09:         rgba(252, 205, 229, @box-opacity);
+@box10:         rgba(188, 128, 189, @box-opacity);
+@box11:         rgba(204, 235, 197, @box-opacity);
+@box12:         rgba(255, 237, 111, @box-opacity);
 
 /*  FONTS  */
 
 @code: 'Courier', 'Courier New', monospace;
 @heading: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
 @plain: 'Times', 'Times New Roman', serif;
-
-/*  OTHER VARIABLES  */
-
-@button-shadow: 0.1em 0.1em 0.2em;
 
 
 /*  RULES  */
@@ -391,7 +392,7 @@
     &.box-tabularasa {
       
       > .box-outermost {
-        margin: 2em 1em;
+        margin: 1.2em 1em;
       }
     } // [data-tapas-gi].boxed.box-tabularasa
     
@@ -410,6 +411,7 @@
   
   .box-tabularasa {
     .box-of-color(@white);
+    box-shadow: 0em 0em 1em @gray-dark;
   }
   
   .box-outermost {

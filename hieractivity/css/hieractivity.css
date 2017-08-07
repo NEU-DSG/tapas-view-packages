@@ -1,6 +1,6 @@
+/*  MISC. VARIABLES  */
 /*  COLORS  */
 /*  FONTS  */
-/*  OTHER VARIABLES  */
 /*  RULES  */
 /* Tooltips */
 .hieractive-tooltip {
@@ -256,7 +256,7 @@
   color: black;
 }
 .hieractivity [data-tapas-gi].boxed.box-tabularasa > .box-outermost {
-  margin: 2em 1em;
+  margin: 1.2em 1em;
 }
 .hieractivity [data-tapas-gi].boxed.box-p {
   margin: 1em 0;
@@ -271,6 +271,7 @@
 .hieractivity .box-tabularasa {
   background-color: #ffffff;
   fill: #ffffff;
+  box-shadow: 0em 0em 1em #555555;
 }
 .hieractivity .box-outermost {
   background-color: rgba(50, 116, 184, 0.8);
