@@ -11,6 +11,7 @@
 }
 /* Hieractivity */
 .hieractivity {
+  background-color: #ffffff;
   font-family: 'Times', 'Times New Roman', serif;
   /* Control panel */
   /* Expandable headings */
@@ -254,6 +255,9 @@
   border-left: 1em solid #8b1122;
   color: black;
 }
+.hieractivity [data-tapas-gi].boxed.box-tabularasa > .box-outermost {
+  margin: 2em 1em;
+}
 .hieractivity [data-tapas-gi].boxed.box-p {
   margin: 1em 0;
   padding: 0.5em 0.5em 0.5em 1em;
@@ -263,6 +267,10 @@
   border-left: 0.5em solid black;
   padding-left: 0.5em;
   color: #808080;
+}
+.hieractivity .box-tabularasa {
+  background-color: #ffffff;
+  fill: #ffffff;
 }
 .hieractivity .box-outermost {
   background-color: rgba(50, 116, 184, 0.8);

@@ -14,6 +14,7 @@
 @raspberry-light:   #EF7C8C;
 @raspberry-lighter: #F7AAB5;
 @slate:             #9EAEC9;
+@white:             #FFFFFF;
 // Color palette used for boxes at varying depths. This is a slightly modified
   // version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
   // http://colorbrewer2.org/?type=qualitative&scheme=Set3&n=12
@@ -49,13 +50,13 @@
   border: thin solid @slate;
   padding: 1em;
   max-width: 180px;
-  //background-color: @cream;
   font-family: @plain;
 }
 
 /* Hieractivity */
 
 .hieractivity {
+  background-color: @white;
   font-family: @plain;
   
   .encoded {
@@ -387,6 +388,13 @@
       color: black;
     }
     
+    &.box-tabularasa {
+      
+      > .box-outermost {
+        margin: 2em 1em;
+      }
+    } // [data-tapas-gi].boxed.box-tabularasa
+    
     &.box-p {
       margin: 1em 0;
       padding: 0.5em 0.5em 0.5em 1em;
@@ -397,8 +405,12 @@
         padding-left: 0.5em;
         color: @gray;
       }
-    } // .box-p
+    } // [data-tapas-gi].boxed.box-p
   } // [data-tapas-gi].boxed
+  
+  .box-tabularasa {
+    .box-of-color(@white);
+  }
   
   .box-outermost {
     .box-of-color(@box01);

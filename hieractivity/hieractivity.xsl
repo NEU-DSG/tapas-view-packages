@@ -290,6 +290,21 @@
     </xsl:element>
   </xsl:template>
   
+  <xsl:template match="group" mode="#default inside-p" priority="87">
+    <xsl:param name="depth" select="-1" as="xs:integer" tunnel="yes"/>
+    <xsl:param name="language" as="xs:string" required="yes" tunnel="yes"/>
+    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
+    <xsl:element name="{$wrapper}">
+      <xsl:attribute name="class" select="'boxed box-tabularasa'"/>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="depth" select="0" tunnel="yes"/>
+        <xsl:with-param name="language" select="$language"/>
+      </xsl:apply-templates>
+    </xsl:element>
+  </xsl:template>
+  
   <!-- Block-level TEI elements will be used to create boxes in the HTML output. 
     Since CSS doesn't allow selecting on ancestors of nodes, we calculate the depth 
     (nestedness) of the current node here. -->
