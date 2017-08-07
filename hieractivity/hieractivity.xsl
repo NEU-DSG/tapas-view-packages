@@ -529,9 +529,9 @@
       <span class="label-explanatory">
         <xsl:value-of select="$interjectStart"/>
         <xsl:call-template name="gloss-gi"/>
-        <xsl:if test="@n">
+        <xsl:if test="@*">
           <xsl:text> </xsl:text>
-          <xsl:value-of select="@n"/>
+          <xsl:apply-templates select="@*" mode="show-att"/>
         </xsl:if>
         <xsl:value-of select="$interjectEnd"/>
       </span>
@@ -547,8 +547,10 @@
       <xsl:apply-templates select="@*"/>
       <xsl:value-of select="$interjectStart"/>
       <xsl:call-template name="gloss-gi"/>
-      <xsl:text> </xsl:text>
-      <xsl:apply-templates select="@*" mode="show-att"/>
+      <xsl:if test="@*">
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="@*" mode="show-att"/>
+      </xsl:if>
       <xsl:value-of select="$interjectEnd"/>
     </span>
   </xsl:template>
@@ -616,6 +618,7 @@
             <xsl:apply-templates/>
           </xsl:when>
           <xsl:when test="@*">
+            <xsl:text> </xsl:text>
             <!--<xsl:value-of select="$contentDivider"/>-->
             <xsl:apply-templates select="@*" mode="show-att"/>
           </xsl:when>

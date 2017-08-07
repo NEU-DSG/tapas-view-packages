@@ -87,7 +87,7 @@
 .hieractivity #control-panel h2.expandable-heading > button {
   border: medium solid #8b1122;
   padding: 0.25em 0.5em;
-  box-shadow: 0.1em 0.1em 0.2em #000000;
+  box-shadow: 0.1em 0.1em 0.2em black;
   font-variant: inherit;
 }
 .hieractivity #control-panel #controls-container {
@@ -256,11 +256,12 @@
 }
 .hieractivity [data-tapas-gi].boxed.box-p {
   margin: 1em 0;
-  padding: 0.5em;
+  padding: 0.5em 0.5em 0.5em 1em;
   display: block;
 }
 .hieractivity [data-tapas-gi].boxed.box-p.selected-gi {
-  border-left: 1em solid black;
+  border-left: 0.5em solid black;
+  padding-left: 0.5em;
   color: #808080;
 }
 .hieractivity .box-outermost {
@@ -276,8 +277,8 @@
   fill: #ffffee;
 }
 .hieractivity .box-gen0 {
-  background-color: #000000;
-  fill: #000000;
+  background-color: black;
+  fill: black;
 }
 .hieractivity .box-gen1 {
   background-color: rgba(255, 255, 179, 0.8);
