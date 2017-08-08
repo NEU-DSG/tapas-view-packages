@@ -69,11 +69,12 @@
   color: white;
 }
 .hieractivity #control-panel .expandable-heading > button {
-  border-color: #b02b3d;
+  border: none;
+  border-radius: 0;
   padding: 0.25em;
   width: 100%;
-  background-color: #FFF5EE;
-  box-shadow: 0.1em 0.1em 0.2em #b02b3d;
+  background-color: #FFF8F3;
+  box-shadow: none;
   color: black;
 }
 .hieractivity #control-panel .expandable-heading > button[aria-expanded=true] {
@@ -87,27 +88,27 @@
 }
 .hieractivity #control-panel h2.expandable-heading > button {
   border: medium solid #8b1122;
+  border-radius: 0.4em;
   padding: 0.25em 0.5em;
   box-shadow: 0.1em 0.1em 0.2em black;
   font-variant: inherit;
 }
 .hieractivity #control-panel #controls-container {
   border: none;
-  border-radius: 0.4em;
   padding: 0;
+  overflow: auto;
   background-color: #8b1122;
   cursor: default;
   /* Widget customizations */
 }
 .hieractivity #control-panel #controls-container .control-widget {
-  border-top: medium solid #b02b3d;
-  padding: 0.4em;
+  padding: 0;
 }
 .hieractivity #control-panel #controls-container .control-widget:first-child {
   border-top: none;
 }
 .hieractivity #control-panel #controls-container .control-widget .control-widget-component {
-  margin: 0;
+  margin: 0.5em 0.5em 1em;
   border: thin solid #dddddd;
   height: 120px;
   background-color: white;
@@ -150,12 +151,11 @@
   stroke: #555555;
 }
 .hieractivity #control-panel #controls-container #gi-properties {
-  margin: 0;
+  margin: 0.5em 0.5em 1em;
   border: thin solid #dddddd;
   height: 120px;
   background-color: white;
   overflow-y: auto;
-  padding: 0 1em;
   text-align: left;
 }
 .hieractivity .expandable-heading {
@@ -165,6 +165,7 @@
 .hieractivity .expandable-heading > button {
   border: thin solid #555555;
   border-radius: 0.4em;
+  padding-top: 0.2em;
   box-shadow: 0.1em 0.1em 0.2em #555555;
   background-color: #f0f0f0;
   cursor: pointer;
@@ -255,6 +256,9 @@
   border-left: 1em solid #8b1122;
   color: black;
 }
+.hieractivity [data-tapas-gi].boxed.box-tabularasa {
+  box-shadow: 0em 0em 1em #555555;
+}
 .hieractivity [data-tapas-gi].boxed.box-tabularasa > .box-outermost {
   margin: 1.2em 1em;
 }
@@ -271,7 +275,6 @@
 .hieractivity .box-tabularasa {
   background-color: #ffffff;
   fill: #ffffff;
-  box-shadow: 0em 0em 1em #555555;
 }
 .hieractivity .box-outermost {
   background-color: rgba(50, 116, 184, 0.8);

@@ -93,7 +93,6 @@
   /* Control panel */
 
   #control-panel {
-    //border: medium solid @gray-dark;
     border-radius: 0.4em;
     padding: 0.5em;
     width: 185px;
@@ -124,11 +123,12 @@
     .expandable-heading {
       
       > button {
-        border-color: @raspberry-dark;
+        border: none;
+        border-radius: 0;
         padding: 0.25em;
         width: 100%;
-        background-color: #FFF5EE;
-        box-shadow: @button-shadow @raspberry-dark;
+        background-color: #FFF8F3;
+        box-shadow: none;
         color: black;
         
         &[aria-expanded=true] {
@@ -145,6 +145,7 @@
       
       > button {
         border: medium solid @raspberry-darker;
+        border-radius: 0.4em;
         padding: 0.25em 0.5em;
         box-shadow: @button-shadow black;
         //text-transform: lowercase;
@@ -154,13 +155,13 @@
     
     #controls-container {
       border: none;
-      border-radius: 0.4em;
       padding: 0;
+      overflow: auto;
       background-color: @raspberry-darker;
       cursor: default;
       
       .component-inner() {
-        margin: 0;
+        margin: 0.5em 0.5em 1em;
         border: thin solid @gray-light;
         height: 120px;
         background-color: white;
@@ -168,13 +169,13 @@
       }
       
       .control-widget {
-        border-top: medium solid @raspberry-dark;
-        padding: 0.4em;
-      
+        //border-top: medium solid @raspberry-dark;
+        padding: 0;
+        
         &:first-child {
           border-top: none;
         }
-      
+        
         .control-widget-component {
           .component-inner();
           padding: 0.25em;
@@ -186,10 +187,10 @@
         border: thin solid @gray-light;
         padding: 0.15em 0;
         text-align: left;
-      
+        
         label {
           display: table-row;
-        
+          
           .label-desc {
             margin: 0 0.35em;
             font-size: 0.85em;
@@ -232,7 +233,7 @@
       
       #gi-properties {
         .component-inner();
-        padding: 0 1em;
+        //padding: 0 1em;
         text-align: left;
       } // #gi-properties
     } // #controls-container
@@ -267,6 +268,7 @@
     > button {
       border: thin solid @gray-dark;
       border-radius: 0.4em;
+      padding-top: 0.2em;
       box-shadow: @button-shadow @gray-dark;
       background-color: @gray-lighter;
       cursor: pointer;
@@ -390,6 +392,7 @@
     }
     
     &.box-tabularasa {
+      box-shadow: 0em 0em 1em @gray-dark;
       
       > .box-outermost {
         margin: 1.2em 1em;
@@ -411,7 +414,6 @@
   
   .box-tabularasa {
     .box-of-color(@white);
-    box-shadow: 0em 0em 1em @gray-dark;
   }
   
   .box-outermost {
