@@ -157,11 +157,10 @@
       border: none;
       padding: 0;
       overflow: auto;
-      background-color: @raspberry-darker;
       cursor: default;
       
       .component-inner() {
-        margin: 0.5em 0.5em 1em;
+        margin: 0.5em;
         border: thin solid @gray-light;
         height: 120px;
         background-color: white;
@@ -169,11 +168,14 @@
       }
       
       .control-widget {
+        margin-top: 0.5em;
         //border-top: medium solid @raspberry-dark;
-        padding: 0;
+        border-radius: 0.4em;
+        padding-bottom: 0.1em;
+        background-color: @raspberry-darker;
         
         &:first-child {
-          border-top: none;
+          margin-top: 0;
         }
         
         .control-widget-component {

@@ -97,18 +97,20 @@
   border: none;
   padding: 0;
   overflow: auto;
-  background-color: #8b1122;
   cursor: default;
   /* Widget customizations */
 }
 .hieractivity #control-panel #controls-container .control-widget {
-  padding: 0;
+  margin-top: 0.5em;
+  border-radius: 0.4em;
+  padding-bottom: 0.1em;
+  background-color: #8b1122;
 }
 .hieractivity #control-panel #controls-container .control-widget:first-child {
-  border-top: none;
+  margin-top: 0;
 }
 .hieractivity #control-panel #controls-container .control-widget .control-widget-component {
-  margin: 0.5em 0.5em 1em;
+  margin: 0.5em;
   border: thin solid #dddddd;
   height: 120px;
   background-color: white;
@@ -151,7 +153,7 @@
   stroke: #555555;
 }
 .hieractivity #control-panel #controls-container #gi-properties {
-  margin: 0.5em 0.5em 1em;
+  margin: 0.5em;
   border: thin solid #dddddd;
   height: 120px;
   background-color: white;
