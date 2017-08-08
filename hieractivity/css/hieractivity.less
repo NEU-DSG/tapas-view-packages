@@ -1,4 +1,4 @@
-// hierarchy.less
+// hieractivity.less
 
 /*  MISC. VARIABLES  */
 
@@ -124,10 +124,12 @@
       
       > button {
         border: none;
+        border-top: thin solid @raspberry-darker;
         border-radius: 0;
         padding: 0.25em;
-        width: 100%;
         background-color: #FFF8F3;
+        opacity: 1;
+        width: 100%;
         box-shadow: none;
         color: black;
         
@@ -148,7 +150,6 @@
         border-radius: 0.4em;
         padding: 0.25em 0.5em;
         box-shadow: @button-shadow black;
-        //text-transform: lowercase;
         font-variant: inherit;
       } // h2 > button
     } // h2
@@ -169,7 +170,6 @@
       
       .control-widget {
         margin-top: 0.5em;
-        //border-top: medium solid @raspberry-dark;
         border-radius: 0.4em;
         padding-bottom: 0.1em;
         background-color: @raspberry-darker;
@@ -238,6 +238,7 @@
         //padding: 0 1em;
         text-align: left;
       } // #gi-properties
+      
     } // #controls-container
   } // .control-panel
   
@@ -250,7 +251,6 @@
     margin: 0 0.4em;
     display: inline-block;
     line-height: 1.2em;
-    //font-size: 0.85em;
   }
   
   .expandable-caret-down() {
@@ -272,7 +272,8 @@
       border-radius: 0.4em;
       padding-top: 0.2em;
       box-shadow: @button-shadow @gray-dark;
-      background-color: @gray-lighter;
+      background-color: @white;
+      opacity: 0.9;
       cursor: pointer;
       font-family: inherit;
       font-size: unset;

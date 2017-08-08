@@ -70,10 +70,12 @@
 }
 .hieractivity #control-panel .expandable-heading > button {
   border: none;
+  border-top: thin solid #8b1122;
   border-radius: 0;
   padding: 0.25em;
-  width: 100%;
   background-color: #FFF8F3;
+  opacity: 1;
+  width: 100%;
   box-shadow: none;
   color: black;
 }
@@ -169,7 +171,8 @@
   border-radius: 0.4em;
   padding-top: 0.2em;
   box-shadow: 0.1em 0.1em 0.2em #555555;
-  background-color: #f0f0f0;
+  background-color: #ffffff;
+  opacity: 0.9;
   cursor: pointer;
   font-family: inherit;
   font-size: unset;
