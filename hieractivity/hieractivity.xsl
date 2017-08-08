@@ -209,9 +209,11 @@
   </xsl:template>
   
   <xsl:template match="@*" name="make-data-attr" mode="carry-on" priority="-20">
-    <xsl:variable name="attrName" 
+    <xsl:variable name="nsResolved" 
       select="if ( local-name() eq name() ) then name() 
               else translate(name(),':','-')"/>
+    <xsl:variable name="attrName" 
+      select="lower-case(replace($nsResolved, '([a-z])([A-Z])', '$1-$2'))"/>
     <xsl:attribute name="data-tapas-att-{$attrName}" select="data(.)"/>
   </xsl:template>
   

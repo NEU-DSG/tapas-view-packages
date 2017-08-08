@@ -162,6 +162,7 @@ $(document).ready(function() {
             .text(value);
         } else {
           console.log('Data attribute "'+ key + '" not found');
+          console.log(dataObj);
         }
       }
     }, this);
