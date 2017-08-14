@@ -255,7 +255,7 @@
   display: block;
 }
 .hieractivity [data-tapas-gi].boxed[data-tapas-gi=text] {
-  margin: 0;
+  margin: 0 0 2em;
 }
 .hieractivity [data-tapas-gi].boxed.selected-gi {
   border-left: 1em solid #8b1122;

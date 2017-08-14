@@ -140,6 +140,8 @@
         <xsl:if test="not($render-full-html)">
           <xsl:attribute name="lang" select="$useLang"/>
         </xsl:if>
+        <!-- The control panel -->
+        <xsl:call-template name="control-box"/>
         <!-- Metadata from the <teiHeader> -->
         <div id="tei-header">
           <xsl:apply-templates select="teiHeader">
@@ -165,12 +167,12 @@
               </xsl:otherwise>
             </xsl:choose>
           </xsl:attribute>
-          <xsl:apply-templates select="text">
-            <xsl:with-param name="language" select="$useLang"/>
-          </xsl:apply-templates>
+          <div id="tei-resources-box">
+            <xsl:apply-templates select="text">
+              <xsl:with-param name="language" select="$useLang"/>
+            </xsl:apply-templates>
+          </div>
         </div>
-        <!-- The control panel -->
-        <xsl:call-template name="control-box"/>
       </div>
     </xsl:variable>
     <xsl:choose>
@@ -1175,7 +1177,7 @@
   <!-- Count number of each type of element within a given element (the default is 
     the current node). -->
   <xsl:template name="gi-counting-robot">
-    <xsl:param name="start" select="." as="node()"/>
+    <xsl:param name="start" select="." as="node()+"/>
     <xsl:variable name="fieldsetName" select="'element'"/>
     <xsl:variable name="allElements" select="$start/descendant-or-self::*/local-name(.)"/>
     <xsl:variable name="distinctGIs" select="distinct-values($allElements)"/>
