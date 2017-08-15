@@ -245,6 +245,9 @@
 .hieractivity #tei-container.text-contrast-mid {
   color: #555555;
 }
+.hieractivity #tei-container #tei-resources-box {
+  display: block;
+}
 .hieractivity .selected-gi {
   background-color: #8b1122;
   color: #f0f0f0;

@@ -41,8 +41,10 @@ $(document).ready(function() {
   
   // Set up variables with relevant d3 selections.
   var teiContainer = d3.select('#tei-container');
-  var scrollElement = d3.select('div[data-tapas-gi].boxed');
+  var scrollElement = d3.select('#tei-resources-box');
   var scrollElementNode = scrollElement.node();
+  // Assign the height of the scrollElement back to it.
+  scrollElement.style('height', $(scrollElementNode).height()+'px');
   var zoomSlider = d3.select('#zoom-slide')
       .on('input', slid)
       .on('mouseout', workedHeight);
@@ -102,7 +104,7 @@ $(document).ready(function() {
   
   // Translate and scale the first element with @data-tapas-gi.
   function transformed(scale) {
-    var h = heightData[0],
+    var h = $(scrollElementNode).height(),
         w = $(scrollElementNode).width(),
         xNew = w / 2 * (-1 + scale),
         yNew = h / 2 * (-1 + scale);
