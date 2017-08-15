@@ -82,9 +82,7 @@
 	
 	<xsl:template match="@*">
 		<!-- copy select elements -->
-		<xsl:copy>
-			<xsl:apply-templates select="@*|node()"/>
-		</xsl:copy>
+		<xsl:copy-of select="."/>
 	</xsl:template>
 
 	<xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl">
@@ -122,9 +120,7 @@
 				</xsl:attribute>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:copy>
-					<xsl:apply-templates select="@*|node()"/>
-				</xsl:copy>
+				<xsl:copy-of select="."/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
