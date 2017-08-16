@@ -48,11 +48,8 @@
     </xsl:variable>
     <xsl:if test="$teiSpec">
       <xsl:choose>
-        <xsl:when test="$teiSpec/gloss[@xml:lang/lower-case(.) eq $language]">
-          <xsl:value-of select="$teiSpec/gloss[@xml:lang/lower-case(.) eq $language]/normalize-space(.)"/>
-        </xsl:when>
-        <xsl:when test="$teiSpec/gloss[@xml:lang/lower-case(.) eq $useLang]">
-          <xsl:value-of select="$teiSpec/gloss[@xml:lang/lower-case(.) eq $useLang]/normalize-space(.)"/>
+        <xsl:when test="$teiSpec/gloss[@xml:lang/lower-case(.) = ( $language, $useLang )]">
+          <xsl:value-of select="$teiSpec/gloss[@xml:lang/lower-case(.) = ( $language, $useLang )]//text()"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$element-name"/>

@@ -47,7 +47,8 @@ $(document).ready(function() {
   scrollElement.style('height', $(scrollElementNode).height()+'px');
   var zoomSlider = d3.select('#zoom-slide')
       .on('input', slid)
-      .on('mouseout', workedHeight);
+      .on('mouseout', workedHeight)
+      .property('disabled', false);
   var giPropList = d3.select('#gi-properties');
   // Any HTML element with the class 'boxed' is a container which should trigger a
     // JS event when clicked.
@@ -92,6 +93,12 @@ $(document).ready(function() {
     type = checked.attr('value');
     teiContainer.classed('text-contrast-'+type, true);
   });
+  
+  // Enable remaining form controls.
+  d3.select('#text-contrast-selector')
+      .property('disabled', false);
+  d3.select('#gi-option-selector')
+      .property('disabled', false);
   
   // Make the control panel draggable.
   $('#control-panel').draggable({

@@ -140,14 +140,14 @@
         <xsl:if test="not($render-full-html)">
           <xsl:attribute name="lang" select="$useLang"/>
         </xsl:if>
-        <!-- The control panel -->
-        <xsl:call-template name="control-box"/>
         <!-- Metadata from the <teiHeader> -->
         <div id="tei-header">
           <xsl:apply-templates select="teiHeader">
             <xsl:with-param name="language" select="$language"/>
           </xsl:apply-templates>
         </div>
+        <!-- The control panel -->
+        <xsl:call-template name="control-box"/>
         <!-- The HTML representation of <text> -->
         <div id="tei-container">
           <xsl:attribute name="class">
@@ -1093,7 +1093,8 @@
           <div id="zoom-container" class="control-widget-component expandable">
             -
             <input id="zoom-slide" title="Zoom control slider" tabindex="1"
-              type="range" min="20" max="100" step="1" value="100" />
+              type="range" min="20" max="100" step="1" value="100" 
+              disabled="disabled"/>
             +
           </div>
         </div>
@@ -1102,7 +1103,7 @@
           <h3 class="expandable-heading">Text contrast</h3>
           <div id="text-contrasts" class="control-widget-component expandable expandable-hidden">
             <xsl:variable name="tabIndex" select="2"/>
-            <fieldset id="text-contrast-selector" tabindex="2">
+            <fieldset id="text-contrast-selector" tabindex="2" disabled="disabled">
               <legend>Visibility</legend>
               <xsl:for-each select="( 'high', 'mid', 'low', 'none' )">
                 <xsl:variable name="value" select="."/>
@@ -1124,7 +1125,7 @@
         <div class="control-widget">
           <h3 class="expandable-heading">Elements by frequency</h3>
           <div id="gi-frequencies" class="control-widget-component expandable">
-            <fieldset id="gi-option-selector" tabindex="3">
+            <fieldset id="gi-option-selector" tabindex="3" disabled="disabled">
               <legend>Mark</legend>
               <xsl:call-template name="gi-counting-robot">
                 <xsl:with-param name="start" select="text"/>
