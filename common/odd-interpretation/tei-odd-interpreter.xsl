@@ -13,7 +13,7 @@
   xmlns:tps="http://tapas.northeastern.edu"
   exclude-result-prefixes="#all">
   
-  <xsl:output indent="no" method="xhtml" omit-xml-declaration="yes"/>
+  <xsl:output encoding="UTF-8" indent="no" method="xhtml" omit-xml-declaration="yes"/>
   
   
 <!-- PARAMETERS AND VARIABLES -->

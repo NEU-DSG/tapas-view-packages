@@ -13,7 +13,7 @@
   xmlns:tps="http://tapas.northeastern.edu"
   exclude-result-prefixes="#all">
   
-  <!--<xd:doc scope="stylesheet">
+  <xd:doc scope="stylesheet">
     <xd:desc>
       <xd:p>This stylesheet performs a relatively simple mapping of TEI to HTML, using 
         data attributes to retain information about the TEI structure. A control box with 
@@ -23,12 +23,22 @@
         <xd:a href="http://tapas.northeastern.edu">TAPAS Project</xd:a>, 2017.</xd:p>
       
       <xd:p>Changelog:</xd:p>
-      <xd:ul><!-\-
+      <xd:ul><!--
         <xd:li>DATE(, VERSION)?:
           <xd:ul>
             <xd:li></xd:li>
           </xd:ul>
-        </xd:li>-\->
+        </xd:li>-->
+        <xd:li>2017-08-17, v0.1.1:
+          <xd:ul>
+            <xd:li>Moved the control box between the &lt;teiHeader&gt; and &lt;text&gt;.</xd:li>
+            <xd:li>Removed explicitly-stated tab-indexes, since the revised DOM order 
+              should yield the correct tab order without intervention.</xd:li>
+          </xd:ul>
+        </xd:li>
+        <xd:li>2017-08-08: Separated camel-cased words in attribute names, solving a bug 
+          where the Javascript was unable to identify the correct HTML data attribute.</xd:li>
+        <xd:li>2017-08-07: Handle &lt;group&gt; with a new class 'box-tabularasa'.</xd:li>
         <xd:li>2017-07-14, v0.1.0: Tweaked tunnelled depth parameters and added a legend 
           to boxed elements by color in 'Elements by frequency'.</xd:li>
         <xd:li>2017-07-10: Added 'Text contrast' widget, as well as an XSLT parameter 
@@ -68,9 +78,9 @@
         <xd:li>2017-06-09, v0.0.1: Created stylesheet and zoom controls.</xd:li>
       </xd:ul>
     </xd:desc>
-  </xd:doc>-->
+  </xd:doc>
   
-  <xsl:output indent="no" method="xhtml" omit-xml-declaration="yes"/>
+  <xsl:output encoding="UTF-8" indent="no" method="xhtml" omit-xml-declaration="yes"/>
   <xsl:include href="../common/odd-interpretation/tei-odd-interpreter.xsl"/>
   
 <!-- PARAMETERS AND VARIABLES -->
@@ -88,6 +98,12 @@
   
 <!-- FUNCTIONS -->
   
+  <xd:doc>
+    <xd:desc>Test if an element is chunk-able, and it should get its own 'box' in the 
+      output HTML.</xd:desc>
+    <xd:param name="element">The element to test.</xd:param>
+    <xd:return>A Boolean value.</xd:return>
+  </xd:doc>
   <xsl:function name="tps:is-chunk-level" as="xs:boolean">
     <xsl:param name="element" as="element()"/>
     <xsl:value-of 
@@ -109,6 +125,12 @@
               ])"/>
   </xsl:function>
   
+  <xd:doc>
+    <xd:desc>Test if an element has only elements as significant children. Text nodes 
+      which contain only whitespace are do not count as significant here.</xd:desc>
+    <xd:param name="element">The element to test.</xd:param>
+    <xd:return>A Boolean value.</xd:return>
+  </xd:doc>
   <xsl:function name="tps:has-only-element-children" as="xs:boolean">
     <xsl:param name="element" as="element()"/>
     <xsl:value-of select="exists($element/*) 
@@ -1092,7 +1114,7 @@
           <h3 class="expandable-heading">Zoom</h3>
           <div id="zoom-container" class="control-widget-component expandable">
             -
-            <input id="zoom-slide" title="Zoom control slider" tabindex="1"
+            <input id="zoom-slide" title="Zoom control slider"
               type="range" min="20" max="100" step="1" value="100" 
               disabled="disabled"/>
             +
@@ -1103,7 +1125,7 @@
           <h3 class="expandable-heading">Text contrast</h3>
           <div id="text-contrasts" class="control-widget-component expandable expandable-hidden">
             <xsl:variable name="tabIndex" select="2"/>
-            <fieldset id="text-contrast-selector" tabindex="2" disabled="disabled">
+            <fieldset id="text-contrast-selector" disabled="disabled">
               <legend>Visibility</legend>
               <xsl:for-each select="( 'high', 'mid', 'low', 'none' )">
                 <xsl:variable name="value" select="."/>
@@ -1125,7 +1147,7 @@
         <div class="control-widget">
           <h3 class="expandable-heading">Elements by frequency</h3>
           <div id="gi-frequencies" class="control-widget-component expandable">
-            <fieldset id="gi-option-selector" tabindex="3" disabled="disabled">
+            <fieldset id="gi-option-selector" disabled="disabled">
               <legend>Mark</legend>
               <xsl:call-template name="gi-counting-robot">
                 <xsl:with-param name="start" select="text"/>
@@ -1152,7 +1174,6 @@
     </xsl:call-template>
     <xsl:text> #</xsl:text>
     <xsl:value-of select="count(preceding::*[local-name(.) eq $gi][ancestor::text]) + 1"/>
-    <!--<xsl:text> of the TEI document</xsl:text>-->
   </xsl:template>
   
   <!-- Apply templates on attributes. -->
@@ -1187,7 +1208,6 @@
       <xsl:with-param name="value" select="'none'"/>
       <xsl:with-param name="label">defaults only</xsl:with-param>
       <xsl:with-param name="isChecked" select="true()"/>
-      <xsl:with-param name="tabIndex" select="4"/>
     </xsl:call-template>
     <xsl:variable name="options" as="item()*">
       <xsl:for-each select="$distinctGIs">
@@ -1245,6 +1265,7 @@
     <xsl:attribute name="data-tapas-gi" select="local-name($start)"/>
   </xsl:template>
   
+  <!-- Set all of the usual attributes for depth-wise boxes. -->
   <xsl:template name="set-box-attributes-by-depth">
     <xsl:param name="depth" as="xs:integer" required="yes"/>
     <xsl:call-template name="set-box-classes-depthwise">
