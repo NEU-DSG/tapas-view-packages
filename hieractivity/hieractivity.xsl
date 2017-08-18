@@ -115,18 +115,23 @@
       select="exists($element[
                 self::TEI or self::text or self::front or self::body or self::back 
               or self::ab or self::floatingText or self::lg or self::div
-              or self::argument or self::group or self::table
+              or self::argument or self::desc or self::group or self::table
               or self::div1 or self::div2 or self::div3 or self::div4 or self::div5 
               or self::div6 or self::div7 or self::titlePage
               or self::listBibl or self::listEvent or self::listOrg or self::listPerson 
-              or self::listPlace or self::castList
+              or self::listPlace or self::listRef or self::castList
               or self::bibl[parent::listBibl] or self::biblFull or self::biblStruct 
               or self::event or self::org or self::person or self::persona or self::place
               or self::performance or self::prologue or self::epilogue or self::set 
               or self::opener or self::closer or self::postscript
               or self::quote[descendant::p] or self::said[descendant::p]
               or self::figure or self::note or self::sp
-              or self::attDef or self::attList or self::elementSpec or self::schemaSpec
+              or self::attDef or self::attList or self::classSpec or self::constraint 
+              or self::constraintSpec or self::dataSpec or self::datatype or self::*:egXML 
+              or self::elementSpec or self::exemplum or self::macroSpec or self::moduleRef 
+              or self::remarks or self::schemaSpec
+              or self::alternate or self::content or self::sequence or self::valItem 
+              or self::valList
               ])"/>
   </xsl:function>
   
@@ -603,8 +608,9 @@
                       | event/* | org/* | person/* | place/*
                       | argument | byline | docAuthor | docDate | docEdition 
                       | docImprint | docTitle[not(titlePart)] | titlePart
-                      | moduleRef" 
-                mode="#default inside-p" priority="-6">
+                      | anyElement | classRef | constraint/* | dataFacet | dataRef | elementRef | empty 
+                      | macroRef | memberOf | listRef/ptr | textNode"
+                mode="#default inside-p" priority="-5">
     <span class="block">
       <xsl:choose>
         <xsl:when test="not(*) and not(text())">
@@ -671,16 +677,23 @@
     <xd:desc>Empty elements require placeholders. If no other template matches an element
       that happens to be empty, this one simply outputs a label with the TEI element 
       name and a list of attributes.</xd:desc>
+    <xd:param name="start">The node on which to perform this template. The default is the 
+      current node.</xd:param>
   </xd:doc>
-  <xsl:template name="gloss-empty" match="*[not(*)][not(text())]" priority="-8" mode="#default inside-p">
+  <xsl:template name="gloss-empty" match="*[not(*)][not(text())]" priority="-6" mode="#default inside-p">
+    <xsl:param name="start" select="." as="node()"/>
     <span class="label-explanatory">
-      <xsl:call-template name="get-attributes"/>
-      <xsl:apply-templates select="@*"/>
+      <xsl:call-template name="get-attributes">
+        <xsl:with-param name="start" select="$start"/>
+      </xsl:call-template>
+      <xsl:apply-templates select="$start/@*"/>
       <xsl:value-of select="$interjectStart"/>
-      <xsl:call-template name="gloss-gi"/>
-      <xsl:if test="@*">
+      <xsl:call-template name="gloss-gi">
+        <xsl:with-param name="start" select="$start"/>
+      </xsl:call-template>
+      <xsl:if test="$start/@*">
         <xsl:text> </xsl:text>
-        <xsl:apply-templates select="@*" mode="show-att"/>
+        <xsl:apply-templates select="$start/@*" mode="show-att"/>
       </xsl:if>
       <xsl:value-of select="$interjectEnd"/>
     </span>
@@ -770,7 +783,9 @@
     </span>
   </xsl:template>
   
-  <!-- Whitespace inside <choice> is thrown away. -->
+  <xd:doc>
+    <xd:desc>Whitespace inside &lt;choice&gt; is thrown away.</xd:desc>
+  </xd:doc>
   <xsl:template match="choice/text()" mode="#default inside-p"/>
   
   <xsl:template match="choice/*[preceding-sibling::*]" mode="#default inside-p">
