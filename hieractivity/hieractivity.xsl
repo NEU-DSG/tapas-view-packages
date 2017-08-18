@@ -78,6 +78,12 @@
         <xd:li>2017-06-09, v0.0.1: Created stylesheet and zoom controls.</xd:li>
       </xd:ul>
     </xd:desc>
+    <xd:param name="assets-base">The path to a folder from which paths to specific CSS 
+      and Javascript assets will be built.</xd:param>
+    <xd:param name="contrast-default">The default contrast between text and background. 
+      Valid choices: 'high', 'mid', 'low', 'none'. The default is 'mid'.</xd:param>
+    <xd:param name="render-full-html">A parameter to toggle the generation of a complete 
+      HTML page. By default, an HTML fragment starting at &lt;div&gt; is returned.</xd:param>
   </xd:doc>
   
   <xsl:output encoding="UTF-8" indent="no" method="xhtml" omit-xml-declaration="yes"/>
@@ -102,7 +108,6 @@
     <xd:desc>Test if an element is chunk-able, and it should get its own 'box' in the 
       output HTML.</xd:desc>
     <xd:param name="element">The element to test.</xd:param>
-    <xd:return>A Boolean value.</xd:return>
   </xd:doc>
   <xsl:function name="tps:is-chunk-level" as="xs:boolean">
     <xsl:param name="element" as="element()"/>
@@ -129,7 +134,6 @@
     <xd:desc>Test if an element has only elements as significant children. Text nodes 
       which contain only whitespace are do not count as significant here.</xd:desc>
     <xd:param name="element">The element to test.</xd:param>
-    <xd:return>A Boolean value.</xd:return>
   </xd:doc>
   <xsl:function name="tps:has-only-element-children" as="xs:boolean">
     <xsl:param name="element" as="element()"/>
@@ -140,6 +144,12 @@
   
 <!-- TEMPLATES -->
   
+  <xd:doc>
+    <xd:desc>The input document goes through two passes. First, TEI elements are turned 
+      into HTML, and those which should render as boxes are identified. In the second 
+      pass, the 'boxed' elements are used to create SVG legends for the colors/depths 
+      used for each type of TEI element.</xd:desc>
+  </xd:doc>
   <xsl:template match="/">
     <xsl:variable name="main-transform" as="node()">
       <xsl:apply-templates/>
@@ -150,6 +160,10 @@
     </xsl:apply-templates>
   </xsl:template>
   
+  <xd:doc>
+    <xd:desc>Create the structure of the HTML document, including a control panel. The 
+      &lt;teiHeader&gt; is handled separately from &lt;text&gt;.</xd:desc>
+  </xd:doc>
   <xsl:template match="/TEI" priority="92">
     <xsl:variable name="language" 
       select="if ( @xml:lang ) then @xml:lang/data(.) else $defaultLanguage"/>
@@ -224,23 +238,33 @@
     </xsl:choose>
   </xsl:template>
   
+  <xd:doc>
+    <xd:desc>Attributes aren't handled in default mode.</xd:desc>
+  </xd:doc>
   <xsl:template match="@*" priority="-10"/>
   
+  <xd:doc>
+    <xd:desc>In default mode and 'table-complex' mode, most elements are turned into an 
+      HTML &lt;span&gt;, with data attributes used to communicate what the TEI element 
+      and its attributes originally looked like.</xd:desc>
+  </xd:doc>
   <xsl:template match="*" mode="#default table-complex" priority="-7">
     <span>
       <xsl:call-template name="keep-calm-and-carry-on"/>
     </span>
   </xsl:template>
   
-  <xsl:template match="@*" name="make-data-attr" mode="carry-on" priority="-20">
-    <xsl:variable name="nsResolved" 
-      select="if ( local-name() eq name() ) then name() 
-              else translate(name(),':','-')"/>
-    <xsl:variable name="attrName" 
-      select="lower-case(replace($nsResolved, '([a-z])([A-Z])', '$1-$2'))"/>
-    <xsl:attribute name="data-tapas-att-{$attrName}" select="data(.)"/>
-  </xsl:template>
-  
+  <xd:doc>
+    <xd:desc>
+      <xd:p>The &lt;teiHeader&gt; is treated separately from &lt;text&gt;. 'teiheader' 
+        mode is used to create nested boxes, only with headings and a metadata focus. The 
+        headings of each  &lt;teiHeader&gt; component will, with Javascript, become 
+        buttons to expand or collapse their content.</xd:p>
+      <xd:p>The control box doesn't act on the &lt;teiHeader&gt;.</xd:p>
+    </xd:desc>
+    <xd:param name="language">The language code passed on from an ancestor node. If the 
+      current node has its own language code defined, that code will be used instead.</xd:param>
+  </xd:doc>
   <xsl:template match="teiHeader" priority="91">
     <xsl:param name="language" as="xs:string" required="yes"/>
     <xsl:apply-templates select="fileDesc/titleStmt/title[1]" mode="teiheader"/>
@@ -266,6 +290,16 @@
     </div>
   </xsl:template>
   
+  <xd:doc>
+    <xd:desc>Since this stylesheet does not handle &lt;teiCorpus&gt;, &lt;text&gt; forms 
+      the outermost 'box' of the output HTML, and should always initiate tunnelled depth 
+      counts.</xd:desc>
+    <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
+      will render as boxes, used to calculate the depth of the current box from a box 
+      representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+    <xd:param name="language">The language code passed on from an ancestor node. If the 
+      current node has its own language code defined, that code will be used instead.</xd:param>
+  </xd:doc>
   <xsl:template match="text" priority="90">
     <xsl:param name="depth" select="0" as="xs:integer" tunnel="yes"/>
     <xsl:param name="language" as="xs:string" required="yes"/>
@@ -290,6 +324,13 @@
     </div>
   </xsl:template>
   
+  <xd:doc>
+    <xd:desc>Like &lt;text&gt;, &lt;floatingText&gt; is considered an outermost box. The 
+      tunnelled depth starts over at 1.</xd:desc>
+    <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
+      will render as boxes, used to calculate the depth of the current box from a box 
+      representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+  </xd:doc>
   <xsl:template match="floatingText" mode="#default inside-p" priority="89">
     <xsl:param name="depth" select="0" as="xs:integer" tunnel="yes"/>
     <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
@@ -303,6 +344,13 @@
     </xsl:element>
   </xsl:template>
   
+  <xd:doc>
+    <xd:desc>&lt;front&gt;, &lt;body&gt;, and &lt;back&gt; are predictable children of
+      &lt;text&gt;, and so they are classed as 'box-outer' rather than 'box-outermost'.</xd:desc>
+    <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
+      will render as boxes, used to calculate the depth of the current box from a box 
+      representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+  </xd:doc>
   <xsl:template match="front | body | back" mode="#default inside-p" priority="88">
     <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
     <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
@@ -316,6 +364,16 @@
     </xsl:element>
   </xsl:template>
   
+  <xd:doc>
+    <xd:desc>&lt;group&gt; generally holds &lt;text&gt;s, so this box requires a 
+      'box-tabularasa' class to set it off from its relatives. The tunnelled depth starts 
+      over at 0.</xd:desc>
+    <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
+      will render as boxes, used to calculate the depth of the current box from a box 
+      representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+    <xd:param name="language">The language code passed on from an ancestor node. If the 
+      current node has its own language code defined, that code will be used instead.</xd:param>
+  </xd:doc>
   <xsl:template match="group" mode="#default inside-p" priority="87">
     <xsl:param name="depth" select="-1" as="xs:integer" tunnel="yes"/>
     <xsl:param name="language" as="xs:string" required="yes" tunnel="yes"/>
@@ -331,9 +389,14 @@
     </xsl:element>
   </xsl:template>
   
-  <!-- Block-level TEI elements will be used to create boxes in the HTML output. 
-    Since CSS doesn't allow selecting on ancestors of nodes, we calculate the depth 
-    (nestedness) of the current node here. -->
+  <xd:doc>
+    <xd:desc>Block-level TEI elements will be used to create boxes in the HTML output. 
+      Since CSS doesn't allow selecting on ancestors of nodes, we calculate the depth 
+      (nestedness) of the current node here.</xd:desc>
+    <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
+      will render as boxes, used to calculate the depth of the current box from a box 
+      representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+  </xd:doc>
   <xsl:template match="*[tps:is-chunk-level(.)]" mode="#default inside-p">
     <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
     <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
@@ -349,9 +412,15 @@
 
 <!-- LISTS -->
 
-  <!-- For the purposes of this view package, the HTML element associated with 
-    <tei:list> is not <ul>, but a wrapper <div> or <span>. This is because TEI 
-    allows elements inside <list> that HTML would have no capacity to represent. -->
+  <xd:doc>
+    <xd:desc>For the purposes of this view package, the HTML element associated with 
+      &lt;tei:list&gt; is not &lt;ul&gt;, but a wrapper &lt;div&gt; or &lt;span&gt;. This 
+      is because TEI allows elements inside &lt;list&gt; that HTML would have no capacity 
+      to represent.</xd:desc>
+    <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
+      will render as boxes, used to calculate the depth of the current box from a box 
+      representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+  </xd:doc>
   <xsl:template match="list" mode="#default inside-p">
     <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
     <xsl:variable name="isDescendantOfP" select="exists(ancestor::p)"/>
@@ -417,6 +486,15 @@
   
 <!-- TABLES -->
   
+  <xd:doc>
+    <xd:desc>Like &lt;list&gt;, a TEI &lt;table&gt; becomes a boxed HTML wrapper around 
+      tabular content. If the TEI table can be mapped onto an HTML table, 'table-simple' 
+      mode is used on its content. Otherwise, 'table-complex' mode fakes an HTML table 
+      using &lt;span&gt;s and CSS.</xd:desc>
+    <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
+      will render as boxes, used to calculate the depth of the current box from a box 
+      representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+  </xd:doc>
   <xsl:template match="table" priority="23" mode="#default inside-p">
     <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
     <xsl:variable name="isDescendantOfP" select="exists(ancestor::p)"/>
@@ -516,8 +594,10 @@
   
 <!-- ELEMENTS THAT REQUIRE JUST A NEWLINE -->
   
-  <!-- TEI elements which do not warrant an <html:div> or <html:p>, but should have 
-    "display: block". -->
+  <xd:doc>
+    <xd:desc>TEI elements which do not warrant an &lt;html:div&gt; or &lt;html:p&gt;, but 
+      should have the CSS rule "display: block".</xd:desc>
+  </xd:doc>
   <xsl:template match=" head | l | stage | salute | signed
                       | listBibl/bibl[tps:has-only-element-children(.)]/* | biblFull/* | biblStruct/*
                       | event/* | org/* | person/* | place/*
@@ -539,6 +619,14 @@
   
 <!-- PARAGRAPHS AND ELEMENTS THAT MIGHT APPEAR IN THEM -->
   
+  <xd:doc>
+    <xd:desc>TEI &lt;p&gt;s are treated as a special kind of boxed element, with their 
+      own class 'box-p'. They map easily onto HTML &lt;p&gt;s, but, since HTML doesn't 
+      allow &lt;p&gt;s inside &lt;p&gt;s, &lt;span&gt; may be used instead.</xd:desc>
+    <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
+      will render as boxes, used to calculate the depth of the current box from a box 
+      representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+  </xd:doc>
   <xsl:template match="p" mode="#default inside-p">
     <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
     <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'p'"/>
@@ -579,9 +667,11 @@
     </span>
   </xsl:template>
   
-  <!-- Empty elements require placeholders. If no other template matches an element
-    that happens to be empty, this one simply outputs a label with the TEI element 
-    name. -->
+  <xd:doc>
+    <xd:desc>Empty elements require placeholders. If no other template matches an element
+      that happens to be empty, this one simply outputs a label with the TEI element 
+      name and a list of attributes.</xd:desc>
+  </xd:doc>
   <xsl:template name="gloss-empty" match="*[not(*)][not(text())]" priority="-8" mode="#default inside-p">
     <span class="label-explanatory">
       <xsl:call-template name="get-attributes"/>
@@ -691,6 +781,18 @@
   </xsl:template>
   
   
+<!-- MODE: CARRY-ON -->
+  
+  <xsl:template match="@*" name="make-data-attr" mode="carry-on" priority="-20">
+    <xsl:variable name="nsResolved" 
+      select="if ( local-name() eq name() ) then name() 
+      else translate(name(),':','-')"/>
+    <xsl:variable name="attrName" 
+      select="lower-case(replace($nsResolved, '([a-z])([A-Z])', '$1-$2'))"/>
+    <xsl:attribute name="data-tapas-att-{$attrName}" select="data(.)"/>
+  </xsl:template>
+  
+  
 <!-- MODE: SHOW-ATT -->
 
   <xsl:template match="@*" mode="show-att">
@@ -698,7 +800,7 @@
       <xsl:text>@</xsl:text>
       <xsl:value-of select="name(.)"/>
     </code>
-    <xsl:text>: "</xsl:text>
+    <xsl:text> = "</xsl:text>
     <xsl:value-of select="data(.)"/>
     <xsl:text>"</xsl:text>
     <xsl:if test="position() ne last()">
@@ -1038,7 +1140,9 @@
     </xsl:copy>
   </xsl:template>
   
-  <!-- Create a legend for the colors assigned to the TEI element, if boxed. -->
+  <xd:doc>
+    <xd:desc>Create a legend for the colors assigned to the TEI element, if boxed.</xd:desc>
+  </xd:doc>
   <xsl:template match="html:label[html:input[@name eq 'element']]" mode="postprocessing">
     <xsl:param name="boxedElements" tunnel="yes"/>
     <xsl:variable name="currentValue" select="html:input/@value"/>
@@ -1104,7 +1208,9 @@
   
 <!-- SUPPLEMENTAL TEMPLATES -->
   
-  <!-- Build out the control box and its widgets. -->
+  <xd:doc>
+    <xd:desc>Build out the control box and its widgets.</xd:desc>
+  </xd:doc>
   <xsl:template name="control-box">
     <div id="control-panel" lang="en">
       <h2 class="expandable-heading">Controls</h2>
@@ -1164,10 +1270,14 @@
     </div>
   </xsl:template>
   
-  <!-- For a given element, determine the number of preceding elements of the same 
-    type that exist within <text>. -->
+  <xd:doc>
+    <xd:desc>For a given element, determine the number of preceding elements of the same 
+      type that exist within &lt;text&gt;.</xd:desc>
+    <xd:param name="element">The element on which to perform this template. The default 
+      is the current node.</xd:param>
+  </xd:doc>
   <xsl:template name="count-preceding-of-type">
-    <xsl:param name="element" select="." as="node()"/>
+    <xsl:param name="element" select="." as="element()"/>
     <xsl:variable name="gi" select="$element/local-name(.)"/>
     <xsl:call-template name="gloss-gi">
       <xsl:with-param name="start" select="$element"/>
@@ -1176,7 +1286,11 @@
     <xsl:value-of select="count(preceding::*[local-name(.) eq $gi][ancestor::text]) + 1"/>
   </xsl:template>
   
-  <!-- Apply templates on attributes. -->
+  <xd:doc>
+    <xd:desc>Apply templates on attributes.</xd:desc>
+    <xd:param name="start">The node on which to perform this template. The default is the 
+      current node.</xd:param>
+  </xd:doc>
   <xsl:template name="get-attributes">
     <xsl:param name="start" select="." as="node()"/>
     <!-- Create a data attribute with the name of the TEI element. -->
@@ -1196,8 +1310,12 @@
     </xsl:attribute>
   </xsl:template>
   
-  <!-- Count number of each type of element within a given element (the default is 
-    the current node). -->
+  <xd:doc>
+    <xd:desc>Count number of each type of element within a given element (the default is 
+      the current node).</xd:desc>
+    <xd:param name="start">The node on which to perform this template. The default is the 
+      current node.</xd:param>
+  </xd:doc>
   <xsl:template name="gi-counting-robot">
     <xsl:param name="start" select="." as="node()+"/>
     <xsl:variable name="fieldsetName" select="'element'"/>
@@ -1230,14 +1348,26 @@
     </xsl:perform-sort>
   </xsl:template>
   
-  <!-- Set data attributes, using the convenience template 'set-data-attributes'. 
-    Then apply templates on child nodes. -->
+  <xd:doc>
+    <xd:desc>Set data attributes, using the convenience template 'set-data-attributes'. 
+      Then apply templates on child nodes.</xd:desc>
+  </xd:doc>
   <xsl:template name="keep-calm-and-carry-on">
     <xsl:call-template name="set-data-attributes"/>
     <xsl:apply-templates mode="#current"/>
   </xsl:template>
   
-  <!-- Create a labelled radio button for the control box. -->
+  <xd:doc>
+    <xd:desc>Create a labelled radio button for the control box.</xd:desc>
+    <xd:param name="fieldsetName">The name used for the fieldset and the radio button.</xd:param>
+    <xd:param name="value">The string value of this radio button.</xd:param>
+    <xd:param name="label">An optional label to use for this radio button. If left 
+      unspecified, the value parameter is used to populate the label too.</xd:param>
+    <xd:param name="isChecked">An optional toggle to have this radio button pre-selected. 
+      The default is to keep the button unselected.</xd:param>
+    <xd:param name="tabIndex">An optional integer to use as a tab-index, used in a 
+      browser to determine the order in which HTML components are tabbed-to.</xd:param>
+  </xd:doc>
   <xsl:template name="make-radio-button">
     <xsl:param name="fieldsetName" as="xs:string" required="yes"/>
     <xsl:param name="value" as="xs:string" required="yes"/>
@@ -1259,13 +1389,21 @@
     </label>
   </xsl:template>
   
-  <!-- Create a data attribute to store the name of the current TEI element. -->
+  <xd:doc>
+    <xd:desc>Create a data attribute to store the name of the current TEI element.</xd:desc>
+    <xd:param name="start">The node on which to perform this template. The default is the 
+      current node.</xd:param>
+  </xd:doc>
   <xsl:template name="save-gi">
     <xsl:param name="start" select="." as="node()"/>
     <xsl:attribute name="data-tapas-gi" select="local-name($start)"/>
   </xsl:template>
   
-  <!-- Set all of the usual attributes for depth-wise boxes. -->
+  <xd:doc>
+    <xd:desc>Set all of the usual attributes for depth-wise boxes.</xd:desc>
+    <xd:param name="depth">A number representing the depth of the element from 
+      &lt;text&gt; or &lt;floatingText&gt;</xd:param>
+  </xd:doc>
   <xsl:template name="set-box-attributes-by-depth">
     <xsl:param name="depth" as="xs:integer" required="yes"/>
     <xsl:call-template name="set-box-classes-depthwise">
@@ -1275,7 +1413,11 @@
     <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
   </xsl:template>
   
-  <!-- Set a color class for a boxed element, based on its depth in the hierarchy. -->
+  <xd:doc>
+    <xd:desc>Set a color class for a boxed element, based on its depth in the hierarchy.</xd:desc>
+    <xd:param name="depth">A number representing the depth of the element from 
+      &lt;text&gt; or &lt;floatingText&gt;</xd:param>
+  </xd:doc>
   <xsl:template name="set-box-classes-depthwise">
     <xsl:param name="depth" as="xs:integer" required="yes"/>
     <xsl:variable name="colorNum" select="($depth - 1) mod 10"/>
@@ -1284,15 +1426,23 @@
     </xsl:attribute>
   </xsl:template>
   
-  <!-- Set data attributes, saving the TEI element's name and attribute values. This 
-    is a convenience template for 'save-gi' followed by 'get-attributes'. -->
+  <xd:doc>
+    <xd:desc>Set data attributes, saving the TEI element's name and attribute values. 
+      This is a convenience template for 'save-gi' followed by 'get-attributes'.</xd:desc>
+  </xd:doc>
   <xsl:template name="set-data-attributes">
     <xsl:call-template name="save-gi"/>
     <xsl:call-template name="get-attributes"/>
   </xsl:template>
   
-  <!-- Add an explanation of depth-based color handling to a legend key, which will be 
-    used to populate a tooltip. -->
+  <xd:doc>
+    <xd:desc>Add an explanation of depth-based color handling to a legend key, which will 
+      be used to populate a tooltip.</xd:desc>
+    <xd:param name="boxedElements">A sequence of '@data-tapas-gi's from HTML boxed 
+      elements.</xd:param>
+    <xd:param name="currentGI">The name of the element for which to generate a tooltip.</xd:param>
+    <xd:param name="currentType">The CSS class(es) which should be matched for this depth.</xd:param>
+  </xd:doc>
   <xsl:template name="set-legend-tooltip">
     <xsl:param name="boxedElements" as="attribute()+" required="yes"/>
     <xsl:param name="currentGI" as="xs:string" required="yes"/>
