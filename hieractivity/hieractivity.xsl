@@ -87,7 +87,7 @@
   </xd:doc>
   
   <xsl:output encoding="UTF-8" indent="no" method="xhtml" omit-xml-declaration="yes"/>
-  <xsl:include href="../common/odd-interpretation/tei-odd-interpreter.xsl"/>
+<!--  <xsl:include href="../common/odd-interpretation/tei-odd-interpreter.xsl"/>-->
   
 <!-- PARAMETERS AND VARIABLES -->
   
@@ -98,6 +98,7 @@
   <xsl:param name="render-full-html"   select="false()" as="xs:boolean"/> <!-- set to 'true' to get browsable output for debugging -->
   <xsl:param name="contrast-default" select="'mid'" as="xs:string"/>
   
+  <xsl:variable name="defaultLanguage" select="'en'"/>
   <xsl:variable name="interjectStart">&lt;[ </xsl:variable>
   <xsl:variable name="interjectEnd"> ]&gt;</xsl:variable>
   <xsl:variable name="nbsp" select="'&#160;'"/>
@@ -275,7 +276,7 @@
       <xsl:if test="$changedLang">
         <xsl:attribute name="lang" select="$useLang"/>
       </xsl:if>
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
         <xsl:with-param name="language" select="$useLang" tunnel="yes"/>
       </xsl:call-template>
@@ -312,7 +313,7 @@
       <xsl:call-template name="set-data-attributes"/>
       <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
       <h2>
-        <xsl:call-template name="gloss-gi">
+        <xsl:call-template name="glossable-gi">
           <xsl:with-param name="isHeading" select="true()"/>
           <xsl:with-param name="language" select="$useLang" tunnel="yes"/>
         </xsl:call-template>
@@ -333,7 +334,8 @@
   </xd:doc>
   <xsl:template match="floatingText" mode="#default inside-p" priority="89">
     <xsl:param name="depth" select="0" as="xs:integer" tunnel="yes"/>
-    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
+    <xsl:param name="has-ancestor-p" select="false()" as="xs:boolean" tunnel="yes"/>
+    <xsl:variable name="wrapper" select="if ( $has-ancestor-p ) then 'span' else 'div'"/>
     <xsl:element name="{$wrapper}">
       <xsl:attribute name="class" select="'boxed box-outermost'"/>
       <xsl:call-template name="set-data-attributes"/>
@@ -353,7 +355,8 @@
   </xd:doc>
   <xsl:template match="front | body | back" mode="#default inside-p" priority="88">
     <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
-    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
+    <xsl:param name="has-ancestor-p" select="false()" as="xs:boolean" tunnel="yes"/>
+    <xsl:variable name="wrapper" select="if ( $has-ancestor-p ) then 'span' else 'div'"/>
     <xsl:element name="{$wrapper}">
       <xsl:attribute name="class" select="'boxed box-outer'"/>
       <xsl:call-template name="set-data-attributes"/>
@@ -376,8 +379,9 @@
   </xd:doc>
   <xsl:template match="group" mode="#default inside-p" priority="87">
     <xsl:param name="depth" select="-1" as="xs:integer" tunnel="yes"/>
+    <xsl:param name="has-ancestor-p" select="false()" as="xs:boolean" tunnel="yes"/>
     <xsl:param name="language" as="xs:string" required="yes" tunnel="yes"/>
-    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
+    <xsl:variable name="wrapper" select="if ( $has-ancestor-p ) then 'span' else 'div'"/>
     <xsl:element name="{$wrapper}">
       <xsl:attribute name="class" select="'boxed box-tabularasa'"/>
       <xsl:call-template name="set-data-attributes"/>
@@ -399,7 +403,8 @@
   </xd:doc>
   <xsl:template match="*[tps:is-chunk-level(.)]" mode="#default inside-p">
     <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
-    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
+    <xsl:param name="has-ancestor-p" select="false()" as="xs:boolean" tunnel="yes"/>
+    <xsl:variable name="wrapper" select="if ( $has-ancestor-p ) then 'span' else 'div'"/>
     <xsl:element name="{$wrapper}">
       <xsl:call-template name="set-box-attributes-by-depth">
         <xsl:with-param name="depth" select="$depth"/>
@@ -423,12 +428,12 @@
   </xd:doc>
   <xsl:template match="list" mode="#default inside-p">
     <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
-    <xsl:variable name="isDescendantOfP" select="exists(ancestor::p)"/>
-    <xsl:variable name="boxWrapper" select="if ( $isDescendantOfP ) then 'span' else 'div'"/>
+    <xsl:param name="has-ancestor-p" select="false()" as="xs:boolean" tunnel="yes"/>
+    <xsl:variable name="boxWrapper" select="if ( $has-ancestor-p ) then 'span' else 'div'"/>
     <xsl:variable name="listType" 
       select="if ( exists(label) ) then 'dl'
               else 'ul'"/>
-    <xsl:variable name="listWrapper" select="if ( $isDescendantOfP ) then 'span' else $listType"/>
+    <xsl:variable name="listWrapper" select="if ( $has-ancestor-p ) then 'span' else $listType"/>
     <xsl:element name="{$boxWrapper}">
       <xsl:call-template name="set-box-attributes-by-depth">
         <xsl:with-param name="depth" select="$depth"/>
@@ -441,7 +446,7 @@
       </xsl:apply-templates>
       <!-- Process what should be list items. -->
       <xsl:element name="{$listWrapper}">
-        <xsl:if test="$isDescendantOfP">
+        <xsl:if test="$has-ancestor-p">
           <xsl:attribute name="class" select="concat('list-', $listType)"/>
         </xsl:if>
         <!-- XD: model.global can also be used anywhere in list. -->
@@ -459,13 +464,13 @@
   </xsl:template>
   
   <xsl:template match="list/item" mode="#default inside-p">
-    <xsl:variable name="isDescendantOfP" select="exists(ancestor::p)"/>
+    <xsl:param name="has-ancestor-p" select="false()" as="xs:boolean" tunnel="yes"/>
     <xsl:variable name="listItemType"
       select="if ( parent::list[label] ) then 'dd' else 'li'"/>
     <xsl:variable name="wrapper" 
-      select=" if ( $isDescendantOfP ) then 'span' else $listItemType"/>
+      select=" if ( $has-ancestor-p ) then 'span' else $listItemType"/>
     <xsl:element name="{$wrapper}">
-      <xsl:if test="$isDescendantOfP">
+      <xsl:if test="$has-ancestor-p">
         <xsl:attribute name="class" select="concat('list-item-',$listItemType)"/>
       </xsl:if>
       <xsl:call-template name="keep-calm-and-carry-on"/>
@@ -473,11 +478,11 @@
   </xsl:template>
   
   <xsl:template match="list/label" mode="#default inside-p">
-    <xsl:variable name="isDescendantOfP" select="exists(ancestor::p)"/>
+    <xsl:param name="has-ancestor-p" select="false()" as="xs:boolean" tunnel="yes"/>
     <xsl:variable name="wrapper" 
-      select=" if ( $isDescendantOfP ) then 'span' else 'dt'"/>
+      select=" if ( $has-ancestor-p ) then 'span' else 'dt'"/>
     <xsl:element name="{$wrapper}">
-      <xsl:if test="$isDescendantOfP">
+      <xsl:if test="$has-ancestor-p">
         <xsl:attribute name="class" select="'list-item-dt'"/>
       </xsl:if>
       <xsl:call-template name="keep-calm-and-carry-on"/>
@@ -497,11 +502,11 @@
   </xd:doc>
   <xsl:template match="table" priority="23" mode="#default inside-p">
     <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
-    <xsl:variable name="isDescendantOfP" select="exists(ancestor::p)"/>
+    <xsl:param name="has-ancestor-p" select="false()" as="xs:boolean" tunnel="yes"/>
     <xsl:variable name="isTableComplex" 
-      select="if ( not(ancestor::p) and not(*[not(self::head | self::row)]) ) then false() else true()"/>
+      select="if ( not($has-ancestor-p) and not(*[not(self::head | self::row)]) ) then false() else true()"/>
     <xsl:variable name="wrapper" 
-      select=" if ( $isDescendantOfP ) then 'span' else 'div'"/>
+      select=" if ( $has-ancestor-p ) then 'span' else 'div'"/>
     <xsl:element name="{$wrapper}">
       <xsl:call-template name="set-box-attributes-by-depth">
         <xsl:with-param name="depth" select="$depth"/>
@@ -545,6 +550,7 @@
   </xsl:template>
   
   <xsl:template match="cell" mode="table-complex">
+    <xsl:param name="has-ancestor-p" select="false()" as="xs:boolean" tunnel="yes"/>
     <xsl:variable name="start" select="."/>
     <xsl:variable name="columns" as="xs:integer" 
       select="if ( @cols and xs:integer(@cols) gt 1 ) then @cols/data(.) else 1"/>
@@ -552,7 +558,7 @@
       select="if ( @rows and xs:integer(@rows) gt 1 ) then @rows/data(.) else 1"/>
     <xsl:variable name="contents">
       <xsl:choose>
-        <xsl:when test="node() and ancestor::p">
+        <xsl:when test="node() and $has-ancestor-p">
           <xsl:apply-templates mode="inside-p"/>
         </xsl:when>
         <xsl:when test="node()">
@@ -629,13 +635,15 @@
   </xd:doc>
   <xsl:template match="p" mode="#default inside-p">
     <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
-    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'p'"/>
+    <xsl:param name="has-ancestor-p" select="false()" as="xs:boolean" tunnel="yes"/>
+    <xsl:variable name="wrapper" select="if ( $has-ancestor-p ) then 'span' else 'p'"/>
     <xsl:element name="{$wrapper}">
       <xsl:attribute name="class" select="'boxed box-p'"/>
       <xsl:call-template name="set-data-attributes"/>
       <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
       <xsl:apply-templates mode="inside-p">
         <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+        <xsl:with-param name="has-ancestor-p" select="true()" tunnel="yes"/>
       </xsl:apply-templates>
     </xsl:element>
   </xsl:template>
@@ -657,7 +665,7 @@
       <xsl:call-template name="set-data-attributes"/>
       <span class="label-explanatory">
         <xsl:value-of select="$interjectStart"/>
-        <xsl:call-template name="gloss-gi"/>
+        <xsl:call-template name="glossable-gi"/>
         <xsl:if test="@*">
           <xsl:text> </xsl:text>
           <xsl:apply-templates select="@*" mode="show-att"/>
@@ -677,7 +685,7 @@
       <xsl:call-template name="get-attributes"/>
       <xsl:apply-templates select="@*"/>
       <xsl:value-of select="$interjectStart"/>
-      <xsl:call-template name="gloss-gi"/>
+      <xsl:call-template name="glossable-gi"/>
       <xsl:if test="@*">
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="@*" mode="show-att"/>
@@ -742,7 +750,7 @@
       <xsl:call-template name="set-data-attributes"/>
       <span class="label-explanatory">
         <xsl:value-of select="$interjectStart"/>
-        <xsl:call-template name="gloss-gi"/>
+        <xsl:call-template name="glossable-gi"/>
         <xsl:choose>
           <xsl:when test="desc">
             <xsl:value-of select="$contentDivider"/>
@@ -763,7 +771,7 @@
     <span class="label-explanatory">
       <xsl:call-template name="set-data-attributes"/>
       <xsl:value-of select="$interjectStart"/>
-      <xsl:call-template name="gloss-gi"/>
+      <xsl:call-template name="glossable-gi"/>
       <xsl:text>: </xsl:text>
       <xsl:apply-templates mode="#current"/>
       <xsl:value-of select="$interjectEnd"/>
@@ -800,7 +808,7 @@
       <xsl:text>@</xsl:text>
       <xsl:value-of select="name(.)"/>
     </code>
-    <xsl:text> = "</xsl:text>
+    <xsl:text>="</xsl:text>
     <xsl:value-of select="data(.)"/>
     <xsl:text>"</xsl:text>
     <xsl:if test="position() ne last()">
@@ -824,7 +832,7 @@
   
   <xsl:template match="teiHeader/fileDesc" mode="teiheader">
     <h3 class="expandable-heading box-outer">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h3>
@@ -835,7 +843,7 @@
   
   <xsl:template match="teiHeader/fileDesc/titleStmt" mode="teiheader">
     <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h4>
@@ -876,7 +884,7 @@
   
   <xsl:template match="author | editor | funder | principal | sponsor" mode="teiheader">
     <dt>
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </dt>
@@ -922,7 +930,7 @@
   
   <xsl:template match="teiHeader/fileDesc/editionStmt" mode="teiheader">
     <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h4>
@@ -935,7 +943,7 @@
   
   <xsl:template match="teiHeader/fileDesc/extent" mode="teiheader">
     <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h4>
@@ -948,7 +956,7 @@
   
   <xsl:template match="teiHeader/fileDesc/publicationStmt" mode="teiheader">
     <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h4>
@@ -960,7 +968,7 @@
   
   <xsl:template match="publicationStmt/availability" mode="teiheader">
     <h5 class="expandable-heading box-gen2">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h5>
@@ -1020,7 +1028,7 @@
   
   <xsl:template match="teiHeader/fileDesc/seriesStmt" mode="teiheader">
     <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h4>
@@ -1031,7 +1039,7 @@
   
   <xsl:template match="teiHeader/fileDesc/notesStmt" mode="teiheader">
     <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h4>
@@ -1052,7 +1060,7 @@
   
   <xsl:template match="teiHeader/encodingDesc" mode="teiheader">
     <h3 class="expandable-heading box-outer">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h3>
@@ -1063,7 +1071,7 @@
   
   <xsl:template match="teiHeader/encodingDesc/projectDesc" mode="teiheader">
     <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h4>
@@ -1074,7 +1082,7 @@
   
   <xsl:template match="teiHeader/encodingDesc/editorialDecl" mode="teiheader">
     <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h4>
@@ -1085,7 +1093,7 @@
   
   <xsl:template match="teiHeader/profileDesc" mode="teiheader">
     <h3 class="expandable-heading box-outer">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h3>
@@ -1096,7 +1104,7 @@
   
   <xsl:template match="profileDesc/*" mode="teiheader">
     <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h4>
@@ -1110,7 +1118,7 @@
   
   <xsl:template match="teiHeader/revisionDesc" mode="teiheader">
     <h3 class="expandable-heading box-outer">
-      <xsl:call-template name="gloss-gi">
+      <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
       </xsl:call-template>
     </h3>
@@ -1279,7 +1287,7 @@
   <xsl:template name="count-preceding-of-type">
     <xsl:param name="element" select="." as="element()"/>
     <xsl:variable name="gi" select="$element/local-name(.)"/>
-    <xsl:call-template name="gloss-gi">
+    <xsl:call-template name="glossable-gi">
       <xsl:with-param name="start" select="$element"/>
     </xsl:call-template>
     <xsl:text> #</xsl:text>
@@ -1346,6 +1354,30 @@
       <xsl:sort select="xs:integer(descendant::*:span[@class eq 'gi-count']/text())" order="descending"/>
       <xsl:sort select="descendant::html:span[contains(@class, 'gi-name')]/text()"/>
     </xsl:perform-sort>
+  </xsl:template>
+  
+  <xd:doc>
+    <xd:desc>Output the name of a given element, with enough context to allow TEI 
+      element names to be glossed via Javascript.</xd:desc>
+  </xd:doc>
+  <xsl:template name="glossable-gi">
+    <xsl:param name="isHeading" select="false()" as="xs:boolean"/>
+    <xsl:param name="language" as="xs:string" required="yes" tunnel="yes"/>
+    <xsl:param name="start" select="." as="node()"/>
+    <code>
+      <xsl:choose>
+        <xsl:when test="$start[self::tei:*]">
+          <xsl:variable name="gi" select="$start/local-name()"/>
+          <xsl:attribute name="class" select="'glossable'"/>
+          <xsl:attribute name="data-tapas-glossable-gi" select="$gi"/>
+          <xsl:attribute name="data-tapas-glossable-langdefault" select="$language"/>
+          <xsl:value-of select="$gi"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$start/name()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </code>
   </xsl:template>
   
   <xd:doc>
