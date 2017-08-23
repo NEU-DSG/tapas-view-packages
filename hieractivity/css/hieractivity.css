@@ -280,7 +280,7 @@
   display: block;
 }
 .hieractivity [data-tapas-gi].boxed.box-p.selected-gi {
-  border-left: 0.5em solid black;
+  border-left: 0.5em solid #8b1122;
   padding-left: 0.5em;
   color: #808080;
 }

@@ -116,7 +116,7 @@
       select="exists($element[
                 self::TEI or self::text or self::front or self::body or self::back 
               or self::ab or self::floatingText or self::lg or self::div
-              or self::argument or self::group or self::table
+              or self::argument or self::epigraph or self::group or self::table
               or self::div1 or self::div2 or self::div3 or self::div4 or self::div5 
               or self::div6 or self::div7 or self::titlePage
               or self::listBibl or self::listEvent or self::listOrg or self::listPerson 
@@ -125,7 +125,9 @@
               or self::event or self::org or self::person or self::persona or self::place
               or self::performance or self::prologue or self::epilogue or self::set 
               or self::opener or self::closer or self::postscript
-              or self::quote[descendant::p] or self::said[descendant::p]
+              or self::q[descendant::p or descendant::lg] 
+              or self::quote[descendant::p or descendant::lg] 
+              or self::said[descendant::p or descendant::lg]
               or self::figure or self::note or self::sp
               or self::attDef or self::attList or self::elementSpec or self::schemaSpec
               ])"/>
