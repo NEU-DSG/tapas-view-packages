@@ -29,6 +29,21 @@
             <xd:li></xd:li>
           </xd:ul>
         </xd:li>-->
+        <xd:li>2017-08-23, v0.2.0:
+          <xd:ul>
+            <xd:li>Removed ODD interpretation due to too-long processing time in eXist. 
+              The element name is output instead, with some attributes for glossing via 
+              Javascript (currently unimplemented).</xd:li>
+            <xd:li>Removed `ancestor::p` tests in favor of a tunnelled parameter 
+              `$has-ancestor-p`.</xd:li>
+            <xd:li>Added &lt;epigraph&gt; and &lt;q&gt; to box candidate testing.</xd:li>
+            <xd:li>&lt;q&gt;, &lt;quote&gt;, and &lt;said&gt; are considered boxable if 
+              they contain &lt;lg&gt;, not just &lt;p&gt;</xd:li>
+            <xd:li>Added a template in post-processing to turn &lt;html:span&gt;s into 
+              &lt;html:div&gt;s if they contain &lt;html:div&gt;s or &lt;html:p&gt;s 
+              (which is invalid HTML).</xd:li>
+          </xd:ul>
+        </xd:li>
         <xd:li>2017-08-17, v0.1.1:
           <xd:ul>
             <xd:li>Moved the control box between the &lt;teiHeader&gt; and &lt;text&gt;.</xd:li>
@@ -87,7 +102,6 @@
   </xd:doc>
   
   <xsl:output encoding="UTF-8" indent="no" method="xhtml" omit-xml-declaration="yes"/>
-<!--  <xsl:include href="../common/odd-interpretation/tei-odd-interpreter.xsl"/>-->
   
 <!-- PARAMETERS AND VARIABLES -->
   
