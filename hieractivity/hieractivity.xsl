@@ -812,7 +812,7 @@
     <xsl:value-of select="data(.)"/>
     <xsl:text>"</xsl:text>
     <xsl:if test="position() ne last()">
-      <xsl:text>; </xsl:text>
+      <xsl:text> </xsl:text>
     </xsl:if>
   </xsl:template>
 
@@ -1146,6 +1146,18 @@
       <xsl:copy-of select="@*"/>
       <xsl:apply-templates mode="#current"/>
     </xsl:copy>
+  </xsl:template>
+  
+  <xd:doc>
+    <xd:desc>If a &lt;html:span&gt; contains &lt;html:p&gt;s or &lt;html:div&gt;s, turn 
+      it into an &lt;html:div&gt;, thus avoiding validity errors.</xd:desc>
+  </xd:doc>
+  <xsl:template match="html:span[@data-tapas-gi]
+                                [descendant::html:p or descendant::html:div]" mode="postprocessing">
+    <div>
+      <xsl:copy-of select="@*"/>
+      <xsl:apply-templates mode="#current"/>
+    </div>
   </xsl:template>
   
   <xd:doc>
