@@ -292,6 +292,11 @@
         margin-left: 0.2em;
         float: left;
       }
+      
+      > code {
+        padding-top: 0.15em;
+        display: inline-block;
+      }
     } // .expandable-heading > button
   } // .expandable-heading
   
@@ -411,7 +416,7 @@
       display: block;
     
       &.selected-gi {
-        border-left: 0.5em solid black;
+        border-left: 0.5em solid @raspberry-darker;
         padding-left: 0.5em;
         color: @gray;
       }

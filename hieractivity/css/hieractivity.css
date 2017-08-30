@@ -197,6 +197,10 @@
   margin-left: 0.2em;
   float: left;
 }
+.hieractivity .expandable-heading > button > code {
+  padding-top: 0.15em;
+  display: inline-block;
+}
 .hieractivity .expandable {
   border: thin solid #808080;
   border-top: none;
@@ -276,7 +280,7 @@
   display: block;
 }
 .hieractivity [data-tapas-gi].boxed.box-p.selected-gi {
-  border-left: 0.5em solid black;
+  border-left: 0.5em solid #8b1122;
   padding-left: 0.5em;
   color: #808080;
 }
