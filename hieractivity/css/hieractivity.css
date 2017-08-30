@@ -92,7 +92,7 @@
   border: medium solid #8b1122;
   border-radius: 0.4em;
   padding: 0.25em 0.5em;
-  box-shadow: 0.1em 0.1em 0.2em black;
+  box-shadow: 0.1em 0.1em 0.2em #000000;
   font-variant: inherit;
 }
 .hieractivity #control-panel #controls-container {
@@ -301,8 +301,8 @@
   fill: #ffffee;
 }
 .hieractivity .box-gen0 {
-  background-color: black;
-  fill: black;
+  background-color: #000000;
+  fill: #000000;
 }
 .hieractivity .box-gen1 {
   background-color: rgba(255, 255, 179, 0.8);
@@ -451,4 +451,7 @@
   text-align: center;
   font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
   font-weight: normal;
+}
+.hieractivity [data-tapas-gi=egXML] {
+  overflow: auto;
 }

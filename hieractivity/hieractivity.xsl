@@ -103,6 +103,7 @@
   
   <xsl:output encoding="UTF-8" indent="no" method="xhtml" omit-xml-declaration="yes"/>
   
+  
 <!-- PARAMETERS AND VARIABLES -->
   
   <xsl:param name="assets-base" select="'./'"/>
@@ -143,10 +144,10 @@
               or self::quote[descendant::p or descendant::lg] 
               or self::said[descendant::p or descendant::lg]
               or self::figure or self::note or self::sp
-              or self::attDef or self::attList or self::classSpec or self::constraint 
-              or self::constraintSpec or self::dataSpec or self::datatype or self::*:egXML 
-              or self::elementSpec or self::exemplum or self::macroSpec or self::moduleRef 
-              or self::remarks or self::schemaSpec
+              or self::attDef or self::attList or self::classes or self::classSpec 
+              or self::constraint or self::constraintSpec or self::dataSpec 
+              or self::datatype or self::eg:egXML or self::elementSpec or self::exemplum 
+              or self::macroSpec or self::moduleRef or self::remarks or self::schemaSpec
               or self::alternate or self::content or self::sequence or self::valItem 
               or self::valList
               ])"/>
@@ -630,8 +631,8 @@
                       | event/* | org/* | person/* | place/*
                       | argument | byline | docAuthor | docDate | docEdition 
                       | docImprint | docTitle[not(titlePart)] | titlePart
-                      | anyElement | classRef | constraint/* | dataFacet | dataRef | elementRef | empty 
-                      | macroRef | memberOf | listRef/ptr | textNode"
+                      | anyElement | classRef | constraint/* | dataFacet | dataRef | elementRef 
+                      | empty | macroRef | memberOf | listRef/ptr | textNode"
                 mode="#default inside-p" priority="-5">
     <span class="block">
       <xsl:choose>
@@ -771,6 +772,20 @@
     </span>
   </xsl:template>
   
+  <xsl:template match="eg:egXML" mode="#default inside-p" priority="20">
+    <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
+    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
+    <xsl:element name="{$wrapper}">
+      <xsl:call-template name="set-box-attributes-by-depth">
+        <xsl:with-param name="depth" select="$depth"/>
+      </xsl:call-template>
+      <xsl:variable name="contents" as="node()*">
+        <xsl:copy-of select="node()"/>
+      </xsl:variable>
+      <pre><code><xsl:apply-templates mode="xml2code"/></code></pre>
+    </xsl:element>
+  </xsl:template>
+  
   <xsl:template match="gap" mode="#default inside-p">
     <xsl:variable name="contentDivider" select="': '"/>
     <span>
@@ -843,6 +858,43 @@
     <xsl:if test="position() ne last()">
       <xsl:text> </xsl:text>
     </xsl:if>
+  </xsl:template>
+
+
+<!-- MODE: XML2CODE -->
+
+  <xsl:template match="eg:*" mode="xml2code" priority="-10">
+    <xsl:variable name="gi" select="local-name()"/>
+    <xsl:text>&lt;</xsl:text>
+    <xsl:value-of select="$gi"/>
+    <xsl:if test="@*">
+      <xsl:apply-templates select="@*" mode="#current"/>
+    </xsl:if>
+    <xsl:text>&gt;</xsl:text>
+    <xsl:apply-templates mode="#current"/>
+    <xsl:text>&lt;/</xsl:text>
+    <xsl:value-of select="$gi"/>
+    <xsl:text>&gt;</xsl:text>
+  </xsl:template>
+  
+  <xsl:template match="@*" mode="xml2code">
+    <xsl:variable name="contents" select="data(.)"/>
+    <xsl:variable name="attrQuote">
+      <xsl:choose>
+        <xsl:when test="contains($contents, '&quot;')">
+          <xsl:text>'</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>"</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="name()"/>
+    <xsl:text>=</xsl:text>
+    <xsl:value-of select="$attrQuote"/>
+    <xsl:value-of select="$contents"/>
+    <xsl:value-of select="$attrQuote"/>
   </xsl:template>
 
 
