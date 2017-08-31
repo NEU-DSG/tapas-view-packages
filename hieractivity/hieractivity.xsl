@@ -29,6 +29,13 @@
             <xd:li></xd:li>
           </xd:ul>
         </xd:li>-->
+        <xd:li>2017-08-31:
+          <xd:ul>
+            <xd:li>Reduced the number of box classes available by depth.</xd:li>
+            <xd:li>Sorted legend boxes by class (which now sorts by color in a rainbow 
+              pattern).</xd:li>
+          </xd:ul>
+        </xd:li>
         <xd:li>2017-08-23, v0.2.0:
           <xd:ul>
             <xd:li>Removed ODD interpretation due to too-long processing time in eXist. 
@@ -1278,7 +1285,14 @@
                     <xsl:value-of select="$split[contains(.,'box-')]"/>
                   </xsl:for-each>
                 </xsl:variable>
-                <xsl:copy-of select="distinct-values($boxTypes)"/>
+                <xsl:for-each select="distinct-values($boxTypes)">
+                  <xsl:sort data-type="number"
+                    select="if ( . eq 'box-gen0' ) then 99
+                            else if ( contains(., 'box-gen') ) then 
+                              xs:integer(substring-after(.,'box-gen'))
+                            else -1" order="ascending"/>
+                  <xsl:copy/>
+                </xsl:for-each>
               </xsl:variable>
               <!--<xsl:message terminate="no">
                 <xsl:value-of select="$distinctTypes"/>
