@@ -22,7 +22,8 @@
 .hieractivity .encoded {
   font-family: 'Courier', 'Courier New', monospace;
 }
-.hieractivity .encoded.encoded-att {
+.hieractivity .encoded.encoded-att,
+.hieractivity .encoded[data-tapas-gi] {
   font-size: 0.95em;
 }
 .hieractivity h1,
@@ -336,10 +337,6 @@
   background-color: rgba(190, 186, 218, 0.85);
   fill: rgba(190, 186, 218, 0.85);
 }
-.hieractivity .box-gen9 {
-  background-color: rgba(128, 177, 211, 0.85);
-  fill: rgba(128, 177, 211, 0.85);
-}
 .hieractivity .block {
   display: block;
 }
@@ -448,6 +445,8 @@
   font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
   font-weight: normal;
 }
-.hieractivity [data-tapas-gi=egXML] {
+.hieractivity pre {
+  margin: 0;
   overflow: auto;
+  background-color: rgba(255, 255, 255, 0.5);
 }

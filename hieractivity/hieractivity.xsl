@@ -29,11 +29,15 @@
             <xd:li></xd:li>
           </xd:ul>
         </xd:li>-->
-        <xd:li>2017-08-31:
+        <xd:li>2017-08-31, v0.2.1:
           <xd:ul>
             <xd:li>Reduced the number of box classes available by depth.</xd:li>
             <xd:li>Sorted legend boxes by class (which now sorts by color in a rainbow 
               pattern).</xd:li>
+            <xd:li>Added several ODD elements to the box candidates.</xd:li>
+            <xd:li>Ensured that most non-TEI-namespaced elements are not represented in 
+              the "Elements by frequency" widget. &lt;egXML&gt; is an exception.</xd:li>
+            <xd:li>Use .encoded class for &lt;gi&gt; and &lt;att&gt;.</xd:li>
           </xd:ul>
         </xd:li>
         <xd:li>2017-08-23, v0.2.0:
@@ -154,9 +158,9 @@
               or self::attDef or self::attList or self::classes or self::classSpec 
               or self::constraint or self::constraintSpec or self::dataSpec 
               or self::datatype or self::eg:egXML or self::elementSpec or self::exemplum 
-              or self::macroSpec or self::moduleRef or self::remarks or self::schemaSpec
-              or self::alternate or self::content or self::sequence or self::valItem 
-              or self::valList
+              or self::macroSpec or self::moduleRef or self::moduleSpec or self::paramList 
+              or self::paramSpec or self::remarks or self::schemaSpec or self::alternate 
+              or self::content or self::sequence or self::valItem or self::valList
               ])"/>
   </xsl:function>
   
@@ -839,6 +843,16 @@
     </span>
   </xsl:template>
   
+  <xsl:template match="att | gi" mode="#default inside-p">
+    <span class="encoded">
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:if test="self::att">
+        <xsl:text>@</xsl:text>
+      </xsl:if>
+      <xsl:apply-templates mode="#current"/>
+    </span>
+  </xsl:template>
+  
   
 <!-- MODE: CARRY-ON -->
   
@@ -1434,7 +1448,8 @@
   <xsl:template name="gi-counting-robot">
     <xsl:param name="start" select="." as="node()+"/>
     <xsl:variable name="fieldsetName" select="'element'"/>
-    <xsl:variable name="allElements" select="$start/descendant-or-self::*/local-name(.)"/>
+    <xsl:variable name="allElements" 
+      select="$start/(descendant-or-self::tei:* | descendant-or-self::eg:egXML)/local-name(.)"/>
     <xsl:variable name="distinctGIs" select="distinct-values($allElements)"/>
     <xsl:call-template name="make-radio-button">
       <xsl:with-param name="fieldsetName" select="$fieldsetName"/>
@@ -1466,6 +1481,11 @@
   <xd:doc>
     <xd:desc>Output the name of a given element, with enough context to allow TEI 
       element names to be glossed via Javascript.</xd:desc>
+    <xd:param name="isHeading">An optional toggle on when a glossable element name is 
+      being used as a heading. Nothing is currently done with this information.</xd:param>
+    <xd:param name="language">The language code passed on from an ancestor node.</xd:param>
+    <xd:param name="start">The node on which to perform this template. The default is the 
+      current node.</xd:param>
   </xd:doc>
   <xsl:template name="glossable-gi">
     <xsl:param name="isHeading" select="false()" as="xs:boolean"/>

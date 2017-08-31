@@ -26,15 +26,14 @@
 @boxOutermost:      rgba(50,  116, 184, @box-opacity);
 @boxOuter:          rgba(124, 186, 176, @box-opacity);
 @box00:             rgba(128, 177, 211, @box-opacity);
-@box03:             rgba(204, 235, 197, 1);
-@box08:             rgba(179, 222, 105, @box-opacity);
-@box12:             rgba(255, 237, 111, @box-opacity);
-@box06:             rgba(253, 180, 98,  @box-opacity);
+@box01:             rgba(204, 235, 197, 1);
+@box02:             rgba(179, 222, 105, @box-opacity);
+@box03:             rgba(255, 237, 111, @box-opacity);
+@box04:             rgba(253, 180, 98,  @box-opacity);
 @box05:             rgba(251, 128, 114, @box-opacity);
-@box09:             rgba(252, 205, 229, @box-opacity);
-@box10:             rgba(188, 128, 189, @box-opacity);
-@box04:             rgba(190, 186, 218, @box-opacity);
-@box07:             rgba(128, 177, 211, @box-opacity);
+@box06:             rgba(252, 205, 229, @box-opacity);
+@box07:             rgba(188, 128, 189, @box-opacity);
+@box08:             rgba(190, 186, 218, @box-opacity);
 
 /*  FONTS  */
 
@@ -63,7 +62,8 @@
   .encoded {
     font-family: @code;
     
-    &.encoded-att {
+    &.encoded-att,
+    &[data-tapas-gi] {
       font-size: 0.95em;
     }
   } // .encoded
@@ -444,19 +444,19 @@
   }
   
   .box-gen1 {
-    .box-of-color(@box03);
+    .box-of-color(@box01);
   }
   
   .box-gen2 {
-    .box-of-color(@box08);
+    .box-of-color(@box02);
   }
   
   .box-gen3 {
-    .box-of-color(@box12);
+    .box-of-color(@box03);
   }
   
   .box-gen4 {
-    .box-of-color(@box06);
+    .box-of-color(@box04);
   }
   
   .box-gen5 {
@@ -464,19 +464,15 @@
   }
   
   .box-gen6 {
-    .box-of-color(@box09);
+    .box-of-color(@box06);
   }
   
   .box-gen7 {
-    .box-of-color(@box10);
+    .box-of-color(@box07);
   }
   
   .box-gen8 {
-    .box-of-color(@box04);
-  }
-  
-  .box-gen9 {
-    .box-of-color(@box07);
+    .box-of-color(@box08);
   }
   
   .block {
@@ -592,8 +588,10 @@
     .html-heading();
   }
   
-  [data-tapas-gi=egXML] {
+  pre {
+    margin: 0;
     overflow: auto;
+    background-color: rgba(255, 255, 255, 0.5);
   }
 
 } // .hieractivity
