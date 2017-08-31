@@ -37,7 +37,9 @@
             <xd:li>Added several ODD elements to the box candidates.</xd:li>
             <xd:li>Ensured that most non-TEI-namespaced elements are not represented in 
               the "Elements by frequency" widget. &lt;egXML&gt; is an exception.</xd:li>
-            <xd:li>Use .encoded class for &lt;gi&gt; and &lt;att&gt;.</xd:li>
+            <xd:li>Used .encoded class for &lt;gi&gt; and &lt;att&gt;.</xd:li>
+            <xd:li>Ensured that preformatted text will render inside &lt;html:p&gt;, with 
+              the .preformatted class.</xd:li>
           </xd:ul>
         </xd:li>
         <xd:li>2017-08-23, v0.2.0:
@@ -785,7 +787,8 @@
   
   <xsl:template match="eg:egXML" mode="#default inside-p" priority="20">
     <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
-    <xsl:variable name="wrapper" select="if ( ancestor::p ) then 'span' else 'div'"/>
+    <xsl:param name="has-ancestor-p" select="false()" as="xs:boolean" tunnel="yes"/>
+    <xsl:variable name="wrapper" select="if ( $has-ancestor-p ) then 'span' else 'div'"/>
     <xsl:element name="{$wrapper}">
       <xsl:call-template name="set-box-attributes-by-depth">
         <xsl:with-param name="depth" select="$depth"/>
@@ -793,7 +796,11 @@
       <xsl:variable name="contents" as="node()*">
         <xsl:copy-of select="node()"/>
       </xsl:variable>
-      <pre><code><xsl:apply-templates mode="xml2code"/></code></pre>
+      <xsl:variable name="preLike" select="if ( $has-ancestor-p ) then 'span' else 'pre'"/>
+      <xsl:element name="{$preLike}">
+        <xsl:attribute name="class" select="'preformatted'"/>
+        <code><xsl:apply-templates mode="xml2code"/></code>
+      </xsl:element>
     </xsl:element>
   </xsl:template>
   
