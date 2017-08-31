@@ -2,7 +2,7 @@
 
 /*  MISC. VARIABLES  */
 
-@box-opacity: 0.8;
+@box-opacity: 0.85;
 @button-shadow: 0.1em 0.1em 0.2em;
 
 /*  COLORS  */
@@ -23,18 +23,18 @@
 // Color palette used for boxes at varying depths. This is a slightly modified
   // version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
   // http://colorbrewer2.org/?type=qualitative&scheme=Set3&n=12
-@box01:         rgba(50,  116, 184, @box-opacity);
-@box02:         rgba(124, 186, 176, @box-opacity);
-@box03:         rgba(255, 255, 179, @box-opacity);
-@box04:         rgba(190, 186, 218, @box-opacity);
-@box05:         rgba(251, 128, 114, @box-opacity);
-@box06:         rgba(253, 180, 98,  @box-opacity);
-@box07:         rgba(128, 177, 211, @box-opacity);
-@box08:         rgba(179, 222, 105, @box-opacity);
-@box09:         rgba(252, 205, 229, @box-opacity);
-@box10:         rgba(188, 128, 189, @box-opacity);
-@box11:         rgba(204, 235, 197, @box-opacity);
-@box12:         rgba(255, 237, 111, @box-opacity);
+@boxOutermost:      rgba(50,  116, 184, @box-opacity);
+@boxOuter:          rgba(124, 186, 176, @box-opacity);
+@box00:             rgba(128, 177, 211, @box-opacity);
+@box03:             rgba(204, 235, 197, 1);
+@box08:             rgba(179, 222, 105, @box-opacity);
+@box12:             rgba(255, 237, 111, @box-opacity);
+@box06:             rgba(253, 180, 98,  @box-opacity);
+@box05:             rgba(251, 128, 114, @box-opacity);
+@box09:             rgba(252, 205, 229, @box-opacity);
+@box10:             rgba(188, 128, 189, @box-opacity);
+@box04:             rgba(190, 186, 218, @box-opacity);
+@box07:             rgba(128, 177, 211, @box-opacity);
 
 /*  FONTS  */
 
@@ -428,22 +428,19 @@
   }
   
   .box-outermost {
-    .box-of-color(@box01);
+    .box-of-color(@boxOutermost);
   }
   
   .box-outer {
-    .box-of-color(@box02);
+    .box-of-color(@boxOuter);
   }
   
   .box-p {
     .box-of-color(@cream);
   }
   
-  // .box-gen0 should only occur when a box-like element (not <body>, <front> or
-    // <back>) occurs as a child of <text>. Which is invalid TEI, so using a sharp
-    // black instead of our usual palette should be fine.
   .box-gen0 {
-    .box-of-color(black);
+    .box-of-color(@box00);
   }
   
   .box-gen1 {
@@ -451,11 +448,11 @@
   }
   
   .box-gen2 {
-    .box-of-color(@box04);
+    .box-of-color(@box08);
   }
   
   .box-gen3 {
-    .box-of-color(@box05);
+    .box-of-color(@box12);
   }
   
   .box-gen4 {
@@ -463,27 +460,23 @@
   }
   
   .box-gen5 {
-    .box-of-color(@box07);
+    .box-of-color(@box05);
   }
   
   .box-gen6 {
-    .box-of-color(@box08);
-  }
-  
-  .box-gen7 {
     .box-of-color(@box09);
   }
   
-  .box-gen8 {
+  .box-gen7 {
     .box-of-color(@box10);
   }
   
-  .box-gen9 {
-    .box-of-color(@box11);
+  .box-gen8 {
+    .box-of-color(@box04);
   }
   
-  .box-gen10 {
-    .box-of-color(@box12);
+  .box-gen9 {
+    .box-of-color(@box07);
   }
   
   .block {

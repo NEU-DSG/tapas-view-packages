@@ -1545,7 +1545,7 @@
   </xd:doc>
   <xsl:template name="set-box-classes-depthwise">
     <xsl:param name="depth" as="xs:integer" required="yes"/>
-    <xsl:variable name="colorNum" select="($depth - 1) mod 10"/>
+    <xsl:variable name="colorNum" select="($depth - 1) mod 9"/>
     <xsl:attribute name="class">
       <xsl:text>boxed box-gen</xsl:text><xsl:value-of select="$colorNum"/>
     </xsl:attribute>

@@ -92,7 +92,7 @@
   border: medium solid #8b1122;
   border-radius: 0.4em;
   padding: 0.25em 0.5em;
-  box-shadow: 0.1em 0.1em 0.2em #000000;
+  box-shadow: 0.1em 0.1em 0.2em black;
   font-variant: inherit;
 }
 .hieractivity #control-panel #controls-container {
@@ -289,60 +289,56 @@
   fill: #ffffff;
 }
 .hieractivity .box-outermost {
-  background-color: rgba(50, 116, 184, 0.8);
-  fill: rgba(50, 116, 184, 0.8);
+  background-color: rgba(50, 116, 184, 0.85);
+  fill: rgba(50, 116, 184, 0.85);
 }
 .hieractivity .box-outer {
-  background-color: rgba(124, 186, 176, 0.8);
-  fill: rgba(124, 186, 176, 0.8);
+  background-color: rgba(124, 186, 176, 0.85);
+  fill: rgba(124, 186, 176, 0.85);
 }
 .hieractivity .box-p {
   background-color: #ffffee;
   fill: #ffffee;
 }
 .hieractivity .box-gen0 {
-  background-color: #000000;
-  fill: #000000;
+  background-color: rgba(128, 177, 211, 0.85);
+  fill: rgba(128, 177, 211, 0.85);
 }
 .hieractivity .box-gen1 {
-  background-color: rgba(255, 255, 179, 0.8);
-  fill: rgba(255, 255, 179, 0.8);
+  background-color: #ccebc5;
+  fill: #ccebc5;
 }
 .hieractivity .box-gen2 {
-  background-color: rgba(190, 186, 218, 0.8);
-  fill: rgba(190, 186, 218, 0.8);
+  background-color: rgba(179, 222, 105, 0.85);
+  fill: rgba(179, 222, 105, 0.85);
 }
 .hieractivity .box-gen3 {
-  background-color: rgba(251, 128, 114, 0.8);
-  fill: rgba(251, 128, 114, 0.8);
+  background-color: rgba(255, 237, 111, 0.85);
+  fill: rgba(255, 237, 111, 0.85);
 }
 .hieractivity .box-gen4 {
-  background-color: rgba(253, 180, 98, 0.8);
-  fill: rgba(253, 180, 98, 0.8);
+  background-color: rgba(253, 180, 98, 0.85);
+  fill: rgba(253, 180, 98, 0.85);
 }
 .hieractivity .box-gen5 {
-  background-color: rgba(128, 177, 211, 0.8);
-  fill: rgba(128, 177, 211, 0.8);
+  background-color: rgba(251, 128, 114, 0.85);
+  fill: rgba(251, 128, 114, 0.85);
 }
 .hieractivity .box-gen6 {
-  background-color: rgba(179, 222, 105, 0.8);
-  fill: rgba(179, 222, 105, 0.8);
+  background-color: rgba(252, 205, 229, 0.85);
+  fill: rgba(252, 205, 229, 0.85);
 }
 .hieractivity .box-gen7 {
-  background-color: rgba(252, 205, 229, 0.8);
-  fill: rgba(252, 205, 229, 0.8);
+  background-color: rgba(188, 128, 189, 0.85);
+  fill: rgba(188, 128, 189, 0.85);
 }
 .hieractivity .box-gen8 {
-  background-color: rgba(188, 128, 189, 0.8);
-  fill: rgba(188, 128, 189, 0.8);
+  background-color: rgba(190, 186, 218, 0.85);
+  fill: rgba(190, 186, 218, 0.85);
 }
 .hieractivity .box-gen9 {
-  background-color: rgba(204, 235, 197, 0.8);
-  fill: rgba(204, 235, 197, 0.8);
-}
-.hieractivity .box-gen10 {
-  background-color: rgba(255, 237, 111, 0.8);
-  fill: rgba(255, 237, 111, 0.8);
+  background-color: rgba(128, 177, 211, 0.85);
+  fill: rgba(128, 177, 211, 0.85);
 }
 .hieractivity .block {
   display: block;
