@@ -29,6 +29,16 @@
             <xd:li></xd:li>
           </xd:ul>
         </xd:li>-->
+        <xd:li>2017-09-01:
+          <xd:ul>
+            <xd:li>In empty element mode, added links for attributes with teidata.pointer 
+              data.</xd:li>
+            <xd:li>Used TEI's @xml:id and @xml:lang to populate HTML @id and @lang.</xd:li>
+            <xd:li>Created a code block inside each &lt;constraint&gt;.</xd:li>
+            <xd:li>Made "xml2code" mode a little more savvy about showing namespaces, 
+              since prefixes aren't very useful here.</xd:li>
+          </xd:ul>
+        </xd:li>
         <xd:li>2017-08-31, v0.2.1:
           <xd:ul>
             <xd:li>Reduced the number of box classes available by depth.</xd:li>
@@ -175,6 +185,28 @@
     <xsl:param name="element" as="element()"/>
     <xsl:value-of select="exists($element/*) 
                       and not(exists($element/text()[normalize-space(.) ne '']))"/>
+  </xsl:function>
+  
+  <xd:doc>
+    <xd:desc>Test if an attribute is expected to contain pointer data; that is, URLs or 
+      anchors used in linking.</xd:desc>
+    <xd:param name="attribute">The attribute to test.</xd:param>
+  </xd:doc>
+  <xsl:function name="tps:has-pointer-data" as="xs:boolean">
+    <xsl:param name="attribute" as="attribute()"/>
+    <xsl:value-of 
+      select="$attribute/name() = 
+              ( 'active', 'adj', 'adjFrom', 'adjTo', 'ana', 'calendar', 'change', 
+                'children', 'class', 'code', 'copyOf', 'corresp', 'datcat', 
+                'datingMethod', 'datingPoint', 'decls', 'domains', 'edRef', 'end', 
+                'exclude', 'facs', 'feats', 'filter', 'follow', 'from', 'fVal', 'given', 
+                'hand', 'inst', 'lemmaRef', 'location', 'mergedIn', 'mutual', 'new', 
+                'next', 'nymRef', 'origin', 'parent', 'parts', 'passive', 'perf', 
+                'period', 'prev', 'ref', 'rendition', 'require', 'resp', 'sameAs', 
+                'scheme', 'scribeRef', 'scriptRef', 'select', 'since', 'source', 'spanTo', 
+                'start', 'synch', 'target', 'targetEnd', 'to', 'uri', 'url', 'value', 
+                'valueDatcat', 'where', 'who', 'wit', 'xml:base'
+              )"/>
   </xsl:function>
   
   
@@ -741,10 +773,14 @@
       <xsl:call-template name="count-preceding-of-type"/>
       <xsl:choose>
         <xsl:when test="desc or following-sibling::figDesc">
-          <xsl:text>; described below.</xsl:text> <!-- XD: uses English -->
+          <span lang="en">
+            <xsl:text>; described below.</xsl:text>
+          </span>
         </xsl:when>
         <xsl:when test="preceding-sibling::figDesc">
-          <xsl:text>; described above.</xsl:text> <!-- XD: uses English -->
+          <span lang="en">
+          <xsl:text>; described above.</xsl:text>
+          </span>
         </xsl:when>
       </xsl:choose>
     </xsl:variable>
@@ -785,7 +821,7 @@
     </span>
   </xsl:template>
   
-  <xsl:template match="eg:egXML" mode="#default inside-p" priority="20">
+  <xsl:template match="constraint | eg:egXML" mode="#default inside-p" priority="20">
     <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
     <xsl:param name="has-ancestor-p" select="false()" as="xs:boolean" tunnel="yes"/>
     <xsl:variable name="wrapper" select="if ( $has-ancestor-p ) then 'span' else 'div'"/>
@@ -794,12 +830,21 @@
         <xsl:with-param name="depth" select="$depth"/>
       </xsl:call-template>
       <xsl:variable name="contents" as="node()*">
-        <xsl:copy-of select="node()"/>
+        <xsl:choose>
+          <xsl:when test="self::eg:egXML">
+            <xsl:apply-templates mode="xml2code">
+              <xsl:with-param name="ns-bestowed" select="namespace-uri()"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates mode="xml2code"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:variable>
       <xsl:variable name="preLike" select="if ( $has-ancestor-p ) then 'span' else 'pre'"/>
       <xsl:element name="{$preLike}">
         <xsl:attribute name="class" select="'preformatted'"/>
-        <code><xsl:apply-templates mode="xml2code"/></code>
+        <code><xsl:copy-of select="$contents"/></code>
       </xsl:element>
     </xsl:element>
   </xsl:template>
@@ -872,34 +917,118 @@
     <xsl:attribute name="data-tapas-att-{$attrName}" select="data(.)"/>
   </xsl:template>
   
+  <xsl:template match="@xml:id" mode="carry-on">
+    <xsl:attribute name="id" select="concat('tps-',data(.))"/>
+    <xsl:call-template name="make-data-attr"/>
+  </xsl:template>
+  
+  <xsl:template match="@xml:lang" mode="carry-on">
+    <xsl:attribute name="lang" select="data(.)"/>
+    <xsl:call-template name="make-data-attr"/>
+  </xsl:template>
+  
   
 <!-- MODE: SHOW-ATT -->
 
-  <xsl:template match="@*" mode="show-att">
+  <xd:doc>
+    <xd:desc>In "show-att" mode, each attribute is described by its name and its content. 
+      This is useful for making empty elements visible in the output.</xd:desc>
+    <xd:param name="attribute-data">An optional sequence of nodes to be used in place of 
+      a simple export of the attribute's data.</xd:param>
+    <xd:param name="start">The node on which to perform this template. The default is the 
+      current node.</xd:param>
+  </xd:doc>
+  <xsl:template name="describe-attribute" match="@*" mode="show-att" priority="-19">
+    <xsl:param name="attribute-data" as="node()*"/>
+    <xsl:param name="start" select="." as="node()"/>
     <code>
       <xsl:text>@</xsl:text>
-      <xsl:value-of select="name(.)"/>
+      <xsl:value-of select="name($start)"/>
+      <xsl:text>="</xsl:text>
     </code>
-    <xsl:text>="</xsl:text>
-    <xsl:value-of select="data(.)"/>
-    <xsl:text>"</xsl:text>
-    <xsl:if test="position() ne last()">
+    <xsl:choose>
+      <xsl:when test="exists($attribute-data)">
+        <xsl:copy-of select="$attribute-data"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="data(.)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <code>
+      <xsl:text>"</xsl:text>
+    </code>
+    <xsl:if test="$start/position() ne last()">
       <xsl:text> </xsl:text>
     </xsl:if>
+  </xsl:template>
+  
+  <xd:doc>
+    <xd:desc>If an attribute is expected to contain one or more pointers (URLs, anchors), 
+      each pointer gets its own HTML link when spelled out by a shown empty element.</xd:desc>
+  </xd:doc>
+  <xsl:template match="@*[tps:has-pointer-data(.)]" mode="show-att">
+    <xsl:variable name="pointerSeq" select="tokenize(data(.), '\s+')"/>
+    <xsl:variable name="links" as="node()*">
+      <xsl:for-each select="1 to count($pointerSeq)">
+        <xsl:variable name="index" select="."/>
+        <xsl:variable name="urlVal" select="$pointerSeq[$index]"/>
+        <a>
+          <xsl:choose>
+            <xsl:when test="starts-with($urlVal,'#')">
+              <xsl:variable name="modifiedAnchor" 
+                select="concat('#tps-', substring-after($urlVal,'#'))"/>
+              <xsl:attribute name="href" select="$modifiedAnchor"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="href" select="$urlVal"/>
+              <xsl:attribute name="target" select="'_blank'"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:value-of select="$urlVal"/>
+        </a>
+        <xsl:if test="$index ne count($pointerSeq)">
+          <xsl:text> </xsl:text>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:call-template name="describe-attribute">
+      <xsl:with-param name="attribute-data" select="$links"/>
+    </xsl:call-template>
   </xsl:template>
 
 
 <!-- MODE: XML2CODE -->
 
-  <xsl:template match="eg:*" mode="xml2code" priority="-10">
+  <xd:doc>
+    <xd:desc>
+      <xd:p>In "xml2code" mode, each element is string-ified for use in an HTML code 
+        block.</xd:p>
+      <xd:p>Since there is no easy way to serialize a portion of XML as text, I've chosen 
+        to recreate elements using entity references and a strict pattern for escaped, 
+        well-formed XML. The main weakness of this approach is that any non-significant 
+        whitespace is removed from inside an element tag, which may affect the 
+        readability of the encoding. Similarly, the template cannot distinguish between 
+        self-closed tags and empty elements with both start and end tags.</xd:p>
+    </xd:desc>
+  </xd:doc>
+  <xsl:template match="*" mode="xml2code" priority="-10">
+    <xsl:param name="ns-bestowed" as="xs:anyURI?"/>
     <xsl:variable name="gi" select="local-name()"/>
     <xsl:text>&lt;</xsl:text>
     <xsl:value-of select="$gi"/>
+    <xsl:if test="not(exists($ns-bestowed)) or $ns-bestowed ne namespace-uri()">
+      <!--<xsl:message>Element <xsl:value-of select="$gi"/> is in namespace <xsl:value-of select="namespace-uri()"/></xsl:message>-->
+      <xsl:text> xmlns="</xsl:text>
+      <xsl:value-of select="namespace-uri()"/>
+      <xsl:text>"</xsl:text>
+    </xsl:if>
     <xsl:if test="@*">
       <xsl:apply-templates select="@*" mode="#current"/>
     </xsl:if>
     <xsl:text>&gt;</xsl:text>
-    <xsl:apply-templates mode="#current"/>
+    <xsl:apply-templates mode="#current">
+      <xsl:with-param name="ns-bestowed" select="namespace-uri()"/>
+    </xsl:apply-templates>
     <xsl:text>&lt;/</xsl:text>
     <xsl:value-of select="$gi"/>
     <xsl:text>&gt;</xsl:text>
@@ -1250,6 +1379,9 @@
   
 <!-- MODE: POSTPROCESSING -->
   
+  <xd:doc>
+    <xd:desc>In "postprocessing" mode, most elements are simply copied through as-is.</xd:desc>
+  </xd:doc>
   <xsl:template match="*" mode="postprocessing" priority="-10">
     <xsl:copy>
       <xsl:copy-of select="@*"/>
@@ -1270,17 +1402,19 @@
   </xsl:template>
   
   <xd:doc>
-    <xd:desc>Create a legend for the colors assigned to the TEI element, if boxed.</xd:desc>
+    <xd:desc>Create a legend for the colors assigned to the TEI element, if boxable.</xd:desc>
+    <xd:param name="boxedElements">A sequence of @data-tapas-gi attributes which occur on 
+      boxable HTML elements.</xd:param>
   </xd:doc>
   <xsl:template match="html:label[html:input[@name eq 'element']]" mode="postprocessing">
-    <xsl:param name="boxedElements" tunnel="yes"/>
+    <xsl:param name="boxedElements" as="attribute()*" tunnel="yes"/>
     <xsl:variable name="currentValue" select="html:input/@value"/>
     <xsl:variable name="distinctBoxed" select="distinct-values($boxedElements/data(.))"/>
     <xsl:variable name="width" select="10"/>
     <xsl:copy>
       <xsl:copy-of select="@*"/>
       <xsl:apply-templates mode="#current"/>
-      
+      <!-- Create an SVG legend for boxable elements. -->
       <xsl:if test="$currentValue eq 'p' or $currentValue = $distinctBoxed">
         <svg xmlns="http://www.w3.org/2000/svg" width="82%" height="12" class="legend">
           <xsl:choose>
@@ -1315,9 +1449,6 @@
                   <xsl:copy/>
                 </xsl:for-each>
               </xsl:variable>
-              <!--<xsl:message terminate="no">
-                <xsl:value-of select="$distinctTypes"/>
-              </xsl:message>-->
               <!-- For each class of box, add a rectangle to the legend. -->
               <xsl:for-each select="$distinctTypes">
                 <xsl:variable name="thisType" select="."/>
