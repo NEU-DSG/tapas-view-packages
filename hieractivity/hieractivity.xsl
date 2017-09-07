@@ -335,7 +335,9 @@
   </xd:doc>
   <xsl:template match="teiHeader" priority="91">
     <xsl:param name="language" as="xs:string" required="yes"/>
-    <xsl:apply-templates select="fileDesc/titleStmt/title[1]" mode="teiheader"/>
+    <xsl:apply-templates select="fileDesc/titleStmt/title[1]" mode="teiheader">
+      <xsl:with-param name="isDocHeading" select="true()"/>
+    </xsl:apply-templates>
     <xsl:variable name="useLang" 
       select="if ( @xml:lang ) then @xml:lang/data(.) else $language"/>
     <xsl:variable name="changedLang" as="xs:boolean" select="$useLang ne $language"/>
@@ -353,6 +355,7 @@
         <xsl:attribute name="lang" select="$useLang"/>
       </xsl:if>
       <xsl:apply-templates mode="teiheader">
+        <xsl:with-param name="depth" select="-1" tunnel="yes"/>
         <xsl:with-param name="language" select="$useLang" tunnel="yes"/>
       </xsl:apply-templates>
     </div>
@@ -1068,18 +1071,46 @@
     </xsl:if>
   </xsl:template>
   
-  <xsl:template match="teiHeader/fileDesc" mode="teiheader">
-    <h3 class="expandable-heading box-outer">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h3>
-    <div id="fileDesc" class="expandable">
-      <xsl:apply-templates mode="#current"/>
-    </div>
+  <xsl:template match="teiHeader/fileDesc | titleStmt" mode="teiheader">
+    <xsl:call-template name="make-teiheader-section">
+      <xsl:with-param name="is-hidden" select="false()"/>
+    </xsl:call-template>
   </xsl:template>
   
-  <xsl:template match="teiHeader/fileDesc/titleStmt" mode="teiheader">
+  <xsl:template match="editionStmt | extent | profileDesc/*" mode="teiheader">
+    <xsl:call-template name="make-teiheader-section">
+      <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+    </xsl:call-template>
+  </xsl:template>
+  
+  <xsl:template match=" sourceDesc | sourceDesc/recordingStmt | sourceDesc/scriptStmt 
+                      | seriesStmt | notesStmt | encodingDesc 
+                      | encodingDesc/*[not(self::p) and not(self::ab)]
+                      | profileDesc | revisionDesc" mode="teiheader">
+    <xsl:call-template name="make-teiheader-section"/>
+  </xsl:template>
+  
+  <xsl:template match="publicationStmt" mode="teiheader">
+    <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
+    <xsl:call-template name="make-teiheader-section">
+      <xsl:with-param name="contents">
+        <xsl:apply-templates select="* except availability" mode="#current"/>
+        <xsl:apply-templates select="availability" mode="#current">
+          <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+        </xsl:apply-templates>
+      </xsl:with-param>
+      <xsl:with-param name="is-hidden" select="false()"/>
+    </xsl:call-template>
+  </xsl:template>
+  
+  <xsl:template match="publicationStmt/availability" mode="teiheader">
+    <xsl:call-template name="make-teiheader-section">
+      <xsl:with-param name="is-hidden" select="false()"/>
+      <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+    </xsl:call-template>
+  </xsl:template>
+  
+  <!--<xsl:template match="teiHeader/fileDesc/titleStmt" mode="teiheader">
     <h4 class="expandable-heading box-gen1">
       <xsl:call-template name="glossable-gi">
         <xsl:with-param name="isHeading" select="true()"/>
@@ -1087,13 +1118,14 @@
     </h4>
     <div id="titleStmt" class="expandable">
       <dl>
-        <xsl:apply-templates select="* except title[1]" mode="#current"/>
+        <xsl:apply-templates select="*" mode="#current"/>
       </dl>
     </div>
-  </xsl:template>
+  </xsl:template>-->
   
-  <xsl:template match="teiHeader/fileDesc/titleStmt/title[1]" mode="teiheader">
-    <h1>
+  <xsl:template match="fileDesc/titleStmt/title[1]" mode="teiheader">
+    <xsl:param name="isDocHeading" select="false()" as="xs:boolean"/>
+    <xsl:element name="{ if ( $isDocHeading ) then 'h1' else 'p' }">
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
       </xsl:apply-templates>
@@ -1108,10 +1140,10 @@
           </xsl:for-each>
         </small>
       </xsl:if>
-    </h1>
+    </xsl:element>
   </xsl:template>
   
-  <xsl:template match="teiHeader/fileDesc/titleStmt/title[not(position() eq 1)]" mode="teiheader">
+  <xsl:template match="fileDesc/titleStmt/title[not(position() eq 1)]" mode="teiheader">
     <xsl:param name="isAllowed" select="false()" as="xs:boolean"/>
     <xsl:if test="$isAllowed">
       <xsl:apply-templates mode="#current">
@@ -1166,57 +1198,6 @@
     </p>
   </xsl:template>
   
-  <xsl:template match="teiHeader/fileDesc/editionStmt" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h4>
-    <div id="editionstmt" class="expandable expandable-hidden">
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
-      </xsl:apply-templates>
-    </div>
-  </xsl:template>
-  
-  <xsl:template match="teiHeader/fileDesc/extent" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h4>
-    <div id="fileextent" class="expandable expandable-hidden">
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
-      </xsl:apply-templates>
-    </div>
-  </xsl:template>
-  
-  <xsl:template match="teiHeader/fileDesc/publicationStmt" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h4>
-    <div id="publicationstmt" class="expandable">
-      <xsl:apply-templates select="* except availability" mode="#current"/>
-      <xsl:apply-templates select="availability" mode="#current"/>
-    </div>
-  </xsl:template>
-  
-  <xsl:template match="publicationStmt/availability" mode="teiheader">
-    <h5 class="expandable-heading box-gen2">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h5>
-    <div id="availability" class="expandable">
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
-      </xsl:apply-templates>
-    </div>
-  </xsl:template>
-  
   <xsl:template match="availability/licence[descendant::p]" mode="teiheader">
     <div>
       <xsl:if test="@target">
@@ -1264,28 +1245,6 @@
     </span>
   </xsl:template>
   
-  <xsl:template match="teiHeader/fileDesc/seriesStmt" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h4>
-    <div id="seriesstmt" class="expandable expandable-hidden">
-      <xsl:apply-templates mode="#current"/>
-    </div>
-  </xsl:template>
-  
-  <xsl:template match="teiHeader/fileDesc/notesStmt" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h4>
-    <div id="notesstmt" class="expandable expandable-hidden">
-      <xsl:apply-templates mode="#current"/>
-    </div>
-  </xsl:template>
-  
   <xsl:template match="title" mode="teiheader" priority="-10">
     <span class="block">
       <xsl:apply-templates mode="#current">
@@ -1294,86 +1253,43 @@
     </span>
   </xsl:template>
   
-  <xsl:template match="teiHeader/fileDesc/sourceDesc" mode="teiheader"/> <!-- XD -->
-  
-  <xsl:template match="teiHeader/encodingDesc" mode="teiheader">
-    <h3 class="expandable-heading box-outer">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h3>
-    <div id="encodingdesc" class="expandable expandable-hidden">
-      <xsl:apply-templates mode="#current"/>
+  <xsl:template match="change" mode="teiheader">
+    <xsl:variable name="position" select="count(preceding-sibling::change) +  1"/>
+    <xsl:variable name="identifier" 
+      select="if ( @xml:id ) then data(@xml:id) else concat('change',$position)"/>
+    <xsl:call-template name="make-teiheading">
+      <xsl:with-param name="heading">
+        <xsl:call-template name="glossable-gi">
+          <xsl:with-param name="isHeading" select="true()"/>
+        </xsl:call-template>
+        <xsl:text> </xsl:text>
+        <span class="change">
+          <xsl:apply-templates select="@*" mode="show-att"/>
+        </span>
+      </xsl:with-param>
+    </xsl:call-template>
+    <div id="{$identifier}">
+      <xsl:attribute name="class">
+        <xsl:text>expandable</xsl:text>
+        <xsl:if test="$position gt 3">
+          <xsl:text> expandable-hidden</xsl:text>
+        </xsl:if>
+      </xsl:attribute>
+      <xsl:choose>
+        <xsl:when test="not(p)">
+          <p>
+            <xsl:apply-templates mode="#current">
+              <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+            </xsl:apply-templates>
+          </p>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates mode="#current">
+            <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
-  </xsl:template>
-  
-  <xsl:template match="teiHeader/encodingDesc/projectDesc" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h4>
-    <div id="projectdesc" class="expandable expandable-hidden">
-      <xsl:apply-templates mode="#current"/>
-    </div>
-  </xsl:template>
-  
-  <xsl:template match="teiHeader/encodingDesc/editorialDecl" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h4>
-    <div id="editorialdecl" class="expandable expandable-hidden">
-      <xsl:apply-templates mode="#current"/>
-    </div>
-  </xsl:template>
-  
-  <xsl:template match="teiHeader/profileDesc" mode="teiheader">
-    <h3 class="expandable-heading box-outer">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h3>
-    <div id="profiledesc" class="expandable expandable-hidden">
-      <xsl:apply-templates mode="#current"/>
-    </div>
-  </xsl:template>
-  
-  <xsl:template match="profileDesc/*" mode="teiheader">
-    <h4 class="expandable-heading box-gen1">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h4>
-    <div id="{translate(lower-case(local-name(.)),'-','')}" 
-      class="expandable expandable-hidden">
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
-      </xsl:apply-templates>
-    </div>
-  </xsl:template>
-  
-  <xsl:template match="teiHeader/revisionDesc" mode="teiheader">
-    <h3 class="expandable-heading box-outer">
-      <xsl:call-template name="glossable-gi">
-        <xsl:with-param name="isHeading" select="true()"/>
-      </xsl:call-template>
-    </h3>
-    <div id="revisiondesc" class="expandable expandable-hidden">
-      <xsl:apply-templates mode="#current"/>
-    </div>
-  </xsl:template>
-  
-  <xsl:template match="revisionDesc//change" mode="teiheader">
-    <span>
-      <span class="change">
-        <xsl:apply-templates select="@*" mode="show-att"/>
-      </span>
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="textAllowed" select="true()" tunnel="yes"/>
-      </xsl:apply-templates>
-    </span>
   </xsl:template>
   
   
@@ -1684,6 +1600,57 @@
         <xsl:copy-of select="$label"/>
       </span>
     </label>
+  </xsl:template>
+  
+  <xsl:template name="make-teiheader-section">
+    <xsl:param name="contents" as="node()*"/>
+    <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
+    <xsl:param name="is-hidden" select="true()" as="xs:boolean"/>
+    <xsl:call-template name="make-teiheading"/>
+    <div id="{lower-case(local-name())}" class="expandable{ if ( $is-hidden ) then ' expandable-hidden' else '' }">
+      <xsl:choose>
+        <xsl:when test="exists($contents)">
+          <xsl:copy-of select="$contents"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates mode="#current">
+            <xsl:with-param name="depth" tunnel="yes" 
+              select="if ( $depth eq -1 ) then 1 else $depth + 1"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </xsl:template>
+  
+  <xsl:template name="make-teiheading">
+    <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
+    <xsl:param name="heading" as="node()*"/>
+    <xsl:variable name="headerN">
+      <xsl:variable name="depthwise" select="$depth + 3"/>
+      <xsl:value-of 
+        select=" if ( $depth eq -1 ) then 3 
+            else if ( $depthwise le 6 ) then $depthwise 
+            else 6"/>
+    </xsl:variable>
+    <xsl:variable name="boxClass" 
+      select="if ( $depth eq -1 ) then 'box-outer' 
+              else concat('box-gen', $depth mod 9) "/>
+    <xsl:element name="h{$headerN}">
+      <xsl:attribute name="class">
+        <xsl:text>expandable-heading </xsl:text>
+        <xsl:value-of select="$boxClass"/>
+      </xsl:attribute>
+      <xsl:choose>
+        <xsl:when test="exists($heading)">
+          <xsl:copy-of select="$heading"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="glossable-gi">
+            <xsl:with-param name="isHeading" select="true()"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:element>
   </xsl:template>
   
   <xd:doc>
