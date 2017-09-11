@@ -33,18 +33,10 @@ $(document).ready(function() {
     });
   });
   
-  // Get the calculated heights of each div with a @data-tapas-gi on it.
-  var heightData = [];
-  $('div[data-tapas-gi].boxed').toArray().forEach(function(obj) {
-    heightData.push($(obj).height());
-  });
-  
   // Set up variables with relevant d3 selections.
   var teiContainer = d3.select('#tei-container');
   var scrollElement = d3.select('#tei-resources-box');
   var scrollElementNode = scrollElement.node();
-  // Assign the height of the scrollElement back to it.
-  scrollElement.style('height', $(scrollElementNode).height()+'px');
   var zoomSlider = d3.select('#zoom-slide')
       .on('input', slid)
       .on('mouseout', workedHeight)
@@ -54,14 +46,9 @@ $(document).ready(function() {
     // JS event when clicked.
   var containers = d3.selectAll('[data-tapas-gi].boxed')
       .on('click', inspectElement);
-  // Assign—explicitly—the container <div>s' heights back to them. d3.js requires
-    // some absolute height value in order to zoom on HTML elements.
-  containers.filter('div')
-      .data(heightData)
-      .style('height', function(d) {
-        //console.log(d);
-        return d + 'px';
-      });
+  // Assign box heights now, and when the window is resized.
+  assignHeights();
+  $(window).resize(assignHeights);
   
   // When the radio buttons' input value changes, mark HTML elements that correspond
     // to the chosen TEI element.
@@ -128,7 +115,31 @@ $(document).ready(function() {
     //console.log(k);
     transformed(k);
   }
-
+  
+  // Use the browser to calculate the heights of boxed elements, and then assign 
+    // those heights back to them. d3.js requires some absolute height value in order 
+    // to zoom on HTML elements.
+  function assignHeights() {
+    // Unassign any height data.
+    scrollElement.style('height', null);
+    containers
+        .style('height', null);
+    // Get the calculated heights of each div with a @data-tapas-gi on it.
+    var heightData = [];
+    $('[data-tapas-gi].boxed').toArray().forEach(function(obj) {
+      heightData.push($(obj).height());
+    });
+    // Assign the height of the scrollElement back to it.
+    scrollElement.style('height', $(scrollElementNode).height()+'px');
+    // Assign the other boxes' heights back to them.
+    containers
+        .data(heightData)
+        .style('height', function(d) {
+          //console.log(d);
+          return d + 'px';
+        });
+  }
+  
   // Change the height of the teiContainer to match the working (scaled) height of
     // scrollElement. This is necessary in order to keep the scrollbar from
     // registering the 'actual' height of scrollElement, which is unaffected by
