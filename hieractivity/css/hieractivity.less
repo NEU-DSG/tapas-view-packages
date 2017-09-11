@@ -78,7 +78,18 @@
     color: black;
   }
   
-  dl {
+  ul, .list-ul,
+  ol, .list-ol {
+    margin: 0.8em 0;
+    padding-left: 1em;
+    display: block;
+    
+    li, .list-item-li {
+      display: list-item;
+    }
+  } // ul, .list-type-ul, ol, .list-type-ol
+  
+  dl, .list-dl {
     
     dd {
       margin-left: 1.2em;
@@ -532,21 +543,6 @@
     padding: 0.2em 0;
     display: block;
     text-align: center;
-  }
-  
-  ul, .list-ul,
-  ol, .list-ol {
-    margin: 0.8em 0;
-    padding-left: 1em;
-    display: block;
-    
-    li, .list-item-li {
-      display: list-item;
-    }
-  } // ul, .list-type-ul, ol, .list-type-ol
-  
-  dl, .list-dl {
-    
   }
   
   table, .table {

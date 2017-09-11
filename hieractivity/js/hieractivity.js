@@ -96,26 +96,6 @@ $(document).ready(function() {
 
 /*  FUNCTIONS  */
   
-  // Translate and scale the first element with @data-tapas-gi.
-  function transformed(scale) {
-    var h = $(scrollElementNode).height(),
-        w = $(scrollElementNode).width(),
-        xNew = w / 2 * (-1 + scale),
-        yNew = h / 2 * (-1 + scale);
-    scrollElement.style('transform',
-        "translate("+ xNew + "px,"+ yNew +"px)"
-      + "scale(" + scale + ")");
-    workedHeight();
-  }
-  
-  // When the zoom slider value is changed, convert the integer into a decimal and
-    // call transformed().
-  function slid(d) {
-    var k = d3.select(this).property('value') / 100;
-    //console.log(k);
-    transformed(k);
-  }
-  
   // Use the browser to calculate the heights of boxed elements, and then assign 
     // those heights back to them. d3.js requires some absolute height value in order 
     // to zoom on HTML elements.
@@ -138,15 +118,6 @@ $(document).ready(function() {
           //console.log(d);
           return d + 'px';
         });
-  }
-  
-  // Change the height of the teiContainer to match the working (scaled) height of
-    // scrollElement. This is necessary in order to keep the scrollbar from
-    // registering the 'actual' height of scrollElement, which is unaffected by
-    // CSS transformations.
-  function workedHeight() {
-    var hNew = scrollElementNode.getBoundingClientRect().height + 10;
-    teiContainer.style('height', hNew + 'px');
   }
   
   // Get the data attributes associated with an HTML element, and display information
@@ -186,5 +157,34 @@ $(document).ready(function() {
         }
       }
     }, this);
+  }
+  
+  // When the zoom slider value is changed, convert the integer into a decimal and
+    // call transformed().
+  function slid(d) {
+    var k = d3.select(this).property('value') / 100;
+    //console.log(k);
+    transformed(k);
+  }
+  
+  // Translate and scale the first element with @data-tapas-gi.
+  function transformed(scale) {
+    var h = $(scrollElementNode).height(),
+        w = $(scrollElementNode).width(),
+        xNew = w / 2 * (-1 + scale),
+        yNew = h / 2 * (-1 + scale);
+    scrollElement.style('transform',
+        "translate("+ xNew + "px,"+ yNew +"px)"
+      + "scale(" + scale + ")");
+    workedHeight();
+  }
+  
+  // Change the height of the teiContainer to match the working (scaled) height of
+    // scrollElement. This is necessary in order to keep the scrollbar from
+    // registering the 'actual' height of scrollElement, which is unaffected by
+    // CSS transformations.
+  function workedHeight() {
+    var hNew = scrollElementNode.getBoundingClientRect().height + 10;
+    teiContainer.style('height', hNew + 'px');
   }
 });

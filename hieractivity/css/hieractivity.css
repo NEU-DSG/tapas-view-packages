@@ -36,10 +36,30 @@
   font-weight: normal;
   color: black;
 }
-.hieractivity dl dd {
+.hieractivity ul,
+.hieractivity .list-ul,
+.hieractivity ol,
+.hieractivity .list-ol {
+  margin: 0.8em 0;
+  padding-left: 1em;
+  display: block;
+}
+.hieractivity ul li,
+.hieractivity .list-ul li,
+.hieractivity ol li,
+.hieractivity .list-ol li,
+.hieractivity ul .list-item-li,
+.hieractivity .list-ul .list-item-li,
+.hieractivity ol .list-item-li,
+.hieractivity .list-ol .list-item-li {
+  display: list-item;
+}
+.hieractivity dl dd,
+.hieractivity .list-dl dd {
   margin-left: 1.2em;
 }
-.hieractivity dl dd + dt {
+.hieractivity dl dd + dt,
+.hieractivity .list-dl dd + dt {
   margin-top: 0.35em;
 }
 .hieractivity #control-panel {
@@ -387,24 +407,6 @@
   padding: 0.2em 0;
   display: block;
   text-align: center;
-}
-.hieractivity ul,
-.hieractivity .list-ul,
-.hieractivity ol,
-.hieractivity .list-ol {
-  margin: 0.8em 0;
-  padding-left: 1em;
-  display: block;
-}
-.hieractivity ul li,
-.hieractivity .list-ul li,
-.hieractivity ol li,
-.hieractivity .list-ol li,
-.hieractivity ul .list-item-li,
-.hieractivity .list-ul .list-item-li,
-.hieractivity ol .list-item-li,
-.hieractivity .list-ol .list-item-li {
-  display: list-item;
 }
 .hieractivity table,
 .hieractivity .table {
