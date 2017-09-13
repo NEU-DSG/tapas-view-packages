@@ -42,6 +42,7 @@ $(document).ready(function() {
       .on('mouseout', workedHeight)
       .property('disabled', false);
   var giPropList = d3.select('#gi-properties');
+  var colorSchemeList = d3.select('#color-scheme');
   // Any HTML element with the class 'boxed' is a container which should trigger a
     // JS event when clicked.
   var containers = d3.selectAll('[data-tapas-gi].boxed')
@@ -81,10 +82,20 @@ $(document).ready(function() {
     teiContainer.classed('text-contrast-'+type, true);
   });
   
+  /* Use the color scheme selected by the user. */
+  $('input[name=color-scheme]').change(function(e) {
+    e.preventDefault();
+    unassignHeights();
+    var divContainer = $('div.hieractivity');
+    divContainer.toggleClass('hieractivity-depthwise hieractivity-familial');
+  });
+  
   // Enable remaining form controls.
   d3.select('#text-contrast-selector')
       .property('disabled', false);
   d3.select('#gi-option-selector')
+      .property('disabled', false);
+  d3.select('#color-scheme-selector')
       .property('disabled', false);
   
   // Make the control panel draggable.
@@ -100,10 +111,7 @@ $(document).ready(function() {
     // those heights back to them. d3.js requires some absolute height value in order 
     // to zoom on HTML elements.
   function assignHeights() {
-    // Unassign any height data.
-    scrollElement.style('height', null);
-    containers
-        .style('height', null);
+    unassignHeights();
     // Get the calculated heights of each div with a @data-tapas-gi on it.
     var heightData = [];
     $('[data-tapas-gi].boxed').toArray().forEach(function(obj) {
@@ -177,6 +185,13 @@ $(document).ready(function() {
         "translate("+ xNew + "px,"+ yNew +"px)"
       + "scale(" + scale + ")");
     workedHeight();
+  }
+  
+  // Unassign any height data.
+  function unassignHeights() {
+    scrollElement.style('height', null);
+    containers
+        .style('height', null);
   }
   
   // Change the height of the teiContainer to match the working (scaled) height of

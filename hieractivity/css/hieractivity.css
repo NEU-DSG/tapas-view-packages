@@ -455,3 +455,19 @@
   background-color: rgba(255, 255, 255, 0.25);
   white-space: pre;
 }
+.hieractivity.hieractivity-familial .box-gen0,
+.hieractivity.hieractivity-familial .box-gen1,
+.hieractivity.hieractivity-familial .box-gen2,
+.hieractivity.hieractivity-familial .box-gen3,
+.hieractivity.hieractivity-familial .box-gen4,
+.hieractivity.hieractivity-familial .box-gen5,
+.hieractivity.hieractivity-familial .box-gen6,
+.hieractivity.hieractivity-familial .box-gen7,
+.hieractivity.hieractivity-familial .box-gen8 {
+  margin: 0;
+  padding: 0;
+  background-color: rgba(255, 255, 255, 0);
+}
+.hieractivity.hieractivity-familial [data-tapas-gi|=div] {
+  margin: 1em 0;
+}

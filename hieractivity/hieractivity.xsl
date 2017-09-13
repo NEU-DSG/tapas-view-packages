@@ -248,7 +248,7 @@
                 text/@xml:id/data(.)
               else $language"/>
     <xsl:variable name="body" as="node()">
-      <div class="hieractivity">
+      <div class="hieractivity hieractivity-depthwise">
         <xsl:if test="not($render-full-html)">
           <xsl:attribute name="lang" select="$useLang"/>
         </xsl:if>
@@ -1605,6 +1605,25 @@
               <legend>Mark</legend>
               <xsl:call-template name="gi-counting-robot">
                 <xsl:with-param name="start" select="text"/>
+              </xsl:call-template>
+            </fieldset>
+          </div>
+        </div>
+        <div class="control-widget">
+          <h3 class="expandable-heading">Color scheme</h3>
+          <div id="color-scheme" class="control-widget-component expandable">
+            <fieldset id="color-scheme-selector" disabled="disabled">
+              <xsl:call-template name="make-radio-button">
+                <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
+                <xsl:with-param name="value" select="'depthwise'"/>
+                <xsl:with-param name="label" select="'Depth-wise hierarchy'"/>
+                <xsl:with-param name="is-checked" select="true()"/>
+              </xsl:call-template>
+              <xsl:call-template name="make-radio-button">
+                <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
+                <xsl:with-param name="value" select="'familial'"/>
+                <xsl:with-param name="label" select="'Familial elements'"/>
+                <xsl:with-param name="is-checked" select="false()"/>
               </xsl:call-template>
             </fieldset>
           </div>
