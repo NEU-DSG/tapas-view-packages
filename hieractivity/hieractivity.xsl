@@ -1482,6 +1482,48 @@
     </div>
   </xsl:template>
   
+  <xsl:template match="html:div[@id eq 'legend-depthwise']" mode="postprocessing">
+    <xsl:param name="boxed-elements" as="attribute()*" tunnel="yes"/>
+    <xsl:variable name="width" select="10"/>
+    <xsl:variable name="boxClassAttrs" select="$boxed-elements/parent::*/@class" as="attribute()*"/>
+    <xsl:variable name="uniqueClasses" as="xs:string*">
+      <xsl:variable name="splitTokens" as="xs:string*">
+        <xsl:for-each select="$boxClassAttrs">
+          <xsl:variable name="me" select="."/>
+          <xsl:value-of select="tokenize(data($me),' ')[matches(.,'^box-')]"/>
+        </xsl:for-each>
+      </xsl:variable>
+      <xsl:for-each select="distinct-values($splitTokens)">
+        <xsl:sort data-type="number"
+          select="if ( . eq 'box-gen0' ) then 99
+                  else if ( contains(., 'box-gen') ) then 
+                    xs:integer(substring-after(.,'box-gen'))
+                  else -1" order="ascending"/>
+        <xsl:copy/>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="82%" height="12" class="legend">
+        <xsl:for-each select="$uniqueClasses">
+          <xsl:variable name="thisType" select="."/>
+          <xsl:variable name="translateX">
+            <xsl:variable name="prevBoxes" select="index-of($uniqueClasses, $thisType) - 1"/>
+            <xsl:value-of select="$prevBoxes * $width  + 1"/>
+          </xsl:variable>
+          <rect width="{$width}" height="{$width}" class="legend-key {$thisType}"
+            transform="translate({$translateX} 1)">
+            <!--<xsl:call-template name="set-legend-tooltip">
+              <xsl:with-param name="boxed-elements" select="$boxed-elements"/>
+              <xsl:with-param name="current-gi" select="$currentValue"/>
+              <xsl:with-param name="current-type" select="$thisType"/>
+            </xsl:call-template>-->
+          </rect>
+        </xsl:for-each>
+      </svg>
+    </xsl:copy>
+  </xsl:template>
+  
   <xd:doc>
     <xd:desc>Create a legend for the colors assigned to the TEI element, if boxable.</xd:desc>
     <xd:param name="boxed-elements">A sequence of @data-tapas-gi attributes which occur on 
@@ -1610,9 +1652,10 @@
           </div>
         </div>
         <div class="control-widget">
-          <h3 class="expandable-heading">Color scheme</h3>
+          <h3 class="expandable-heading">Legend</h3>
           <div id="color-scheme" class="control-widget-component expandable">
             <fieldset id="color-scheme-selector" disabled="disabled">
+              <legend>Color scheme</legend>
               <xsl:call-template name="make-radio-button">
                 <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
                 <xsl:with-param name="value" select="'depthwise'"/>
@@ -1626,6 +1669,10 @@
                 <xsl:with-param name="is-checked" select="false()"/>
               </xsl:call-template>
             </fieldset>
+            <div id="color-scheme-legend">
+              <div id="legend-depthwise"></div>
+              <div id="legend-familial"></div>
+            </div>
           </div>
         </div>
         <!-- Clicked element properties -->
