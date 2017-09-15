@@ -36,6 +36,10 @@
   font-weight: normal;
   color: black;
 }
+.hieractivity h5,
+.hieractivity h6 {
+  font-size: 1em;
+}
 .hieractivity ul,
 .hieractivity .list-ul,
 .hieractivity ol,

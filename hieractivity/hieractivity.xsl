@@ -29,6 +29,12 @@
             <xd:li></xd:li>
           </xd:ul>
         </xd:li>-->
+        <xd:li>2017-09-15:
+          <xd:ul>
+            <xd:li>Added &lt;caption&gt; and &lt;figDesc&gt; to list of box candidates.</xd:li>
+            <xd:li>Expanded handling of children of &lt;encodingDesc&gt;.</xd:li>
+          </xd:ul>
+        </xd:li>
         <xd:li>2017-09-11:
           <xd:ul>
             <xd:li>Abstracted out the creation of &lt;teiHeader&gt; sections, simplifying code.</xd:li>
@@ -174,7 +180,7 @@
               or self::q[descendant::p or descendant::lg] 
               or self::quote[descendant::p or descendant::lg] 
               or self::said[descendant::p or descendant::lg]
-              or self::figure or self::note or self::sp
+              or self::figure or self::caption or self::figDesc or self::note or self::sp
               or self::attDef or self::attList or self::classes or self::classSpec 
               or self::constraint or self::constraintSpec or self::dataSpec 
               or self::datatype or self::eg:egXML or self::elementSpec or self::exemplum 
@@ -1185,7 +1191,12 @@
   
   <xsl:template match=" sourceDesc | sourceDesc/recordingStmt | sourceDesc/scriptStmt 
                       | seriesStmt | notesStmt | encodingDesc 
-                      | encodingDesc/*[not(self::p) and not(self::ab)]
+                      | encodingDesc/appInfo | encodingDesc/charDecl | encodingDesc/classDecl
+                      | encodingDesc/editorialDecl | correction | hyphenation | interpretation 
+                      | normalization | punctuation | quotation | segmentation | stdVals
+                      | encodingDesc/fsdDecl | encodingDesc/listPrefixDef 
+                      | encodingDesc/projectDesc | encodingDesc/refsDecl 
+                      | encodingDesc/samplingDecl | encodingDesc/transcriptionDesc 
                       | profileDesc | revisionDesc" mode="teiheader">
     <xsl:call-template name="make-teiheader-section"/>
   </xsl:template>
@@ -1395,36 +1406,28 @@
     </span>
   </xsl:template>
   
-  <xsl:template match=" change | handNote | notesStmt[count(*) gt 1]/note
-                      | notesStmt[count(*) gt 1]/witDetail | relatedItem" 
+  <xsl:template name="make-qualified-heading"
+                match=" application | change | handNote | keywords | metSym
+                      | notesStmt[count(*) gt 1]/note | notesStmt[count(*) gt 1]/witDetail 
+                      | prefixDef | relatedItem | taxonomy" 
                 mode="teiheader">
+    <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
+    <xsl:param name="hide-all" select="false()" as="xs:boolean"/>
     <xsl:variable name="gi" select="local-name()"/>
     <xsl:variable name="position" 
       select="count(preceding-sibling::*[local-name() eq $gi]) +  1"/>
     <xsl:variable name="identifier" 
-      select="if ( @xml:id ) then data(@xml:id) else concat('change',$position)"/>
-    <xsl:call-template name="make-teiheading">
-      <xsl:with-param name="heading">
-        <xsl:call-template name="glossable-gi">
-          <xsl:with-param name="is-heading" select="true()"/>
-        </xsl:call-template>
-        <xsl:text> </xsl:text>
-        <span class="heading-attr">
-          <xsl:apply-templates select="@*" mode="show-att">
-            <xsl:with-param name="suppress-links" select="true()"/>
-          </xsl:apply-templates>
-        </span>
-      </xsl:with-param>
-    </xsl:call-template>
+      select="if ( @xml:id ) then data(@xml:id) else concat(local-name(),$position)"/>
+    <xsl:call-template name="make-teiheading-with-attributes"/>
     <div id="{$identifier}">
       <xsl:attribute name="class">
         <xsl:text>expandable</xsl:text>
-        <xsl:if test="$position gt 3">
+        <xsl:if test="$hide-all or $position gt 3">
           <xsl:text> expandable-hidden</xsl:text>
         </xsl:if>
       </xsl:attribute>
       <xsl:choose>
-        <xsl:when test="not(p)">
+        <xsl:when test="text()[normalize-space() ne '']">
           <p>
             <xsl:apply-templates mode="#current">
               <xsl:with-param name="text-allowed" select="true()" tunnel="yes"/>
@@ -1433,11 +1436,20 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-templates mode="#current">
+            <xsl:with-param name="depth" tunnel="yes" select="$depth + 1"/>
             <xsl:with-param name="text-allowed" select="true()" tunnel="yes"/>
           </xsl:apply-templates>
         </xsl:otherwise>
       </xsl:choose>
     </div>
+  </xsl:template>
+  
+  <xsl:template match=" geoDecl | metDecl | schemaRef | schemaSpec | styleDefDecl 
+                      | tagsDecl | rendition | namespace | tagUsage | variantEncoding" 
+                mode="teiheader">
+    <xsl:call-template name="make-qualified-heading">
+      <xsl:with-param name="hide-all" select="true()"/>
+    </xsl:call-template>
   </xsl:template>
   
   <xsl:template match="date[not(text()) and not(*)]" mode="teiheader" priority="10">
@@ -1827,6 +1839,32 @@
       </xsl:attribute>
       <xsl:copy-of select="$heading"/>
     </xsl:element>
+  </xsl:template>
+  
+  <xd:doc>
+    <xd:desc>A convenience template for creating a heading with not just the name of the 
+      element, but the attributes on it.</xd:desc>
+    <xd:param name="heading">The node(s) which should be used as the content of the heading, 
+      to which attributes will be appended. If this parameter isn't provided, the heading text 
+      will consist of the glossed element name.</xd:param>
+  </xd:doc>
+  <xsl:template name="make-teiheading-with-attributes">
+    <xsl:param name="heading" as="node()*">
+      <xsl:call-template name="glossable-gi">
+        <xsl:with-param name="is-heading" select="true()"/>
+      </xsl:call-template>
+    </xsl:param>
+    <xsl:call-template name="make-teiheading">
+      <xsl:with-param name="heading">
+        <xsl:copy-of select="$heading"/>
+        <xsl:text> </xsl:text>
+        <span class="heading-attr">
+          <xsl:apply-templates select="@*" mode="show-att">
+            <xsl:with-param name="suppress-links" select="true()"/>
+          </xsl:apply-templates>
+        </span>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
   
   <xd:doc>
