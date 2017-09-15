@@ -9,6 +9,7 @@
 
 @cream:             #FFE;
 @clear:             rgba(255, 255, 255, 0);
+@cloudy:            rgba(255, 255, 255, 0.3);
 @gray-darker:       #202020;
 @gray-dark:         #555555;
 @gray:              #808080;
@@ -426,6 +427,14 @@
       }
     } // [data-tapas-gi].boxed.box-tabularasa
     
+    &.boxed-gen {
+      margin: 1em 0.5em;
+    }
+    
+    &[data-tapas-gi|=div] {
+      margin-top: 2em;
+    }
+    
     &.box-p {
       margin: 1em 0;
       padding: 0.5em 0.5em 0.5em 1em;
@@ -520,7 +529,7 @@
   }
   
   *[data-tapas-gi] {
-    padding: 0 0.1em;
+    padding: 0.2em;
   }
   
   [data-tapas-gi=lb] {
@@ -594,21 +603,28 @@
     padding: 0.25em;
     display: block;
     overflow: auto;
-    background-color: rgba(255, 255, 255, 0.25);
+    background-color: @cloudy;
     white-space: pre;
   }
   
   &.hieractivity-familial {
     
-    .box-gen0, .box-gen1, .box-gen2, .box-gen3, .box-gen4, 
-    .box-gen5, .box-gen6, .box-gen7, .box-gen8 {
+    .boxed-gen {
       margin: 0.5em 0 0;
-      padding: 0;
-      background-color: @clear;
+      background-color: @cloudy;
     }
     
-    [data-tapas-gi|=div] {
-      margin: 1.5em 0;
+    .familial-candidate {
+      display: inline-block;
     }
-  }
+    
+    .family-namelike-1 {
+      background-color: rgb(106,61,154);
+      color: rgb(202,178,214);
+    }
+    .family-namelike-0 {
+      background-color: rgb(202,178,214);
+      color: rgb(106,61,154);
+    }
+  } // .hieractivity.hieractivity-familial
 } // .hieractivity

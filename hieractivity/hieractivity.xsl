@@ -33,6 +33,10 @@
           <xd:ul>
             <xd:li>Added &lt;caption&gt; and &lt;figDesc&gt; to list of box candidates.</xd:li>
             <xd:li>Expanded handling of children of &lt;encodingDesc&gt;.</xd:li>
+            <xd:li>Added the 'boxed-gen' class for all boxes colored by depth rather than 
+              identity.</xd:li>
+            <xd:li>Created the first element family (name-likes) for the new familial mode, 
+              which de-emphasizes depth in favor of pre-selected groups of elements.</xd:li>
           </xd:ul>
         </xd:li>
         <xd:li>2017-09-11:
@@ -158,39 +162,6 @@
 <!-- FUNCTIONS -->
   
   <xd:doc>
-    <xd:desc>Test if an element is chunk-able, and it should get its own 'box' in the 
-      output HTML.</xd:desc>
-    <xd:param name="element">The element to test.</xd:param>
-  </xd:doc>
-  <xsl:function name="tps:is-chunk-level" as="xs:boolean">
-    <xsl:param name="element" as="element()"/>
-    <xsl:value-of 
-      select="exists($element[
-                self::TEI or self::text or self::front or self::body or self::back 
-              or self::ab or self::floatingText or self::lg or self::div
-              or self::argument or self::desc or self::epigraph or self::group or self::table
-              or self::div1 or self::div2 or self::div3 or self::div4 or self::div5 
-              or self::div6 or self::div7 or self::titlePage
-              or self::listBibl or self::listEvent or self::listOrg or self::listPerson 
-              or self::listPlace or self::listRef or self::castList
-              or self::bibl[parent::listBibl] or self::biblFull or self::biblStruct 
-              or self::event or self::org or self::person or self::persona or self::place
-              or self::performance or self::prologue or self::epilogue or self::set 
-              or self::opener or self::closer or self::postscript
-              or self::q[descendant::p or descendant::lg] 
-              or self::quote[descendant::p or descendant::lg] 
-              or self::said[descendant::p or descendant::lg]
-              or self::figure or self::caption or self::figDesc or self::note or self::sp
-              or self::attDef or self::attList or self::classes or self::classSpec 
-              or self::constraint or self::constraintSpec or self::dataSpec 
-              or self::datatype or self::eg:egXML or self::elementSpec or self::exemplum 
-              or self::macroSpec or self::moduleRef or self::moduleSpec or self::paramList 
-              or self::paramSpec or self::remarks or self::schemaSpec or self::alternate 
-              or self::content or self::sequence or self::valItem or self::valList
-              ])"/>
-  </xsl:function>
-  
-  <xd:doc>
     <xd:desc>Test if an element has only elements as significant children. Text nodes 
       which contain only whitespace are do not count as significant here.</xd:desc>
     <xd:param name="element">The element to test.</xd:param>
@@ -223,6 +194,62 @@
               )"/>
   </xsl:function>
   
+  <xd:doc>
+    <xd:desc>Test if an element is chunk-able, and it should get its own 'box' in the 
+      output HTML.</xd:desc>
+    <xd:param name="element">The element to test.</xd:param>
+  </xd:doc>
+  <xsl:function name="tps:is-chunk-level" as="xs:boolean">
+    <xsl:param name="element" as="element()"/>
+    <xsl:value-of 
+      select="exists($element[
+                self::TEI or self::text or self::front or self::body or self::back 
+              or self::ab or self::floatingText or self::lg or self::div
+              or self::argument or self::desc or self::epigraph or self::group or self::table
+              or self::div1 or self::div2 or self::div3 or self::div4 or self::div5 
+              or self::div6 or self::div7 or self::titlePage
+              or self::listBibl or self::listEvent or self::listOrg or self::listPerson 
+              or self::listPlace or self::listRef or self::castList
+              or self::bibl[parent::listBibl] or self::biblFull or self::biblStruct 
+              or self::event or self::org or self::person or self::persona or self::place
+              or self::performance or self::prologue or self::epilogue or self::set 
+              or self::opener or self::closer or self::postscript
+              or self::q[descendant::p or descendant::lg] 
+              or self::quote[descendant::p or descendant::lg] 
+              or self::said[descendant::p or descendant::lg]
+              or self::figure or self::caption or self::figDesc or self::note or self::sp
+              or self::attDef or self::attList or self::classes or self::classSpec 
+              or self::constraint or self::constraintSpec or self::dataSpec 
+              or self::datatype or self::eg:egXML or self::elementSpec or self::exemplum 
+              or self::macroSpec or self::moduleRef or self::moduleSpec or self::paramList 
+              or self::paramSpec or self::remarks or self::schemaSpec or self::alternate 
+              or self::content or self::sequence or self::valItem or self::valList
+              ])"/>
+  </xsl:function>
+  
+  <xsl:variable name="model.nameLike" as="xs:string*" 
+    select="( $model.placeStateLike, 'addName', 'forename', 'genName', 'geogFeat', 
+      'idno', 'lang', 'name', 'nameLink', 'offset', 'orgName', 'persName', 
+      'roleName', 'rs', 'surname' 
+      )"/>
+  
+  <xsl:variable name="model.placeStateLike" as="xs:string*"
+    select="( 'bloc', 'climate', 'country', 'district', 'geogName', 'location', 
+      'placeName', 'population', 'region', 'settlement', 'state', 'terrain', 'trait' 
+      )"/>
+  
+  <xd:doc>
+    <xd:desc></xd:desc>
+  </xd:doc>
+  <xsl:function name="tps:is-name-like" as="xs:boolean">
+    <xsl:param name="element" as="element()"/>
+    <xsl:value-of select="exists($element[self::addName or self::forename or self::genName 
+              or self::geogFeat or self::name or self::nameLink or self::offset 
+              or self::orgName or self::persName or self::placeName or self::roleName 
+              or self::surname
+              ])"/>
+  </xsl:function>
+  
   
 <!-- TEMPLATES -->
   
@@ -236,7 +263,8 @@
     <xsl:variable name="main-transform" as="node()">
       <xsl:apply-templates/>
     </xsl:variable>
-    <xsl:variable name="boxed-elements" select="$main-transform//*[@id eq 'tei-container']//*[@data-tapas-box-depth]/@data-tapas-gi"/>
+    <xsl:variable name="boxed-elements" 
+      select="$main-transform//*[@id eq 'tei-container']//*[@data-tapas-box-depth]/@data-tapas-gi"/>
     <xsl:apply-templates select="$main-transform" mode="postprocessing">
       <xsl:with-param name="boxed-elements" select="$boxed-elements" tunnel="yes"/>
     </xsl:apply-templates>
@@ -959,7 +987,7 @@
     </span>
   </xsl:template>
   
-  <xsl:template match="att | gi" mode="#default inside-p teiheader">
+  <xsl:template match="att | code | gi" mode="#default inside-p teiheader">
     <xsl:param name="has-ancestor-teiheader" select="false()" as="xs:boolean" tunnel="yes"/>
     <span class="encoded">
       <xsl:if test="not($has-ancestor-teiheader)">
@@ -969,6 +997,20 @@
         <xsl:text>@</xsl:text>
       </xsl:if>
       <xsl:apply-templates mode="#current"/>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="*[tps:is-name-like(.)]" mode="#default inside-p">
+    <xsl:param name="namelike-depth" select="1" as="xs:integer"/>
+    <span>
+      <xsl:call-template name="set-classes-by-family">
+        <xsl:with-param name="base-classname" select="'family-namelike'"/>
+        <xsl:with-param name="family-depth" select="$namelike-depth"/>
+      </xsl:call-template>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="namelike-depth" select="$namelike-depth + 1"/>
+      </xsl:apply-templates>
     </span>
   </xsl:template>
   
@@ -1966,7 +2008,23 @@
     <xsl:param name="depth" as="xs:integer" required="yes"/>
     <xsl:variable name="colorNum" select="($depth - 1) mod 9"/>
     <xsl:attribute name="class">
-      <xsl:text>boxed box-gen</xsl:text><xsl:value-of select="$colorNum"/>
+      <xsl:text>boxed boxed-gen box-gen</xsl:text><xsl:value-of select="$colorNum"/>
+    </xsl:attribute>
+  </xsl:template>
+  
+  <xd:doc>
+    <xd:desc>Set a color class for an element family member, using minimal depth cues.</xd:desc>
+    <xd:param name="base-classname">The main part of the familial class name.</xd:param>
+    <xd:param name="family-depth">A number representing the depth of the element from another 
+      in its family.</xd:param>
+  </xd:doc>
+  <xsl:template name="set-classes-by-family">
+    <xsl:param name="base-classname" as="xs:string"/>
+    <xsl:param name="family-depth" as="xs:integer"/>
+    <xsl:variable name="version" select="$family-depth mod 2"/>
+    <xsl:variable name="class" select="concat($base-classname,'-',$version)"/>
+    <xsl:attribute name="class">
+      <xsl:text>familial-candidate </xsl:text><xsl:value-of select="$class"/>
     </xsl:attribute>
   </xsl:template>
   

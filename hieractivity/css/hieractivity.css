@@ -299,6 +299,12 @@
 .hieractivity [data-tapas-gi].boxed.box-tabularasa > .box-outermost {
   margin: 1.2em 1em;
 }
+.hieractivity [data-tapas-gi].boxed.boxed-gen {
+  margin: 1em 0.5em;
+}
+.hieractivity [data-tapas-gi].boxed[data-tapas-gi|=div] {
+  margin-top: 2em;
+}
 .hieractivity [data-tapas-gi].boxed.box-p {
   margin: 1em 0;
   padding: 0.5em 0.5em 0.5em 1em;
@@ -384,7 +390,7 @@
   font-size: initial;
 }
 .hieractivity *[data-tapas-gi] {
-  padding: 0 0.1em;
+  padding: 0.2em;
 }
 .hieractivity [data-tapas-gi=lb]::before {
   content: '↵';
@@ -456,22 +462,21 @@
   padding: 0.25em;
   display: block;
   overflow: auto;
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.3);
   white-space: pre;
 }
-.hieractivity.hieractivity-familial .box-gen0,
-.hieractivity.hieractivity-familial .box-gen1,
-.hieractivity.hieractivity-familial .box-gen2,
-.hieractivity.hieractivity-familial .box-gen3,
-.hieractivity.hieractivity-familial .box-gen4,
-.hieractivity.hieractivity-familial .box-gen5,
-.hieractivity.hieractivity-familial .box-gen6,
-.hieractivity.hieractivity-familial .box-gen7,
-.hieractivity.hieractivity-familial .box-gen8 {
+.hieractivity.hieractivity-familial .boxed-gen {
   margin: 0.5em 0 0;
-  padding: 0;
-  background-color: rgba(255, 255, 255, 0);
+  background-color: rgba(255, 255, 255, 0.3);
 }
-.hieractivity.hieractivity-familial [data-tapas-gi|=div] {
-  margin: 1.5em 0;
+.hieractivity.hieractivity-familial .familial-candidate {
+  display: inline-block;
+}
+.hieractivity.hieractivity-familial .family-namelike-1 {
+  background-color: #6a3d9a;
+  color: #cab2d6;
+}
+.hieractivity.hieractivity-familial .family-namelike-0 {
+  background-color: #cab2d6;
+  color: #6a3d9a;
 }
