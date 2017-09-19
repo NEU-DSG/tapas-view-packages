@@ -241,6 +241,17 @@
   <xd:doc>
     <xd:desc></xd:desc>
   </xd:doc>
+  <xsl:function name="tps:is-emph-like" as="xs:boolean">
+    <xsl:param name="element" as="element()"/>
+    <xsl:value-of select="exists($element[self::code or self::distinct or self::emph
+              or self::foreign or self::gloss or self::hi or self::ident or self::mentioned 
+              or self::soCalled or self::term or self::title
+              ])"/>
+  </xsl:function>
+  
+  <xd:doc>
+    <xd:desc></xd:desc>
+  </xd:doc>
   <xsl:function name="tps:is-name-like" as="xs:boolean">
     <xsl:param name="element" as="element()"/>
     <xsl:value-of select="exists($element[self::addName or self::forename or self::genName 
@@ -988,15 +999,42 @@
   </xsl:template>
   
   <xsl:template match="att | code | gi" mode="#default inside-p teiheader">
+    <xsl:param name="emphlike-depth" select="1" as="xs:integer"/>
     <xsl:param name="has-ancestor-teiheader" select="false()" as="xs:boolean" tunnel="yes"/>
-    <span class="encoded">
-      <xsl:if test="not($has-ancestor-teiheader)">
-        <xsl:call-template name="set-data-attributes"/>
-      </xsl:if>
+    <span>
+      <xsl:choose>
+        <xsl:when test="$has-ancestor-teiheader">
+          <xsl:attribute name="class" select="'encoded'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="set-classes-by-family">
+            <xsl:with-param name="additional-classes" select="'encoded'"/>
+            <xsl:with-param name="base-classname" select="'family-emphlike'"/>
+            <xsl:with-param name="family-depth" select="$emphlike-depth"/>
+          </xsl:call-template>
+          <xsl:call-template name="set-data-attributes"/>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:if test="self::att">
         <xsl:text>@</xsl:text>
       </xsl:if>
+      <!-- These particular emph-likes should never have other emph-likes nested inside them, 
+        so a depth count is not carried on. -->
       <xsl:apply-templates mode="#current"/>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="*[tps:is-emph-like(.)]" mode="#default inside-p" priority="-9">
+    <xsl:param name="emphlike-depth" select="1" as="xs:integer"/>
+    <span>
+      <xsl:call-template name="set-classes-by-family">
+        <xsl:with-param name="base-classname" select="'family-emphlike'"/>
+        <xsl:with-param name="family-depth" select="$emphlike-depth"/>
+      </xsl:call-template>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="emphlike-depth" select="$emphlike-depth + 1"/>
+      </xsl:apply-templates>
     </span>
   </xsl:template>
   
@@ -2014,16 +2052,23 @@
   
   <xd:doc>
     <xd:desc>Set a color class for an element family member, using minimal depth cues.</xd:desc>
+    <xd:param name="additional-classes">An optional string representing other, 
+      whitespace-delimited HTML classes to be assigned to the output element. These will be 
+      applied before the family class.</xd:param>
     <xd:param name="base-classname">The main part of the familial class name.</xd:param>
     <xd:param name="family-depth">A number representing the depth of the element from another 
       in its family.</xd:param>
   </xd:doc>
   <xsl:template name="set-classes-by-family">
+    <xsl:param name="additional-classes" select="''" as="xs:string"/>
     <xsl:param name="base-classname" as="xs:string"/>
     <xsl:param name="family-depth" as="xs:integer"/>
     <xsl:variable name="version" select="$family-depth mod 2"/>
     <xsl:variable name="class" select="concat($base-classname,'-',$version)"/>
     <xsl:attribute name="class">
+      <xsl:if test="normalize-space($additional-classes) ne ''">
+        <xsl:value-of select="$additional-classes"/><xsl:text> </xsl:text>
+      </xsl:if>
       <xsl:text>familial-candidate </xsl:text><xsl:value-of select="$class"/>
     </xsl:attribute>
   </xsl:template>
