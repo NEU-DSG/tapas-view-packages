@@ -227,37 +227,33 @@
               ])"/>
   </xsl:function>
   
-  <xsl:variable name="model.nameLike" as="xs:string*" 
-    select="( $model.placeStateLike, 'addName', 'forename', 'genName', 'geogFeat', 
-      'idno', 'lang', 'name', 'nameLink', 'offset', 'orgName', 'persName', 
-      'roleName', 'rs', 'surname' 
-      )"/>
-  
-  <xsl:variable name="model.placeStateLike" as="xs:string*"
-    select="( 'bloc', 'climate', 'country', 'district', 'geogName', 'location', 
-      'placeName', 'population', 'region', 'settlement', 'state', 'terrain', 'trait' 
-      )"/>
-  
   <xd:doc>
-    <xd:desc></xd:desc>
+    <xd:desc>Test if an element belongs to a family of tags indicating emphasized, often 
+      typographically distinct text.</xd:desc>
+    <xd:param name="element">The element to test.</xd:param>
   </xd:doc>
   <xsl:function name="tps:is-emph-like" as="xs:boolean">
     <xsl:param name="element" as="element()"/>
-    <xsl:value-of select="exists($element[self::code or self::distinct or self::emph
-              or self::foreign or self::gloss or self::hi or self::ident or self::mentioned 
-              or self::soCalled or self::term or self::title
+    <xsl:value-of select="exists($element[self::att or self::code or self::distinct 
+              or self::emph or self::foreign or self::gi or self::gloss or self::hi 
+              or self::ident or self::mentioned or self::soCalled or self::term or self::title
               ])"/>
   </xsl:function>
   
   <xd:doc>
-    <xd:desc></xd:desc>
+    <xd:desc>Test if an element belongs to a family of tags used to indicate the names of 
+      things.</xd:desc>
+    <xd:param name="element">The element to test.</xd:param>
   </xd:doc>
   <xsl:function name="tps:is-name-like" as="xs:boolean">
     <xsl:param name="element" as="element()"/>
-    <xsl:value-of select="exists($element[self::addName or self::forename or self::genName 
-              or self::geogFeat or self::name or self::nameLink or self::offset 
-              or self::orgName or self::persName or self::placeName or self::roleName 
-              or self::surname
+    <xsl:value-of select="exists($element[self::addName or self::bloc or self::climate 
+              or self::country or self::district or self::forename or self::genName 
+              or self::geogFeat or self::geogName or self::idno or self::location 
+              or self::lang or self::name or self::nameLink or self::offset or self::orgName 
+              or self::persName or self::placeName or self::population or self::region 
+              or self::roleName or self::rs or self::settlement or self::state 
+              or self::surname or self::terrain or self::trait
               ])"/>
   </xsl:function>
   
@@ -455,6 +451,8 @@
     <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
       will render as boxes, used to calculate the depth of the current box from a box 
       representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+    <xd:param name="has-ancestor-p">A boolean value which indicates if the current node 
+      occurs as a descendant of &lt;p&gt;.</xd:param>
   </xd:doc>
   <xsl:template match="floatingText" mode="#default inside-p" priority="89">
     <xsl:param name="depth" select="0" as="xs:integer" tunnel="yes"/>
@@ -476,6 +474,8 @@
     <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
       will render as boxes, used to calculate the depth of the current box from a box 
       representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+    <xd:param name="has-ancestor-p">A boolean value which indicates if the current node 
+      occurs as a descendant of &lt;p&gt;.</xd:param>
   </xd:doc>
   <xsl:template match="front | body | back" mode="#default inside-p" priority="88">
     <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
@@ -498,6 +498,8 @@
     <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
       will render as boxes, used to calculate the depth of the current box from a box 
       representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+    <xd:param name="has-ancestor-p">A boolean value which indicates if the current node 
+      occurs as a descendant of &lt;p&gt;.</xd:param>
     <xd:param name="language">The language code passed on from an ancestor node. If the 
       current node has its own language code defined, that code will be used instead.</xd:param>
   </xd:doc>
@@ -524,6 +526,8 @@
     <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
       will render as boxes, used to calculate the depth of the current box from a box 
       representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+    <xd:param name="has-ancestor-p">A boolean value which indicates if the current node 
+      occurs as a descendant of &lt;p&gt;.</xd:param>
   </xd:doc>
   <xsl:template match="*[tps:is-chunk-level(.)]" mode="#default inside-p">
     <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
@@ -549,6 +553,10 @@
     <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
       will render as boxes, used to calculate the depth of the current box from a box 
       representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+    <xd:param name="has-ancestor-p">A boolean value which indicates if the current node 
+      occurs as a descendant of &lt;p&gt;.</xd:param>
+    <xd:param name="has-ancestor-teiheader">A boolean value which indicates if the current 
+      node occurs as a descendant of the &lt;teiHeader&gt;.</xd:param>
   </xd:doc>
   <xsl:template match="list" mode="#default inside-p teiheader">
     <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
@@ -656,6 +664,8 @@
     <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
       will render as boxes, used to calculate the depth of the current box from a box 
       representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+    <xd:param name="has-ancestor-p">A boolean value which indicates if the current node 
+      occurs as a descendant of &lt;p&gt;.</xd:param>
   </xd:doc>
   <xsl:template match="table" priority="23" mode="#default inside-p">
     <xsl:param name="depth" select="2" as="xs:integer" tunnel="yes"/>
@@ -790,6 +800,10 @@
     <xd:param name="depth">A tunnelled parameter passed on from ancestor elements which 
       will render as boxes, used to calculate the depth of the current box from a box 
       representing &lt;text&gt; or &lt;floatingText&gt;.</xd:param>
+    <xd:param name="has-ancestor-p">A boolean value which indicates if the current node 
+      occurs as a descendant of &lt;p&gt;.</xd:param>
+    <xd:param name="has-ancestor-teiheader">A boolean value which indicates if the current 
+      node occurs as a descendant of the &lt;teiHeader&gt;.</xd:param>
   </xd:doc>
   <xsl:template match="p" mode="#default inside-p teiheader">
     <xsl:param name="depth" select="1" as="xs:integer" tunnel="yes"/>
@@ -1019,12 +1033,12 @@
         <xsl:text>@</xsl:text>
       </xsl:if>
       <!-- These particular emph-likes should never have other emph-likes nested inside them, 
-        so a depth count is not carried on. -->
+        so no depth count is carried on. -->
       <xsl:apply-templates mode="#current"/>
     </span>
   </xsl:template>
   
-  <xsl:template match="*[tps:is-emph-like(.)]" mode="#default inside-p" priority="-9">
+  <xsl:template match="*[tps:is-emph-like(.)]" mode="#default inside-p" priority="-4">
     <xsl:param name="emphlike-depth" select="1" as="xs:integer"/>
     <span>
       <xsl:call-template name="set-classes-by-family">
@@ -1167,6 +1181,8 @@
         readability of the encoding. Similarly, the template cannot distinguish between 
         self-closed tags and empty elements with both start and end tags.</xd:p>
     </xd:desc>
+    <xd:param name="ns-bestowed">An optional parameter containing the namespace bestowed by 
+      the parent element.</xd:param>
   </xd:doc>
   <xsl:template match="*" mode="xml2code" priority="-10">
     <xsl:param name="ns-bestowed" as="xs:anyURI?"/>
