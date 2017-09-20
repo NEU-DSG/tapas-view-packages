@@ -36,6 +36,22 @@
 @box06:             rgba(252, 205, 229, @box-opacity);
 @box07:             rgba(188, 128, 189, @box-opacity);
 @box08:             rgba(190, 186, 218, @box-opacity);
+// Color palette used for families of elements. This is a slightly modified
+  // version of 12-class Paired from ColorBrewer 2.0:
+  // http://colorbrewer2.org/?type=qualitative&scheme=Paired&n=12
+@green-dark:        #33A02C;
+@green-light:       #B2DF8A;
+@blue-dark:         #1F78B4;
+@blue-light:        #A6CEE3;
+@purple-dark:       #6A3D9A;
+@purple-light:      #CAB2D6;
+@red-dark:          #E31A1C;
+@red-light:         #FB9A99;
+@orange-dark:       #FF7F00;
+@orange-light:      #FDBF6F;
+@brown-dark:        #B15928;
+@yellow-light:      #FFFF99;
+
 
 /*  FONTS  */
 
@@ -102,7 +118,7 @@
     }
     
     dd + dt {
-      margin-top: 0.35em;
+      margin-top: 0.2em;
     }
   } // dl
   
@@ -180,7 +196,7 @@
       .component-inner() {
         margin: 0.5em;
         border: thin solid @gray-light;
-        height: 120px;
+        height: 100px;
         background-color: white;
         overflow-y: auto;
       }
@@ -239,16 +255,19 @@
           margin-top: 0.2em;
           float: right;
         }
+      } // #gi-option-selector
+      
+      #color-scheme-legend {
         
         .legend {
-          float: right;
+          margin-top: 0.2em;
           
           .legend-key {
             stroke-width: 1px;
             stroke: @gray-dark;
           }
         } // .legend
-      } // #gi-option-selector
+      } // #color-scheme-legend
       
       #gi-properties {
         .component-inner();
@@ -607,7 +626,18 @@
     white-space: pre;
   }
   
+  &.hieractivity-depthwise {
+    
+    #legend-familial {
+      display: none;
+    }
+  } // .hieractivity.hieractivity-depthwise
+  
   &.hieractivity-familial {
+    
+    #legend-depthwise {
+      display: none;
+    }
     
     .boxed-gen {
       margin: 0.5em 0 0;
@@ -618,13 +648,30 @@
       display: inline-block;
     }
     
-    .family-namelike-1 {
-      background-color: rgb(106,61,154);
-      color: rgb(202,178,214);
-    }
-    .family-namelike-0 {
-      background-color: rgb(202,178,214);
-      color: rgb(106,61,154);
-    }
+    .family-namelike {
+      
+      &.familial-candidate-dark {
+        background-color: @purple-dark;
+        color: @purple-light;
+      }
+      
+      &.familial-candidate-light {
+        background-color: @purple-light;
+        color: @purple-dark;
+      }
+    } // .family-namelike
+    
+    .family-emphlike {
+      
+      &.familial-candidate-dark {
+        background-color: @blue-dark;
+        color: @blue-light;
+      }
+      
+      &.familial-candidate-light {
+        background-color: @blue-light;
+        color: @blue-dark;
+      }
+    } // .family-emphlike
   } // .hieractivity.hieractivity-familial
 } // .hieractivity

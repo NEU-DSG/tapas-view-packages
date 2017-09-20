@@ -64,7 +64,7 @@
 }
 .hieractivity dl dd + dt,
 .hieractivity .list-dl dd + dt {
-  margin-top: 0.35em;
+  margin-top: 0.2em;
 }
 .hieractivity #control-panel {
   border-radius: 0.4em;
@@ -139,7 +139,7 @@
 .hieractivity #control-panel #controls-container .control-widget .control-widget-component {
   margin: 0.5em;
   border: thin solid #dddddd;
-  height: 120px;
+  height: 100px;
   background-color: white;
   overflow-y: auto;
   padding: 0.25em;
@@ -172,17 +172,17 @@
   margin-top: 0.2em;
   float: right;
 }
-.hieractivity #control-panel #controls-container #gi-option-selector .legend {
-  float: right;
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend {
+  margin-top: 0.2em;
 }
-.hieractivity #control-panel #controls-container #gi-option-selector .legend .legend-key {
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend .legend-key {
   stroke-width: 1px;
   stroke: #555555;
 }
 .hieractivity #control-panel #controls-container #gi-properties {
   margin: 0.5em;
   border: thin solid #dddddd;
-  height: 120px;
+  height: 100px;
   background-color: white;
   overflow-y: auto;
   text-align: left;
@@ -465,6 +465,12 @@
   background-color: rgba(255, 255, 255, 0.3);
   white-space: pre;
 }
+.hieractivity.hieractivity-depthwise #legend-familial {
+  display: none;
+}
+.hieractivity.hieractivity-familial #legend-depthwise {
+  display: none;
+}
 .hieractivity.hieractivity-familial .boxed-gen {
   margin: 0.5em 0 0;
   background-color: rgba(255, 255, 255, 0.3);
@@ -472,11 +478,19 @@
 .hieractivity.hieractivity-familial .familial-candidate {
   display: inline-block;
 }
-.hieractivity.hieractivity-familial .family-namelike-1 {
+.hieractivity.hieractivity-familial .family-namelike.familial-candidate-dark {
   background-color: #6a3d9a;
   color: #cab2d6;
 }
-.hieractivity.hieractivity-familial .family-namelike-0 {
+.hieractivity.hieractivity-familial .family-namelike.familial-candidate-light {
   background-color: #cab2d6;
   color: #6a3d9a;
+}
+.hieractivity.hieractivity-familial .family-emphlike.familial-candidate-dark {
+  background-color: #1f78b4;
+  color: #a6cee3;
+}
+.hieractivity.hieractivity-familial .family-emphlike.familial-candidate-light {
+  background-color: #a6cee3;
+  color: #1f78b4;
 }

@@ -2072,7 +2072,7 @@
   </xsl:template>
   
   <xd:doc>
-    <xd:desc>Set a color class for an element family member, using minimal depth cues.</xd:desc>
+    <xd:desc>Set color classes for an element family member, using minimal depth cues.</xd:desc>
     <xd:param name="additional-classes">An optional string representing other, 
       whitespace-delimited HTML classes to be assigned to the output element. These will be 
       applied before the family class.</xd:param>
@@ -2085,12 +2085,14 @@
     <xsl:param name="base-classname" as="xs:string"/>
     <xsl:param name="family-depth" as="xs:integer"/>
     <xsl:variable name="version" select="$family-depth mod 2"/>
-    <xsl:variable name="class" select="concat($base-classname,'-',$version)"/>
     <xsl:attribute name="class">
       <xsl:if test="normalize-space($additional-classes) ne ''">
         <xsl:value-of select="$additional-classes"/><xsl:text> </xsl:text>
       </xsl:if>
-      <xsl:text>familial-candidate </xsl:text><xsl:value-of select="$class"/>
+      <xsl:text>familial-candidate </xsl:text>
+      <xsl:value-of select="$base-classname"/>
+      <xsl:text> familial-candidate-</xsl:text>
+      <xsl:value-of select="if ( $version eq 1 ) then 'dark' else 'light'"/>
     </xsl:attribute>
   </xsl:template>
   
