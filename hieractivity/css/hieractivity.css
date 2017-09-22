@@ -476,6 +476,9 @@
   margin: 0.5em 0 0;
   background-color: rgba(255, 255, 255, 0.3);
 }
+.hieractivity.hieractivity-familial .familial-candidate {
+  border: thin outset #ef7c8c;
+}
 .hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-dark {
   background-color: #33a02c;
   color: #b2df8a;
