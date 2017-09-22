@@ -195,6 +195,44 @@
   </xsl:function>
   
   <xd:doc>
+    <xd:desc>
+      <xd:p>Test if an element belongs to a family of tags used in bibliographic description.</xd:p>
+      <xd:p>Tags were drawn from the TEI's <xd:a href="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-model.biblPart.html"
+        >model.biblPart</xd:a>.</xd:p>
+    </xd:desc>
+    <xd:param name="element">The element to test.</xd:param>
+  </xd:doc>
+  <xsl:function name="tps:is-bibliographic-candidate" as="xs:boolean">
+    <xsl:param name="element" as="element()"/>
+    <xsl:value-of select="exists($element[self::author or self::availability or self::bibl 
+              or self::biblScope or self::citedRange or self::distributor or self::edition 
+              or self::editor or self::extent or self::funder or self::listRelation 
+              or self::meeting or self::msIdentifier or self::principal or self::pubPlace 
+              or self::publisher or self::relatedItem or self::respStmt or self::series 
+              or self::sponsor or self::textLang
+              ])"/>
+  </xsl:function>
+  
+  <xd:doc>
+    <xd:desc>
+      <xd:p>Test if an element belongs to a family of tags which, as possible children of 
+        &lt;choice&gt;, indicate a facet of editorial identification or intervention.</xd:p>
+      <xd:p>Tags were drawn primarily from the TEI's <xd:a 
+        href="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-model.choicePart.html"
+        >model.choicePart</xd:a>, and include &lt;choice&gt; itself. &lt;seg&gt; is only 
+        included if it occurs as a child of &lt;choice&gt;.</xd:p>
+    </xd:desc>
+    <xd:param name="element">The element to test.</xd:param>
+  </xd:doc>
+  <xsl:function name="tps:is-choicepart-candidate" as="xs:boolean">
+    <xsl:param name="element" as="element()"/>
+    <xsl:value-of select="exists($element[self::abbr or self::am or self::choice or self::corr  
+              or self::ex or self::expan or self::orig or self::reg 
+              or self::seg[parent::choice] or self::sic or self::supplied or self::unclear 
+              ])"/>
+  </xsl:function>
+  
+  <xd:doc>
     <xd:desc>Test if an element is chunk-able, and it should get its own 'box' in the 
       output HTML.</xd:desc>
     <xd:param name="element">The element to test.</xd:param>
@@ -228,24 +266,16 @@
   </xsl:function>
   
   <xd:doc>
-    <xd:desc>Test if an element belongs to a family of tags indicating emphasized, often 
-      typographically distinct text.</xd:desc>
+    <xd:desc>
+      <xd:p>Test if an element belongs to a family of tags used to indicate the names of 
+        things.</xd:p>
+      <xd:p>Tags were drawn from the TEI's <xd:a 
+        href="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-model.nameLike.html"
+        >model.nameLike</xd:a>.</xd:p>
+    </xd:desc>
     <xd:param name="element">The element to test.</xd:param>
   </xd:doc>
-  <xsl:function name="tps:is-emph-like" as="xs:boolean">
-    <xsl:param name="element" as="element()"/>
-    <xsl:value-of select="exists($element[self::att or self::code or self::distinct 
-              or self::emph or self::foreign or self::gi or self::gloss or self::hi 
-              or self::ident or self::mentioned or self::soCalled or self::term or self::title
-              ])"/>
-  </xsl:function>
-  
-  <xd:doc>
-    <xd:desc>Test if an element belongs to a family of tags used to indicate the names of 
-      things.</xd:desc>
-    <xd:param name="element">The element to test.</xd:param>
-  </xd:doc>
-  <xsl:function name="tps:is-name-like" as="xs:boolean">
+  <xsl:function name="tps:is-namelike-candidate" as="xs:boolean">
     <xsl:param name="element" as="element()"/>
     <xsl:value-of select="exists($element[self::addName or self::bloc or self::climate 
               or self::country or self::district or self::forename or self::genName 
@@ -254,6 +284,41 @@
               or self::persName or self::placeName or self::population or self::region 
               or self::roleName or self::rs or self::settlement or self::state 
               or self::surname or self::terrain or self::trait
+              ])"/>
+  </xsl:function>
+  
+  <xd:doc>
+    <xd:desc>
+      <xd:p>Test if an element belongs to a family of tags indicating rhetorical, often 
+        typographically distinct text.</xd:p>
+      <xd:p>Tags were drawn from the TEI's <xd:a 
+        href="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-model.highlighted.html"
+        >model.highlighted</xd:a>.</xd:p>
+    </xd:desc>
+    <xd:param name="element">The element to test.</xd:param>
+  </xd:doc>
+  <xsl:function name="tps:is-rhetorical-candidate" as="xs:boolean">
+    <xsl:param name="element" as="element()"/>
+    <xsl:value-of select="exists($element[self::distinct or self::emph or self::foreign 
+              or self::gloss or self::hi or self::ident or self::mentioned or self::soCalled 
+              or self::term
+              ])"/>
+  </xsl:function>
+  
+  <xd:doc>
+    <xd:desc>
+      <xd:p>Test if an element belongs to a family of tags used for editorial transcription.</xd:p>
+      <xd:p>Tags were drawn from the TEI's <xd:a 
+        href="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-model.pPart.transcriptional.html"
+        >model.pPart.transcriptional</xd:a>. The children of &lt;choice&gt; are not included.</xd:p>
+    </xd:desc>
+    <xd:param name="element">The element to test.</xd:param>
+  </xd:doc>
+  <xsl:function name="tps:is-transcriptional-candidate" as="xs:boolean">
+    <xsl:param name="element" as="element()"/>
+    <xsl:value-of select="exists($element[self::add or self::damage or self::del or self::gap 
+              or self::handShift or self::redo or self::restore or self::retrace or self::secl 
+              or self::subst or self::supplied or self::surplus or self::undo
               ])"/>
   </xsl:function>
   
@@ -967,8 +1032,13 @@
   </xsl:template>
   
   <xsl:template match="gap" mode="#default inside-p">
+    <xsl:param name="transcriptional-depth" select="1" as="xs:integer"/>
     <xsl:variable name="contentDivider" select="': '"/>
     <span>
+      <xsl:call-template name="set-classes-by-family">
+        <xsl:with-param name="base-classname" select="'family-transcriptional'"/>
+        <xsl:with-param name="family-depth" select="$transcriptional-depth"/>
+      </xsl:call-template>
       <xsl:call-template name="set-data-attributes"/>
       <span class="label-explanatory">
         <xsl:value-of select="$interjectStart"/>
@@ -976,7 +1046,7 @@
         <xsl:choose>
           <xsl:when test="desc">
             <xsl:value-of select="$contentDivider"/>
-            <xsl:apply-templates/>
+            <xsl:apply-templates mode="#current"/>
           </xsl:when>
           <xsl:when test="@*">
             <xsl:text> </xsl:text>
@@ -1013,22 +1083,22 @@
   </xsl:template>
   
   <xsl:template match="att | code | gi" mode="#default inside-p teiheader">
-    <xsl:param name="emphlike-depth" select="1" as="xs:integer"/>
+    <!--<xsl:param name="rhetorical-depth" select="1" as="xs:integer"/>-->
     <xsl:param name="has-ancestor-teiheader" select="false()" as="xs:boolean" tunnel="yes"/>
     <span>
-      <xsl:choose>
-        <xsl:when test="$has-ancestor-teiheader">
+      <!--<xsl:choose>
+        <xsl:when test="$has-ancestor-teiheader">-->
           <xsl:attribute name="class" select="'encoded'"/>
-        </xsl:when>
+        <!--</xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="set-classes-by-family">
             <xsl:with-param name="additional-classes" select="'encoded'"/>
-            <xsl:with-param name="base-classname" select="'family-emphlike'"/>
-            <xsl:with-param name="family-depth" select="$emphlike-depth"/>
+            <xsl:with-param name="base-classname" select="'family-rhetorical'"/>
+            <xsl:with-param name="family-depth" select="$rhetorical-depth"/>
           </xsl:call-template>
           <xsl:call-template name="set-data-attributes"/>
         </xsl:otherwise>
-      </xsl:choose>
+      </xsl:choose>-->
       <xsl:if test="self::att">
         <xsl:text>@</xsl:text>
       </xsl:if>
@@ -1038,21 +1108,15 @@
     </span>
   </xsl:template>
   
-  <xsl:template match="*[tps:is-emph-like(.)]" mode="#default inside-p" priority="-4">
-    <xsl:param name="emphlike-depth" select="1" as="xs:integer"/>
-    <span>
-      <xsl:call-template name="set-classes-by-family">
-        <xsl:with-param name="base-classname" select="'family-emphlike'"/>
-        <xsl:with-param name="family-depth" select="$emphlike-depth"/>
-      </xsl:call-template>
-      <xsl:call-template name="set-data-attributes"/>
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="emphlike-depth" select="$emphlike-depth + 1"/>
-      </xsl:apply-templates>
-    </span>
-  </xsl:template>
+  <!--<xsl:template match="*[tps:is-bibliographic-candidate(.)]" mode="#default inside-p">
+    
+  </xsl:template>-->
   
-  <xsl:template match="*[tps:is-name-like(.)]" mode="#default inside-p">
+  <!--<xsl:template match="*[tps:is-choicepart-candidate(.)]" mode="#default inside-p">
+    
+  </xsl:template>-->
+  
+  <xsl:template match="*[tps:is-namelike-candidate(.)]" mode="#default inside-p">
     <xsl:param name="namelike-depth" select="1" as="xs:integer"/>
     <span>
       <xsl:call-template name="set-classes-by-family">
@@ -1062,6 +1126,34 @@
       <xsl:call-template name="set-data-attributes"/>
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="namelike-depth" select="$namelike-depth + 1"/>
+      </xsl:apply-templates>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="*[tps:is-rhetorical-candidate(.)]" mode="#default inside-p" priority="-4">
+    <xsl:param name="rhetorical-depth" select="1" as="xs:integer"/>
+    <span>
+      <xsl:call-template name="set-classes-by-family">
+        <xsl:with-param name="base-classname" select="'family-rhetorical'"/>
+        <xsl:with-param name="family-depth" select="$rhetorical-depth"/>
+      </xsl:call-template>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="rhetorical-depth" select="$rhetorical-depth + 1"/>
+      </xsl:apply-templates>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="*[tps:is-transcriptional-candidate(.)]" mode="#default inside-p" priority="-4">
+    <xsl:param name="transcriptional-depth" select="1" as="xs:integer"/>
+    <span>
+      <xsl:call-template name="set-classes-by-family">
+        <xsl:with-param name="base-classname" select="'family-transcriptional'"/>
+        <xsl:with-param name="family-depth" select="$transcriptional-depth"/>
+      </xsl:call-template>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="transcriptional-depth" select="$transcriptional-depth + 1"/>
       </xsl:apply-templates>
     </span>
   </xsl:template>
@@ -1247,7 +1339,7 @@
     </xsl:call-template>
   </xsl:template>
   
-  <xsl:template match=" editionStmt | profileDesc/*[not(self::langUsage)]" mode="teiheader">
+  <xsl:template match="editionStmt | profileDesc/*[not(self::langUsage)]" mode="teiheader">
     <xsl:call-template name="make-teiheader-section">
       <xsl:with-param name="text-allowed" select="true()" tunnel="yes"/>
     </xsl:call-template>

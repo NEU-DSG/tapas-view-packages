@@ -475,6 +475,22 @@
   margin: 0.5em 0 0;
   background-color: rgba(255, 255, 255, 0.3);
 }
+.hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-dark {
+  background-color: #33a02c;
+  color: #b2df8a;
+}
+.hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-light {
+  background-color: #b2df8a;
+  color: #33a02c;
+}
+.hieractivity.hieractivity-familial .family-choicepart.familial-candidate-dark {
+  background-color: #ff7f00;
+  color: #fdbf6f;
+}
+.hieractivity.hieractivity-familial .family-choicepart.familial-candidate-light {
+  background-color: #fdbf6f;
+  color: #ff7f00;
+}
 .hieractivity.hieractivity-familial .family-namelike.familial-candidate-dark {
   background-color: #6a3d9a;
   color: #cab2d6;
@@ -483,11 +499,19 @@
   background-color: #cab2d6;
   color: #6a3d9a;
 }
-.hieractivity.hieractivity-familial .family-emphlike.familial-candidate-dark {
+.hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-dark {
   background-color: #1f78b4;
   color: #a6cee3;
 }
-.hieractivity.hieractivity-familial .family-emphlike.familial-candidate-light {
+.hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-light {
   background-color: #a6cee3;
   color: #1f78b4;
+}
+.hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-dark {
+  background-color: #e31a1c;
+  color: #fb9a99;
+}
+.hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-light {
+  background-color: #fb9a99;
+  color: #e31a1c;
 }

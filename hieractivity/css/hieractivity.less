@@ -648,6 +648,32 @@
       //display: inline-block;
     }
     
+    .family-bibliographic {
+      
+      &.familial-candidate-dark {
+        background-color: @green-dark;
+        color: @green-light;
+      }
+      
+      &.familial-candidate-light {
+        background-color: @green-light;
+        color: @green-dark;
+      }
+    } // .family-bibliographic
+    
+    .family-choicepart {
+      
+      &.familial-candidate-dark {
+        background-color: @orange-dark;
+        color: @orange-light;
+      }
+      
+      &.familial-candidate-light {
+        background-color: @orange-light;
+        color: @orange-dark;
+      }
+    } // .family-choicepart
+    
     .family-namelike {
       
       &.familial-candidate-dark {
@@ -661,7 +687,7 @@
       }
     } // .family-namelike
     
-    .family-emphlike {
+    .family-rhetorical {
       
       &.familial-candidate-dark {
         background-color: @blue-dark;
@@ -672,6 +698,19 @@
         background-color: @blue-light;
         color: @blue-dark;
       }
-    } // .family-emphlike
+    } // .family-rhetorical
+    
+    .family-transcriptional {
+      
+      &.familial-candidate-dark {
+        background-color: @red-dark;
+        color: @red-light;
+      }
+      
+      &.familial-candidate-light {
+        background-color: @red-light;
+        color: @red-dark;
+      }
+    } // .family-transcriptional
   } // .hieractivity.hieractivity-familial
 } // .hieractivity
