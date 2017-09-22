@@ -29,6 +29,8 @@
             <xd:li></xd:li>
           </xd:ul>
         </xd:li>-->
+        <xd:li>2017-09-22, v0.3.0: Added element families: 'rhetorical', 'transcriptional', 
+          'bibliographic', and 'choicepart'.</xd:li>
         <xd:li>2017-09-15:
           <xd:ul>
             <xd:li>Added &lt;caption&gt; and &lt;figDesc&gt; to list of box candidates.</xd:li>
@@ -1031,6 +1033,24 @@
     </xsl:element>
   </xsl:template>
   
+  <xsl:template match="att | code | gi" mode="#default inside-p teiheader">
+    <xsl:param name="has-ancestor-teiheader" select="false()" as="xs:boolean" tunnel="yes"/>
+    <span>
+      <xsl:choose>
+        <xsl:when test="$has-ancestor-teiheader">
+          <xsl:attribute name="class" select="'encoded'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="set-data-attributes"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:if test="self::att">
+        <xsl:text>@</xsl:text>
+      </xsl:if>
+      <xsl:apply-templates mode="#current"/>
+    </span>
+  </xsl:template>
+  
   <xsl:template match="gap" mode="#default inside-p">
     <xsl:param name="transcriptional-depth" select="1" as="xs:integer"/>
     <xsl:variable name="contentDivider" select="': '"/>
@@ -1060,12 +1080,20 @@
   </xsl:template>
   
   <xsl:template match="choice" mode="#default inside-p">
-    <span class="label-explanatory">
+    <xsl:param name="choicepart-depth" select="1" as="xs:integer"/>
+    <span>
+      <xsl:call-template name="set-classes-by-family">
+        <xsl:with-param name="additional-classes" select="'label-explanatory'"/>
+        <xsl:with-param name="base-classname" select="'family-choicepart'"/>
+        <xsl:with-param name="family-depth" select="$choicepart-depth"/>
+      </xsl:call-template>
       <xsl:call-template name="set-data-attributes"/>
       <xsl:value-of select="$interjectStart"/>
       <xsl:call-template name="glossable-gi"/>
       <xsl:text>: </xsl:text>
-      <xsl:apply-templates mode="#current"/>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="choicepart-depth" select="$choicepart-depth + 1"/>
+      </xsl:apply-templates>
       <xsl:value-of select="$interjectEnd"/>
     </span>
   </xsl:template>
@@ -1076,45 +1104,47 @@
   <xsl:template match="choice/text()" mode="#default inside-p"/>
   
   <xsl:template match="choice/*[preceding-sibling::*]" mode="#default inside-p">
+    <xsl:param name="choicepart-depth" select="1" as="xs:integer"/>
     <xsl:text> | </xsl:text>
     <span>
-      <xsl:call-template name="keep-calm-and-carry-on"/>
+      <xsl:call-template name="set-classes-by-family">
+        <xsl:with-param name="base-classname" select="'family-choicepart'"/>
+        <xsl:with-param name="family-depth" select="$choicepart-depth"/>
+      </xsl:call-template>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="choicepart-depth" select="$choicepart-depth + 1"/>
+      </xsl:apply-templates>
     </span>
   </xsl:template>
   
-  <xsl:template match="att | code | gi" mode="#default inside-p teiheader">
-    <!--<xsl:param name="rhetorical-depth" select="1" as="xs:integer"/>-->
-    <xsl:param name="has-ancestor-teiheader" select="false()" as="xs:boolean" tunnel="yes"/>
+  <xsl:template match="*[tps:is-choicepart-candidate(.)]" mode="#default inside-p" priority="-4">
+    <xsl:param name="choicepart-depth" select="1" as="xs:integer"/>
     <span>
-      <!--<xsl:choose>
-        <xsl:when test="$has-ancestor-teiheader">-->
-          <xsl:attribute name="class" select="'encoded'"/>
-        <!--</xsl:when>
-        <xsl:otherwise>
-          <xsl:call-template name="set-classes-by-family">
-            <xsl:with-param name="additional-classes" select="'encoded'"/>
-            <xsl:with-param name="base-classname" select="'family-rhetorical'"/>
-            <xsl:with-param name="family-depth" select="$rhetorical-depth"/>
-          </xsl:call-template>
-          <xsl:call-template name="set-data-attributes"/>
-        </xsl:otherwise>
-      </xsl:choose>-->
-      <xsl:if test="self::att">
-        <xsl:text>@</xsl:text>
-      </xsl:if>
-      <!-- These particular emph-likes should never have other emph-likes nested inside them, 
-        so no depth count is carried on. -->
-      <xsl:apply-templates mode="#current"/>
+      <xsl:call-template name="set-classes-by-family">
+        <xsl:with-param name="base-classname" select="'family-choicepart'"/>
+        <xsl:with-param name="family-depth" select="$choicepart-depth"/>
+      </xsl:call-template>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="choicepart-depth" select="$choicepart-depth + 1"/>
+      </xsl:apply-templates>
     </span>
   </xsl:template>
   
-  <!--<xsl:template match="*[tps:is-bibliographic-candidate(.)]" mode="#default inside-p">
-    
-  </xsl:template>-->
-  
-  <!--<xsl:template match="*[tps:is-choicepart-candidate(.)]" mode="#default inside-p">
-    
-  </xsl:template>-->
+  <xsl:template match="*[tps:is-bibliographic-candidate(.)]" mode="#default inside-p" priority="-4">
+    <xsl:param name="bibliographic-depth" select="1" as="xs:integer"/>
+    <span>
+      <xsl:call-template name="set-classes-by-family">
+        <xsl:with-param name="base-classname" select="'family-bibliographic'"/>
+        <xsl:with-param name="family-depth" select="$bibliographic-depth"/>
+      </xsl:call-template>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="choicepart-depth" select="$bibliographic-depth + 1"/>
+      </xsl:apply-templates>
+    </span>
+  </xsl:template>
   
   <xsl:template match="*[tps:is-namelike-candidate(.)]" mode="#default inside-p">
     <xsl:param name="namelike-depth" select="1" as="xs:integer"/>

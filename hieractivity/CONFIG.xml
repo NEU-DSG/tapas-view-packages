@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../config.rnc" type="application/relax-ng-compact-syntax"?>
 <view_package xmlns="http://www.wheatoncollege.edu/TAPAS/1.0" 
-  version="0.2.1" xml:id="hieractivity" dynamic="false" scope="file">
+  version="0.3.0" xml:id="hieractivity" dynamic="false" scope="file">
   
   <human_name>Hieractivity</human_name>
   <description>This view package draws attention to the hierarchical structures of a TEI 
@@ -11,6 +11,7 @@
   
   <file_types>
     <file_type>tei</file_type>
+    <file_type>odd</file_type>
     <file_type>ography</file_type>
   </file_types>
   <git_branch/>

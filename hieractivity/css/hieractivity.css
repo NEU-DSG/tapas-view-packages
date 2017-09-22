@@ -391,6 +391,7 @@
 }
 .hieractivity *[data-tapas-gi] {
   padding: 0.2em;
+  line-height: 1.4em;
 }
 .hieractivity [data-tapas-gi=lb]::before {
   content: '↵';
