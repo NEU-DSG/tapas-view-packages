@@ -848,7 +848,7 @@
                 mode="#default inside-p" priority="-5">
     <span class="block">
       <xsl:choose>
-        <xsl:when test="not(*) and not(text())">
+        <xsl:when test="not(node())">
           <xsl:call-template name="gloss-empty"/>
         </xsl:when>
         <xsl:otherwise>
@@ -1141,7 +1141,7 @@
       </xsl:call-template>
       <xsl:call-template name="set-data-attributes"/>
       <xsl:apply-templates mode="#current">
-        <xsl:with-param name="choicepart-depth" select="$bibliographic-depth + 1"/>
+        <xsl:with-param name="bibliographic-depth" select="$bibliographic-depth + 1"/>
       </xsl:apply-templates>
     </span>
   </xsl:template>
@@ -1674,7 +1674,7 @@
     <xsl:apply-templates select="@*" mode="teiheader"/>
   </xsl:template>
   
-  <xsl:template match="@when">
+  <xsl:template match="@when" mode="teiheader">
     <span class="block">
       <xsl:value-of select="."/>
     </span>

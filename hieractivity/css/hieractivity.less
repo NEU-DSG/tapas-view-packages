@@ -10,6 +10,7 @@
 @cream:             #FFE;
 @clear:             rgba(255, 255, 255, 0);
 @cloudy:            rgba(255, 255, 255, 0.3);
+@smokey:            rgba(0, 0, 0, 0.3);
 @gray-darker:       #202020;
 @gray-dark:         #555555;
 @gray:              #808080;
@@ -426,6 +427,7 @@
   
   [data-tapas-gi].boxed {
     margin: 2em 1em;
+    border: none;
     padding: 0.85em;
     display: block;
     
@@ -548,7 +550,9 @@
   }
   
   *[data-tapas-gi] {
-    padding: 0.2em;
+    border: solid @clear;
+    border-width: thin medium;
+    padding: 0.15em;
     line-height: 1.4em;
   }
   
@@ -646,71 +650,81 @@
     }
     
     .familial-candidate {
-      border: thin outset @raspberry-light;
-    }
+      border-width: thin medium;
+      border-style: solid;
+      border-radius: 0.5em;
+      background-color: inherit;
+      
+      &:hover {
+        box-shadow: -0.2em -0.15em 0.3em @smokey;
+      }
+      
+      &.selected-gi {
+        border-radius: 0;
+        background-color: @raspberry-darker;
+      }
+      
+      .familial-candidate {
+        border-style: none solid;
+        
+        &:hover { 
+          border-style: solid;
+        }
+      }
+    } // .familial-candidate
     
     .family-bibliographic {
       
       &.familial-candidate-dark {
-        background-color: @green-dark;
-        color: @green-light;
+        border-color: @green-dark;
       }
       
       &.familial-candidate-light {
-        background-color: @green-light;
-        color: @green-dark;
+        border-color: @green-light;
       }
     } // .family-bibliographic
     
     .family-choicepart {
       
       &.familial-candidate-dark {
-        background-color: @orange-dark;
-        color: @orange-light;
+        border-color: @orange-dark;
       }
       
       &.familial-candidate-light {
-        background-color: @orange-light;
-        color: @orange-dark;
+        border-color: @orange-light;
       }
     } // .family-choicepart
     
     .family-namelike {
       
       &.familial-candidate-dark {
-        background-color: @purple-dark;
-        color: @purple-light;
+        border-color: @purple-dark;
       }
       
       &.familial-candidate-light {
-        background-color: @purple-light;
-        color: @purple-dark;
+        border-color: @purple-light;
       }
     } // .family-namelike
     
     .family-rhetorical {
       
       &.familial-candidate-dark {
-        background-color: @blue-dark;
-        color: @blue-light;
+        border-color: @blue-dark;
       }
       
       &.familial-candidate-light {
-        background-color: @blue-light;
-        color: @blue-dark;
+        border-color: @blue-light;
       }
     } // .family-rhetorical
     
     .family-transcriptional {
       
       &.familial-candidate-dark {
-        background-color: @red-dark;
-        color: @red-light;
+        border-color: @red-dark;
       }
       
       &.familial-candidate-light {
-        background-color: @red-light;
-        color: @red-dark;
+        border-color: @red-light;
       }
     } // .family-transcriptional
   } // .hieractivity.hieractivity-familial

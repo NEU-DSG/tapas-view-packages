@@ -283,6 +283,7 @@
 }
 .hieractivity [data-tapas-gi].boxed {
   margin: 2em 1em;
+  border: none;
   padding: 0.85em;
   display: block;
 }
@@ -390,7 +391,9 @@
   font-size: initial;
 }
 .hieractivity *[data-tapas-gi] {
-  padding: 0.2em;
+  border: solid rgba(255, 255, 255, 0);
+  border-width: thin medium;
+  padding: 0.15em;
   line-height: 1.4em;
 }
 .hieractivity [data-tapas-gi=lb]::before {
@@ -477,45 +480,51 @@
   background-color: rgba(255, 255, 255, 0.3);
 }
 .hieractivity.hieractivity-familial .familial-candidate {
-  border: thin outset #ef7c8c;
+  border-width: thin medium;
+  border-style: solid;
+  border-radius: 0.5em;
+  background-color: inherit;
+}
+.hieractivity.hieractivity-familial .familial-candidate:hover {
+  box-shadow: -0.2em -0.15em 0.3em rgba(0, 0, 0, 0.3);
+}
+.hieractivity.hieractivity-familial .familial-candidate.selected-gi {
+  border-radius: 0;
+  background-color: #8b1122;
+}
+.hieractivity.hieractivity-familial .familial-candidate .familial-candidate {
+  border-style: none solid;
+}
+.hieractivity.hieractivity-familial .familial-candidate .familial-candidate:hover {
+  border-style: solid;
 }
 .hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-dark {
-  background-color: #33a02c;
-  color: #b2df8a;
+  border-color: #33a02c;
 }
 .hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-light {
-  background-color: #b2df8a;
-  color: #33a02c;
+  border-color: #b2df8a;
 }
 .hieractivity.hieractivity-familial .family-choicepart.familial-candidate-dark {
-  background-color: #ff7f00;
-  color: #fdbf6f;
+  border-color: #ff7f00;
 }
 .hieractivity.hieractivity-familial .family-choicepart.familial-candidate-light {
-  background-color: #fdbf6f;
-  color: #ff7f00;
+  border-color: #fdbf6f;
 }
 .hieractivity.hieractivity-familial .family-namelike.familial-candidate-dark {
-  background-color: #6a3d9a;
-  color: #cab2d6;
+  border-color: #6a3d9a;
 }
 .hieractivity.hieractivity-familial .family-namelike.familial-candidate-light {
-  background-color: #cab2d6;
-  color: #6a3d9a;
+  border-color: #cab2d6;
 }
 .hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-dark {
-  background-color: #1f78b4;
-  color: #a6cee3;
+  border-color: #1f78b4;
 }
 .hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-light {
-  background-color: #a6cee3;
-  color: #1f78b4;
+  border-color: #a6cee3;
 }
 .hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-dark {
-  background-color: #e31a1c;
-  color: #fb9a99;
+  border-color: #e31a1c;
 }
 .hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-light {
-  background-color: #fb9a99;
-  color: #e31a1c;
+  border-color: #fb9a99;
 }
