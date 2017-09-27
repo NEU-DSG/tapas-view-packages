@@ -1171,6 +1171,37 @@
     </xsl:call-template>
   </xsl:template>
   
+  <xsl:template match="tag" mode="#default inside-p teiheader">
+    <xsl:param name="has-ancestor-teiheader" select="false()" as="xs:boolean" tunnel="yes"/>
+    <xsl:variable name="useType">
+      <xsl:variable name="validTypes" as="xs:string+" 
+        select="('start', 'end', 'empty', 'pi', 'comment', 'ms')"/>
+      <xsl:value-of select="if ( @type and @type = $validTypes ) then 
+                              @type/data(.) 
+                            else 'start'"/>
+    </xsl:variable>
+    <xsl:variable name="delimiterStart"
+      select=" if ( $useType eq 'end' ) then '&lt;/'
+          else if ( $useType eq 'pi' ) then '&lt;?'
+          else if ( $useType eq 'comment' ) then '&lt;!--'
+          else if ( $useType eq 'ms' ) then '&lt;]CDATA['
+          else '&lt;'"/>
+    <xsl:variable name="delimiterEnd"
+      select=" if ( $useType eq 'empty' ) then '/&gt;'
+          else if ( $useType eq 'pi' ) then '?&gt;'
+          else if ( $useType eq 'comment' ) then '--&gt;'
+          else if ( $useType eq 'ms' ) then ']]&gt;'
+          else '&gt;'"/>
+    <span class="encoded">
+      <xsl:if test="not($has-ancestor-teiheader)">
+        <xsl:call-template name="set-data-attributes"/>
+      </xsl:if>
+      <xsl:copy-of select="$delimiterStart"/>
+      <xsl:apply-templates mode="#current"/>
+      <xsl:copy-of select="$delimiterEnd"/>
+    </span>
+  </xsl:template>
+  
   
 <!-- MODE: CARRY-ON -->
   
