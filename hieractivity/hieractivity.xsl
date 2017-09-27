@@ -211,7 +211,7 @@
               or self::editor or self::extent or self::funder or self::listRelation 
               or self::meeting or self::msIdentifier or self::principal or self::pubPlace 
               or self::publisher or self::relatedItem or self::respStmt or self::series 
-              or self::sponsor or self::textLang
+              or self::sponsor or self::textLang or self::title
               ])"/>
   </xsl:function>
   
@@ -264,6 +264,34 @@
               or self::macroSpec or self::moduleRef or self::moduleSpec or self::paramList 
               or self::paramSpec or self::remarks or self::schemaSpec or self::alternate 
               or self::content or self::sequence or self::valItem or self::valList
+              ])"/>
+  </xsl:function>
+  
+  <xd:doc>
+    <xd:desc>Test if an element is empty—if it has no child elements and no text nodes.</xd:desc>
+    <xd:param name="element">The element to test.</xd:param>
+  </xd:doc>
+  <xsl:function name="tps:is-empty" as="xs:boolean">
+    <xsl:param name="element" as="element()"/>
+    <xsl:value-of select="not($element/*) and not($element/text())"/>
+  </xsl:function>
+  
+  <xd:doc>
+    <xd:desc>
+      <xd:p>Test if an element belongs to a family of tags used to measurements.</xd:p>
+      <xd:p>Tags were drawn from the TEI's <xd:a 
+        href="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-model.measureLike.html"
+        >model.measureLike</xd:a> and <xd:a 
+        href="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-model.dateLike.html"
+        >model.dateLike</xd:a>.</xd:p>
+    </xd:desc>
+    <xd:param name="element">The element to test.</xd:param>
+  </xd:doc>
+  <xsl:function name="tps:is-measurement-candidate" as="xs:boolean">
+    <xsl:param name="element" as="element()"/>
+    <xsl:value-of select="exists($element[self::date or self::depth or self::dim or self::geo 
+              or self::height or self::measure or self::measureGrp or self::num or self::time 
+              or self::width
               ])"/>
   </xsl:function>
   
@@ -933,13 +961,20 @@
       name and a list of attributes.</xd:desc>
     <xd:param name="start">The node on which to perform this template. The default is the 
       current node.</xd:param>
+    <xd:param name="has-wrapper">An optional toggle indicating whether there is a wrapper for 
+      the triggering element. If there is a wrapper, the data attributes identifying the 
+      output &lt;span&gt; as such will be suppressed, since they would already occur on the 
+      wrapper. The default is to assume there is no wrapper.</xd:param>
   </xd:doc>
   <xsl:template name="gloss-empty" match="*[not(*)][not(text())]" priority="-6" mode="#default inside-p">
     <xsl:param name="start" select="." as="node()"/>
+    <xsl:param name="has-wrapper" select="false()" as="xs:boolean"/>
     <span class="label-explanatory">
-      <xsl:call-template name="get-attributes">
-        <xsl:with-param name="start" select="$start"/>
-      </xsl:call-template>
+      <xsl:if test="not($has-wrapper)">
+        <xsl:call-template name="get-attributes">
+          <xsl:with-param name="start" select="$start"/>
+        </xsl:call-template>
+      </xsl:if>
       <xsl:apply-templates select="$start/@*"/>
       <xsl:value-of select="$interjectStart"/>
       <xsl:call-template name="glossable-gi"/>
@@ -1118,20 +1153,6 @@
     </span>
   </xsl:template>
   
-  <xsl:template match="*[tps:is-choicepart-candidate(.)]" mode="#default inside-p" priority="-4">
-    <xsl:param name="choicepart-depth" select="1" as="xs:integer"/>
-    <span>
-      <xsl:call-template name="set-classes-by-family">
-        <xsl:with-param name="base-classname" select="'family-choicepart'"/>
-        <xsl:with-param name="family-depth" select="$choicepart-depth"/>
-      </xsl:call-template>
-      <xsl:call-template name="set-data-attributes"/>
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="choicepart-depth" select="$choicepart-depth + 1"/>
-      </xsl:apply-templates>
-    </span>
-  </xsl:template>
-  
   <xsl:template match="*[tps:is-bibliographic-candidate(.)]" mode="#default inside-p" priority="-4">
     <xsl:param name="bibliographic-depth" select="1" as="xs:integer"/>
     <span>
@@ -1140,9 +1161,64 @@
         <xsl:with-param name="family-depth" select="$bibliographic-depth"/>
       </xsl:call-template>
       <xsl:call-template name="set-data-attributes"/>
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="bibliographic-depth" select="$bibliographic-depth + 1"/>
-      </xsl:apply-templates>
+      <xsl:choose>
+        <xsl:when test="tps:is-empty(.)">
+          <xsl:call-template name="gloss-empty">
+            <xsl:with-param name="has-wrapper" select="true()"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates mode="#current">
+            <xsl:with-param name="bibliographic-depth" select="$bibliographic-depth + 1"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="*[tps:is-choicepart-candidate(.)]" mode="#default inside-p" priority="-4">
+    <xsl:param name="choicepart-depth" select="1" as="xs:integer"/>
+    <span>
+      <xsl:call-template name="set-classes-by-family">
+        <xsl:with-param name="base-classname" select="'family-choicepart'"/>
+        <xsl:with-param name="family-depth" select="$choicepart-depth"/>
+      </xsl:call-template>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:choose>
+        <xsl:when test="tps:is-empty(.)">
+          <xsl:call-template name="gloss-empty">
+            <xsl:with-param name="has-wrapper" select="true()"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates mode="#current">
+            <xsl:with-param name="choicepart-depth" select="$choicepart-depth + 1"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
+    </span>
+  </xsl:template>
+  
+  <xsl:template match="*[tps:is-measurement-candidate(.)]" mode="#default inside-p" priority="-4">
+    <xsl:param name="measurement-depth" select="1" as="xs:integer"/>
+    <span>
+      <xsl:call-template name="set-classes-by-family">
+        <xsl:with-param name="base-classname" select="'family-measurement'"/>
+        <xsl:with-param name="family-depth" select="$measurement-depth"/>
+      </xsl:call-template>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:choose>
+        <xsl:when test="tps:is-empty(.)">
+          <xsl:call-template name="gloss-empty">
+            <xsl:with-param name="has-wrapper" select="true()"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates mode="#current">
+            <xsl:with-param name="measurement-depth" select="$measurement-depth + 1"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
     </span>
   </xsl:template>
   
@@ -1154,9 +1230,18 @@
         <xsl:with-param name="family-depth" select="$namelike-depth"/>
       </xsl:call-template>
       <xsl:call-template name="set-data-attributes"/>
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="namelike-depth" select="$namelike-depth + 1"/>
-      </xsl:apply-templates>
+      <xsl:choose>
+        <xsl:when test="tps:is-empty(.)">
+          <xsl:call-template name="gloss-empty">
+            <xsl:with-param name="has-wrapper" select="true()"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates mode="#current">
+            <xsl:with-param name="namelike-depth" select="$namelike-depth + 1"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
     </span>
   </xsl:template>
   
@@ -1168,9 +1253,18 @@
         <xsl:with-param name="family-depth" select="$rhetorical-depth"/>
       </xsl:call-template>
       <xsl:call-template name="set-data-attributes"/>
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="rhetorical-depth" select="$rhetorical-depth + 1"/>
-      </xsl:apply-templates>
+      <xsl:choose>
+        <xsl:when test="tps:is-empty(.)">
+          <xsl:call-template name="gloss-empty">
+            <xsl:with-param name="has-wrapper" select="true()"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates mode="#current">
+            <xsl:with-param name="rhetorical-depth" select="$rhetorical-depth + 1"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
     </span>
   </xsl:template>
   

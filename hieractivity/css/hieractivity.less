@@ -655,25 +655,18 @@
     
     .familial-candidate {
       border-width: thin medium;
-      border-style: solid;
+      border-style: none solid;
       border-radius: 0.5em;
       background-color: inherit;
       
       &:hover {
+        border-style: solid;
         box-shadow: -0.2em -0.15em 0.3em @smokey;
       }
       
       &.selected-gi {
         border-radius: 0;
         background-color: @raspberry-darker;
-      }
-      
-      .familial-candidate {
-        border-style: none solid;
-        
-        &:hover { 
-          border-style: solid;
-        }
       }
     } // .familial-candidate
     

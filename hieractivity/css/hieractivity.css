@@ -485,22 +485,17 @@
 }
 .hieractivity.hieractivity-familial .familial-candidate {
   border-width: thin medium;
-  border-style: solid;
+  border-style: none solid;
   border-radius: 0.5em;
   background-color: inherit;
 }
 .hieractivity.hieractivity-familial .familial-candidate:hover {
+  border-style: solid;
   box-shadow: -0.2em -0.15em 0.3em rgba(0, 0, 0, 0.3);
 }
 .hieractivity.hieractivity-familial .familial-candidate.selected-gi {
   border-radius: 0;
   background-color: #8b1122;
-}
-.hieractivity.hieractivity-familial .familial-candidate .familial-candidate {
-  border-style: none solid;
-}
-.hieractivity.hieractivity-familial .familial-candidate .familial-candidate:hover {
-  border-style: solid;
 }
 .hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-dark {
   border-color: #33a02c;
@@ -527,8 +522,8 @@
   border-color: #a6cee3;
 }
 .hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-dark {
-  border-color: #c80000;
+  border-color: #bd1515;
 }
 .hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-light {
-  border-color: #ff0003;
+  border-color: #ff181b;
 }
