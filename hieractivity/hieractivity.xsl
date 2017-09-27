@@ -1070,15 +1070,10 @@
   
   <xsl:template match="att | code | gi" mode="#default inside-p teiheader">
     <xsl:param name="has-ancestor-teiheader" select="false()" as="xs:boolean" tunnel="yes"/>
-    <span>
-      <xsl:choose>
-        <xsl:when test="$has-ancestor-teiheader">
-          <xsl:attribute name="class" select="'encoded'"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:call-template name="set-data-attributes"/>
-        </xsl:otherwise>
-      </xsl:choose>
+    <span class="encoded">
+      <xsl:if test="not($has-ancestor-teiheader)">
+        <xsl:call-template name="set-data-attributes"/>
+      </xsl:if>
       <xsl:if test="self::att">
         <xsl:text>@</xsl:text>
       </xsl:if>

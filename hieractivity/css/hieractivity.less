@@ -37,7 +37,7 @@
 @box06:             rgba(252, 205, 229, @box-opacity);
 @box07:             rgba(188, 128, 189, @box-opacity);
 @box08:             rgba(190, 186, 218, @box-opacity);
-// Color palette used for families of elements. This is a slightly modified
+// Color palette used for families of elements. This is a modified
   // version of 12-class Paired from ColorBrewer 2.0:
   // http://colorbrewer2.org/?type=qualitative&scheme=Paired&n=12
 @green-dark:        #33A02C;
@@ -46,12 +46,12 @@
 @blue-light:        #A6CEE3;
 @purple-dark:       #6A3D9A;
 @purple-light:      #CAB2D6;
-@red-dark:          #BD1515;//#E31A1C; <- replaced the reds because they looked too similar to the oranges
-@red-light:         #FF181B;//#FB9A99;
+@red-dark:          #FF181B;//#E31A1C; <- replaced the reds because they looked too similar to the oranges
+@red-light:         #FC9B9C;//#FB9A99;
 @orange-dark:       #FF7F00;
 @orange-light:      #FDBF6F;
-@brown-dark:        #B15928;
-@yellow-light:      #FFFF99;
+@brown-dark:        #a97211;//#B15928; <- replaced the brown to make its connection to yellow more apparent
+@yellow-light:      #D6D63A;//#FFFF99; <- darkened the yellow so it will stand out better against <p>s
 
 
 /*  FONTS  */
@@ -689,6 +689,16 @@
         border-color: @orange-light;
       }
     } // .family-choicepart
+    
+    .family-measurement {
+      
+      &.familial-candidate-dark {
+        border-color: @brown-dark;
+      }
+      &.familial-candidate-light {
+        border-color: @yellow-light;
+      }
+    } // .family-measurement
     
     .family-namelike {
       

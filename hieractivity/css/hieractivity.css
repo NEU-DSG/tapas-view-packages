@@ -509,6 +509,12 @@
 .hieractivity.hieractivity-familial .family-choicepart.familial-candidate-light {
   border-color: #fdbf6f;
 }
+.hieractivity.hieractivity-familial .family-measurement.familial-candidate-dark {
+  border-color: #a97211;
+}
+.hieractivity.hieractivity-familial .family-measurement.familial-candidate-light {
+  border-color: #d6d63a;
+}
 .hieractivity.hieractivity-familial .family-namelike.familial-candidate-dark {
   border-color: #6a3d9a;
 }
@@ -522,8 +528,8 @@
   border-color: #a6cee3;
 }
 .hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-dark {
-  border-color: #bd1515;
+  border-color: #ff181b;
 }
 .hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-light {
-  border-color: #ff181b;
+  border-color: #fc9b9c;
 }
