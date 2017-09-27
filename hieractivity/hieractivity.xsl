@@ -1087,50 +1087,45 @@
   </xsl:template>
   
   <xsl:template match="gap" mode="#default inside-p">
-    <xsl:param name="transcriptional-depth" select="1" as="xs:integer"/>
     <xsl:variable name="contentDivider" select="': '"/>
-    <span>
-      <xsl:call-template name="set-classes-by-family">
-        <xsl:with-param name="base-classname" select="'family-transcriptional'"/>
-        <xsl:with-param name="family-depth" select="$transcriptional-depth"/>
-      </xsl:call-template>
-      <xsl:call-template name="set-data-attributes"/>
-      <span class="label-explanatory">
-        <xsl:value-of select="$interjectStart"/>
-        <xsl:call-template name="glossable-gi"/>
-        <xsl:choose>
-          <xsl:when test="desc">
-            <xsl:value-of select="$contentDivider"/>
-            <xsl:apply-templates mode="#current"/>
-          </xsl:when>
-          <xsl:when test="@*">
-            <xsl:text> </xsl:text>
-            <!--<xsl:value-of select="$contentDivider"/>-->
-            <xsl:apply-templates select="@*" mode="show-att"/>
-          </xsl:when>
-        </xsl:choose>
-        <xsl:value-of select="$interjectEnd"/>
-      </span>
-    </span>
+    <xsl:call-template name="make-familial-candidate">
+      <xsl:with-param name="family-class" select="'family-transcriptional'"/>
+      <xsl:with-param name="contents" as="node()*">
+        <span class="label-explanatory">
+          <xsl:value-of select="$interjectStart"/>
+          <xsl:call-template name="glossable-gi"/>
+          <xsl:choose>
+            <xsl:when test="desc">
+              <xsl:value-of select="$contentDivider"/>
+              <xsl:apply-templates mode="#current"/>
+            </xsl:when>
+            <xsl:when test="@*">
+              <xsl:text> </xsl:text>
+              <!--<xsl:value-of select="$contentDivider"/>-->
+              <xsl:apply-templates select="@*" mode="show-att"/>
+            </xsl:when>
+          </xsl:choose>
+          <xsl:value-of select="$interjectEnd"/>
+        </span>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
   
   <xsl:template match="choice" mode="#default inside-p">
-    <xsl:param name="choicepart-depth" select="1" as="xs:integer"/>
-    <span>
-      <xsl:call-template name="set-classes-by-family">
-        <xsl:with-param name="additional-classes" select="'label-explanatory'"/>
-        <xsl:with-param name="base-classname" select="'family-choicepart'"/>
-        <xsl:with-param name="family-depth" select="$choicepart-depth"/>
-      </xsl:call-template>
-      <xsl:call-template name="set-data-attributes"/>
-      <xsl:value-of select="$interjectStart"/>
-      <xsl:call-template name="glossable-gi"/>
-      <xsl:text>: </xsl:text>
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="choicepart-depth" select="$choicepart-depth + 1"/>
-      </xsl:apply-templates>
-      <xsl:value-of select="$interjectEnd"/>
-    </span>
+    <xsl:param name="familial-depth" select="1" as="xs:integer" tunnel="yes"/>
+    <xsl:call-template name="make-familial-candidate">
+      <xsl:with-param name="additional-classes" select="'label-explanatory'" tunnel="yes"/>
+      <xsl:with-param name="family-class" select="'family-choicepart'"/>
+      <xsl:with-param name="contents">
+        <xsl:value-of select="$interjectStart"/>
+        <xsl:call-template name="glossable-gi"/>
+        <xsl:text>: </xsl:text>
+        <xsl:apply-templates mode="#current">
+          <xsl:with-param name="familial-depth" select="$familial-depth + 1" tunnel="yes"/>
+        </xsl:apply-templates>
+        <xsl:value-of select="$interjectEnd"/>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
   
   <xd:doc>
@@ -1139,147 +1134,46 @@
   <xsl:template match="choice/text()" mode="#default inside-p"/>
   
   <xsl:template match="choice/*[preceding-sibling::*]" mode="#default inside-p">
-    <xsl:param name="choicepart-depth" select="1" as="xs:integer"/>
     <xsl:text> | </xsl:text>
-    <span>
-      <xsl:call-template name="set-classes-by-family">
-        <xsl:with-param name="base-classname" select="'family-choicepart'"/>
-        <xsl:with-param name="family-depth" select="$choicepart-depth"/>
-      </xsl:call-template>
-      <xsl:call-template name="set-data-attributes"/>
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="choicepart-depth" select="$choicepart-depth + 1"/>
-      </xsl:apply-templates>
-    </span>
+    <xsl:call-template name="make-familial-candidate">
+      <xsl:with-param name="family-class" select="'family-choicepart'"/>
+    </xsl:call-template>
   </xsl:template>
   
   <xsl:template match="*[tps:is-bibliographic-candidate(.)]" mode="#default inside-p" priority="-4">
-    <xsl:param name="bibliographic-depth" select="1" as="xs:integer"/>
-    <span>
-      <xsl:call-template name="set-classes-by-family">
-        <xsl:with-param name="base-classname" select="'family-bibliographic'"/>
-        <xsl:with-param name="family-depth" select="$bibliographic-depth"/>
-      </xsl:call-template>
-      <xsl:call-template name="set-data-attributes"/>
-      <xsl:choose>
-        <xsl:when test="tps:is-empty(.)">
-          <xsl:call-template name="gloss-empty">
-            <xsl:with-param name="has-wrapper" select="true()"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates mode="#current">
-            <xsl:with-param name="bibliographic-depth" select="$bibliographic-depth + 1"/>
-          </xsl:apply-templates>
-        </xsl:otherwise>
-      </xsl:choose>
-    </span>
+    <xsl:call-template name="make-familial-candidate">
+      <xsl:with-param name="family-class" select="'family-bibliographic'"/>
+    </xsl:call-template>
   </xsl:template>
   
   <xsl:template match="*[tps:is-choicepart-candidate(.)]" mode="#default inside-p" priority="-4">
-    <xsl:param name="choicepart-depth" select="1" as="xs:integer"/>
-    <span>
-      <xsl:call-template name="set-classes-by-family">
-        <xsl:with-param name="base-classname" select="'family-choicepart'"/>
-        <xsl:with-param name="family-depth" select="$choicepart-depth"/>
-      </xsl:call-template>
-      <xsl:call-template name="set-data-attributes"/>
-      <xsl:choose>
-        <xsl:when test="tps:is-empty(.)">
-          <xsl:call-template name="gloss-empty">
-            <xsl:with-param name="has-wrapper" select="true()"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates mode="#current">
-            <xsl:with-param name="choicepart-depth" select="$choicepart-depth + 1"/>
-          </xsl:apply-templates>
-        </xsl:otherwise>
-      </xsl:choose>
-    </span>
+    <xsl:call-template name="make-familial-candidate">
+      <xsl:with-param name="family-class" select="'family-choicepart'"/>
+    </xsl:call-template>
   </xsl:template>
   
   <xsl:template match="*[tps:is-measurement-candidate(.)]" mode="#default inside-p" priority="-4">
-    <xsl:param name="measurement-depth" select="1" as="xs:integer"/>
-    <span>
-      <xsl:call-template name="set-classes-by-family">
-        <xsl:with-param name="base-classname" select="'family-measurement'"/>
-        <xsl:with-param name="family-depth" select="$measurement-depth"/>
-      </xsl:call-template>
-      <xsl:call-template name="set-data-attributes"/>
-      <xsl:choose>
-        <xsl:when test="tps:is-empty(.)">
-          <xsl:call-template name="gloss-empty">
-            <xsl:with-param name="has-wrapper" select="true()"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates mode="#current">
-            <xsl:with-param name="measurement-depth" select="$measurement-depth + 1"/>
-          </xsl:apply-templates>
-        </xsl:otherwise>
-      </xsl:choose>
-    </span>
+    <xsl:call-template name="make-familial-candidate">
+      <xsl:with-param name="family-class" select="'family-measurement'"/>
+    </xsl:call-template>
   </xsl:template>
   
-  <xsl:template match="*[tps:is-namelike-candidate(.)]" mode="#default inside-p">
-    <xsl:param name="namelike-depth" select="1" as="xs:integer"/>
-    <span>
-      <xsl:call-template name="set-classes-by-family">
-        <xsl:with-param name="base-classname" select="'family-namelike'"/>
-        <xsl:with-param name="family-depth" select="$namelike-depth"/>
-      </xsl:call-template>
-      <xsl:call-template name="set-data-attributes"/>
-      <xsl:choose>
-        <xsl:when test="tps:is-empty(.)">
-          <xsl:call-template name="gloss-empty">
-            <xsl:with-param name="has-wrapper" select="true()"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates mode="#current">
-            <xsl:with-param name="namelike-depth" select="$namelike-depth + 1"/>
-          </xsl:apply-templates>
-        </xsl:otherwise>
-      </xsl:choose>
-    </span>
+  <xsl:template match="*[tps:is-namelike-candidate(.)]" mode="#default inside-p" priority="-4">
+    <xsl:call-template name="make-familial-candidate">
+      <xsl:with-param name="family-class" select="'family-namelike'"/>
+    </xsl:call-template>
   </xsl:template>
   
   <xsl:template match="*[tps:is-rhetorical-candidate(.)]" mode="#default inside-p" priority="-4">
-    <xsl:param name="rhetorical-depth" select="1" as="xs:integer"/>
-    <span>
-      <xsl:call-template name="set-classes-by-family">
-        <xsl:with-param name="base-classname" select="'family-rhetorical'"/>
-        <xsl:with-param name="family-depth" select="$rhetorical-depth"/>
-      </xsl:call-template>
-      <xsl:call-template name="set-data-attributes"/>
-      <xsl:choose>
-        <xsl:when test="tps:is-empty(.)">
-          <xsl:call-template name="gloss-empty">
-            <xsl:with-param name="has-wrapper" select="true()"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates mode="#current">
-            <xsl:with-param name="rhetorical-depth" select="$rhetorical-depth + 1"/>
-          </xsl:apply-templates>
-        </xsl:otherwise>
-      </xsl:choose>
-    </span>
+    <xsl:call-template name="make-familial-candidate">
+      <xsl:with-param name="family-class" select="'family-rhetorical'"/>
+    </xsl:call-template>
   </xsl:template>
   
   <xsl:template match="*[tps:is-transcriptional-candidate(.)]" mode="#default inside-p" priority="-4">
-    <xsl:param name="transcriptional-depth" select="1" as="xs:integer"/>
-    <span>
-      <xsl:call-template name="set-classes-by-family">
-        <xsl:with-param name="base-classname" select="'family-transcriptional'"/>
-        <xsl:with-param name="family-depth" select="$transcriptional-depth"/>
-      </xsl:call-template>
-      <xsl:call-template name="set-data-attributes"/>
-      <xsl:apply-templates mode="#current">
-        <xsl:with-param name="transcriptional-depth" select="$transcriptional-depth + 1"/>
-      </xsl:apply-templates>
-    </span>
+    <xsl:call-template name="make-familial-candidate">
+      <xsl:with-param name="family-class" select="'family-transcriptional'"/>
+    </xsl:call-template>
   </xsl:template>
   
   
@@ -2131,6 +2025,42 @@
   </xsl:template>
   
   <xd:doc>
+    <xd:desc>Create a representation of a phrase-level element that should be categorized as a 
+      member of a tag family.</xd:desc>
+    <xd:param name="contents">The node(s) which should be used as the content of the section.</xd:param>
+    <xd:param name="family-class">The main part of the familial class name.</xd:param>
+    <xd:param name="familial-depth">A number representing the depth of the element from 
+      another in its family.</xd:param>
+  </xd:doc>
+  <xsl:template name="make-familial-candidate">
+    <xsl:param name="contents" as="node()*"/>
+    <xsl:param name="family-class" as="xs:string" required="yes"/>
+    <xsl:param name="familial-depth" select="1" as="xs:integer" tunnel="yes"/>
+    <span>
+      <xsl:call-template name="set-classes-by-family">
+        <xsl:with-param name="family-class" select="$family-class"/>
+        <xsl:with-param name="family-depth" select="$familial-depth"/>
+      </xsl:call-template>
+      <xsl:call-template name="set-data-attributes"/>
+      <xsl:choose>
+        <xsl:when test="$contents">
+          <xsl:copy-of select="$contents"/>
+        </xsl:when>
+        <xsl:when test="tps:is-empty(.)">
+          <xsl:call-template name="gloss-empty">
+            <xsl:with-param name="has-wrapper" select="true()"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates mode="#current">
+            <xsl:with-param name="familial-depth" select="$familial-depth + 1" tunnel="yes"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
+    </span>
+  </xsl:template>
+  
+  <xd:doc>
     <xd:desc>Create a labelled radio button for the control box.</xd:desc>
     <xd:param name="fieldset-name">The name used for the fieldset and the radio button.</xd:param>
     <xd:param name="value">The string value of this radio button.</xd:param>
@@ -2292,13 +2222,13 @@
     <xd:param name="additional-classes">An optional string representing other, 
       whitespace-delimited HTML classes to be assigned to the output element. These will be 
       applied before the family class.</xd:param>
-    <xd:param name="base-classname">The main part of the familial class name.</xd:param>
+    <xd:param name="family-class">The main part of the familial class name.</xd:param>
     <xd:param name="family-depth">A number representing the depth of the element from another 
       in its family.</xd:param>
   </xd:doc>
   <xsl:template name="set-classes-by-family">
-    <xsl:param name="additional-classes" select="''" as="xs:string"/>
-    <xsl:param name="base-classname" as="xs:string"/>
+    <xsl:param name="additional-classes" select="''" as="xs:string" tunnel="yes"/>
+    <xsl:param name="family-class" as="xs:string"/>
     <xsl:param name="family-depth" as="xs:integer"/>
     <xsl:variable name="version" select="$family-depth mod 2"/>
     <xsl:attribute name="class">
@@ -2306,7 +2236,7 @@
         <xsl:value-of select="$additional-classes"/><xsl:text> </xsl:text>
       </xsl:if>
       <xsl:text>familial-candidate </xsl:text>
-      <xsl:value-of select="$base-classname"/>
+      <xsl:value-of select="$family-class"/>
       <xsl:text> familial-candidate-</xsl:text>
       <xsl:value-of select="if ( $version eq 1 ) then 'dark' else 'light'"/>
     </xsl:attribute>
