@@ -479,7 +479,9 @@
   margin: 0.5em 0 0;
   background-color: rgba(255, 255, 255, 0.3);
 }
-.hieractivity.hieractivity-familial .boxed-gen.box-gen1 {
+.hieractivity.hieractivity-familial .boxed-gen.box-gen1,
+.hieractivity.hieractivity-familial .boxed-gen.box-gen4,
+.hieractivity.hieractivity-familial .boxed-gen.box-gen7 {
   background-color: #ccebc5;
   fill: #ccebc5;
 }
@@ -487,7 +489,6 @@
   border-width: thin medium;
   border-style: none solid;
   border-radius: 0.5em;
-  background-color: inherit;
 }
 .hieractivity.hieractivity-familial .familial-candidate:hover {
   border-style: solid;

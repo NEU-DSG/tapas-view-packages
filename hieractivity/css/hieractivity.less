@@ -648,16 +648,19 @@
       margin: 0.5em 0 0;
       background-color: @cloudy;
       
-      &.box-gen1 {
+      // Every third box refreshes the color scheme by returning to Box Color 1.
+      &.box-gen1,
+      &.box-gen4,
+      &.box-gen7 {
         .box-of-color(@box01);
       }
-    }
+    } // .boxed-gen
     
     .familial-candidate {
       border-width: thin medium;
       border-style: none solid;
       border-radius: 0.5em;
-      background-color: inherit;
+      //background-color: @clear;
       
       &:hover {
         border-style: solid;
