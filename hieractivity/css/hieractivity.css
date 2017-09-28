@@ -391,10 +391,12 @@
   font-size: initial;
 }
 .hieractivity *[data-tapas-gi] {
-  border: solid rgba(255, 255, 255, 0);
-  border-width: thin medium;
   padding: 0.15em;
   line-height: 1.4em;
+}
+.hieractivity *[data-tapas-gi].familial-candidate {
+  border: solid rgba(255, 255, 255, 0);
+  border-width: thin medium;
 }
 .hieractivity [data-tapas-gi=lb]::before {
   content: '↵';
@@ -463,6 +465,7 @@
 }
 .hieractivity .preformatted {
   margin: 0;
+  border: thin inset rgba(0, 0, 0, 0.3);
   padding: 0.25em;
   display: block;
   overflow: auto;
@@ -502,7 +505,7 @@
   border-color: #33a02c;
 }
 .hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-light {
-  border-color: #b2df8a;
+  border-color: #83cd41;
 }
 .hieractivity.hieractivity-familial .family-choicepart.familial-candidate-dark {
   border-color: #ff7f00;

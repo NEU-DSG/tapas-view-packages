@@ -41,7 +41,7 @@
   // version of 12-class Paired from ColorBrewer 2.0:
   // http://colorbrewer2.org/?type=qualitative&scheme=Paired&n=12
 @green-dark:        #33A02C;
-@green-light:       #B2DF8A;
+@green-light:       #83CD41;//#B2DF8A;
 @blue-dark:         #1F78B4;
 @blue-light:        #A6CEE3;
 @purple-dark:       #6A3D9A;
@@ -550,11 +550,14 @@
   }
   
   *[data-tapas-gi] {
-    border: solid @clear;
-    border-width: thin medium;
     padding: 0.15em;
     line-height: 1.4em;
-  }
+    
+    &.familial-candidate {
+      border: solid @clear;
+      border-width: thin medium;
+    }
+  } // .*[data-tapas-gi]
   
   [data-tapas-gi=lb] {
     
@@ -624,6 +627,7 @@
   
   .preformatted {
     margin: 0;
+    border: thin inset @smokey;
     padding: 0.25em;
     display: block;
     overflow: auto;

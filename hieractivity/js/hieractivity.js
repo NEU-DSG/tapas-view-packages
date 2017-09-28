@@ -88,9 +88,7 @@ $(document).ready(function() {
     unassignHeights();
     var divContainer = $('div.hieractivity');
     divContainer.toggleClass('hieractivity-depthwise hieractivity-familial');
-    if ( divContainer.hasClass('hieractivity-depthwise') ) {
-      assignHeights();
-    }
+    assignHeights();
   });
   
   // Enable remaining form controls.

@@ -1534,6 +1534,13 @@
     </xsl:if>
   </xsl:template>
   
+  <xsl:template match="fileDesc/titleStmt//title" priority="-1" mode="teiheader">
+    <xsl:param name="text-allowed" select="false()" as="xs:boolean" tunnel="yes"/>
+    <xsl:if test="$text-allowed">
+      <xsl:apply-templates mode="#current"/>
+    </xsl:if>
+  </xsl:template>
+  
   <xsl:template match="author | editor | funder | principal | sponsor" mode="teiheader">
     <dt>
       <xsl:call-template name="glossable-gi">
