@@ -99,9 +99,10 @@ xslt = element tapas:run {
 xproc = element tapas:run {
    attribute type {"xproc"},
    attribute pgm { xs:NMTOKEN },
-   Pparameter*
+   Pparameter+
+   # Note -- at least one <tapas:parameter>, typically with port=source, is required so that
+   # tapas-xq knows which pipeline step to start with.
 }
-
 
 file_type = 
 ## A type of TAPAS file. Allowed values are 'odd', 'ography', 'tei', or 'xslt'.
