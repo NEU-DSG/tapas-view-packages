@@ -23,7 +23,7 @@
 @raspberry-lighter: #F7AAB5;
 @slate:             #9EAEC9;
 @white:             #FFFFFF;
-// Color palette used for boxes at varying depths. This is a slightly modified
+// Color palette used for boxes at varying depths. This is a modified
   // version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
   // http://colorbrewer2.org/?type=qualitative&scheme=Set3&n=12
 @boxOutermost:      rgba(50,  116, 184, @box-opacity);
@@ -160,12 +160,13 @@
         border: none;
         border-top: thin solid @raspberry-darker;
         border-radius: 0;
-        padding: 0.25em;
+        padding: 0.1em;//0.25em;
         background-color: #FFF8F3;
         opacity: 1;
         width: 100%;
         box-shadow: none;
         color: black;
+        font-size: 0.85em;
         
         &[aria-expanded=true] {
           box-shadow: unset;
@@ -238,11 +239,21 @@
       
       #zoom-container {
         padding: 0.4em;
-        display: flex;
         height: initial;
-      
-        #zoom-slide {
-          width: 140px;
+        
+        .slidebar {
+          display: table-row;
+          
+          > * {
+            display: table-cell;
+            min-width: 10px;
+            vertical-align: middle;
+            text-align: center;
+          }
+          
+          #zoom-slide {
+            width: 130px;
+          }
         }
       } // #zoom-container
       
@@ -277,7 +288,7 @@
       } // #gi-properties
       
     } // #controls-container
-  } // .control-panel
+  } // #control-panel
   
   
   /* Expandable headings */

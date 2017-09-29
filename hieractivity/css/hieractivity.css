@@ -97,12 +97,13 @@
   border: none;
   border-top: thin solid #8b1122;
   border-radius: 0;
-  padding: 0.25em;
+  padding: 0.1em;
   background-color: #FFF8F3;
   opacity: 1;
   width: 100%;
   box-shadow: none;
   color: black;
+  font-size: 0.85em;
 }
 .hieractivity #control-panel .expandable-heading > button[aria-expanded=true] {
   box-shadow: unset;
@@ -117,7 +118,7 @@
   border: medium solid #8b1122;
   border-radius: 0.4em;
   padding: 0.25em 0.5em;
-  box-shadow: 0.1em 0.1em 0.2em black;
+  box-shadow: 0.1em 0.1em 0.2em #000000;
   font-variant: inherit;
 }
 .hieractivity #control-panel #controls-container {
@@ -159,11 +160,19 @@
 }
 .hieractivity #control-panel #controls-container #zoom-container {
   padding: 0.4em;
-  display: flex;
   height: initial;
 }
-.hieractivity #control-panel #controls-container #zoom-container #zoom-slide {
-  width: 140px;
+.hieractivity #control-panel #controls-container #zoom-container .slidebar {
+  display: table-row;
+}
+.hieractivity #control-panel #controls-container #zoom-container .slidebar > * {
+  display: table-cell;
+  min-width: 10px;
+  vertical-align: middle;
+  text-align: center;
+}
+.hieractivity #control-panel #controls-container #zoom-container .slidebar #zoom-slide {
+  width: 130px;
 }
 .hieractivity #control-panel #controls-container #text-contrasts {
   height: unset;

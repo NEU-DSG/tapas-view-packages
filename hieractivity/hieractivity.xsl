@@ -1864,12 +1864,14 @@
         <!-- Zoom -->
         <div class="control-widget">
           <h3 class="expandable-heading">Zoom</h3>
-          <div id="zoom-container" class="control-widget-component expandable">
-            -
-            <input id="zoom-slide" title="Zoom control slider"
-              type="range" min="20" max="100" step="1" value="100" 
-              disabled="disabled"/>
-            +
+          <div id="zoom-container" class="control-widget-component expandable expandable-hidden">
+            <div class="slidebar">
+              <span class="slidebar-label">-</span>
+              <input id="zoom-slide" title="Zoom control slider"
+                type="range" min="20" max="100" step="1" value="100" 
+                disabled="disabled"/>
+              <span class="slidebar-label">+</span>
+            </div>
           </div>
         </div>
         <!-- Text contrast -->
