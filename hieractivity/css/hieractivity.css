@@ -394,10 +394,10 @@
 .hieractivity *[data-tapas-gi] {
   padding: 0.15em;
   line-height: 1.4em;
-}
-.hieractivity *[data-tapas-gi].familial-candidate {
-  border: solid rgba(255, 255, 255, 0);
-  border-width: thin medium;
+  /*&.familial-candidate {
+      border: solid @clear;
+      border-width: thin medium;
+    }*/
 }
 .hieractivity [data-tapas-gi=lb]::before {
   content: '↵';
@@ -499,7 +499,6 @@
   box-shadow: -0.2em -0.15em 0.3em rgba(0, 0, 0, 0.3);
 }
 .hieractivity.hieractivity-familial .familial-candidate.selected-gi {
-  border-radius: 0;
   background-color: #8b1122;
 }
 .hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-dark {

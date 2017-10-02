@@ -555,10 +555,10 @@
     padding: 0.15em;
     line-height: 1.4em;
     
-    &.familial-candidate {
+    /*&.familial-candidate {
       border: solid @clear;
       border-width: thin medium;
-    }
+    }*/
   } // .*[data-tapas-gi]
   
   [data-tapas-gi=lb] {
@@ -637,12 +637,14 @@
     white-space: pre;
   }
   
+  
   &.hieractivity-depthwise {
     
     #legend-familial {
       display: none;
     }
   } // .hieractivity.hieractivity-depthwise
+  
   
   &.hieractivity-familial {
     
@@ -666,7 +668,6 @@
       border-width: thin medium;
       border-style: none solid;
       border-radius: 0.5em;
-      //background-color: @clear;
       
       &:hover {
         border-style: solid;
@@ -674,7 +675,6 @@
       }
       
       &.selected-gi {
-        border-radius: 0;
         background-color: @raspberry-darker;
       }
     } // .familial-candidate

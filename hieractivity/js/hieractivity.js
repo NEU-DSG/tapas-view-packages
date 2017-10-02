@@ -43,10 +43,10 @@ $(document).ready(function() {
       .property('disabled', false);
   var giPropList = d3.select('#gi-properties');
   var colorSchemeList = d3.select('#color-scheme');
-  // Any HTML element with the class 'boxed' is a container which should trigger a
-    // JS event when clicked.
-  var containers = d3.selectAll('[data-tapas-gi].boxed')
+  // All representations of TEI elements have their properties shown on click.
+  var teiElements = d3.selectAll('[data-tapas-gi]')
       .on('click', inspectElement);
+  var containers = teiElements.filter('.boxed');
   // Assign box heights now, and when the window is resized.
   assignHeights();
   $(window).resize(assignHeights);
@@ -78,7 +78,7 @@ $(document).ready(function() {
     // Get the selected visibility setting.
     var checked = d3.select('input[name=contrast-type]:checked');
     console.log(checked);
-    type = checked.attr('value');
+    var type = checked.attr('value');
     teiContainer.classed('text-contrast-'+type, true);
   });
   
@@ -132,13 +132,47 @@ $(document).ready(function() {
   // Get the data attributes associated with an HTML element, and display information
     // in the control panel regarding the TEI element represented.
   function inspectElement() {
-    var e = d3.event,
+    var shadowMax = 0.6,
+        shadowMin = 1e-6,         // 0.000001
+        shadowColor = '#B02B3D',  // @raspberry-dark
+        e = d3.event,
         el = d3.select(this),
         dataObj = el.node().dataset,
         giName = dataObj['tapasGi'],
         attrNames = dataObj['tapasAttributes'] === '' ? [] : dataObj['tapasAttributes'].split(' ');
     e.stopPropagation();
     //e.preventDefault();
+    // Animate a box shadow to indicate the element the user selected.
+    el
+      // First, the shadow expands outward to shadowMax.
+      .transition()
+        .duration(200)
+        .ease(d3.easeExpOut)
+        .styleTween('box-shadow', function() {
+          return function (t) {
+            return '0 0 ' 
+                  + d3.interpolateNumber(shadowMin, shadowMax)(t) + 'em ' 
+                  + shadowColor;
+          };
+        })
+      // Then, the shadow contracts back in on itself.
+      .transition()
+        .duration(500)
+        .ease(d3.easeExpIn)
+        .styleTween('box-shadow', function() {
+          return function (t) {
+            // If we're on the last step of the duration, remove the 'box-shadow' 
+              // rule on the element.
+            if ( t === 1.0 ) {
+              return '';
+            }
+            return '0 0 '
+                  + d3.interpolateNumber(0.6, 1e-6)(t) + 'em ' 
+                  + shadowColor;
+          };
+        });
+    // Clear the 'Clicked element' widget, then create a list of the target 
+      // element's properties.
     giPropList.html('');
     giPropList.append('dt')
       .text('Element name:');
