@@ -11,6 +11,7 @@
 @clear:             rgba(255, 255, 255, 0);
 @cloudy:            rgba(255, 255, 255, 0.3);
 @smokey:            rgba(0, 0, 0, 0.3);
+@shadow-touched:    rgba(200, 200, 200, 0.1);
 @gray-darker:       #202020;
 @gray-dark:         #555555;
 @gray:              #808080;
@@ -436,7 +437,8 @@
     }
     
     &.selected-gi {
-      border-left: 1em solid @raspberry-darker;
+      border-left: 0.5em solid @raspberry-darker;
+      padding-left: 0.35em;
       color: black;
     }
     
@@ -631,7 +633,7 @@
     padding: 0.25em;
     display: block;
     overflow: auto;
-    background-color: @cloudy;
+    background-color: @shadow-touched;
     white-space: pre;
   }
   
