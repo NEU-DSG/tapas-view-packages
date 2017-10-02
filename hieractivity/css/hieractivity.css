@@ -290,7 +290,8 @@
   margin: 0 0 2em;
 }
 .hieractivity [data-tapas-gi].boxed.selected-gi {
-  border-left: 1em solid #8b1122;
+  border-left: 0.5em solid #8b1122;
+  padding-left: 0.35em;
   color: black;
 }
 .hieractivity [data-tapas-gi].boxed.box-tabularasa {
@@ -456,6 +457,6 @@
   padding: 0.25em;
   display: block;
   overflow: auto;
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: rgba(200, 200, 200, 0.1);
   white-space: pre;
 }
