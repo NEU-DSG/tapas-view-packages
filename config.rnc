@@ -99,9 +99,16 @@ xslt = element tapas:run {
 xproc = element tapas:run {
    attribute type {"xproc"},
    attribute pgm { xs:NMTOKEN },
-   Pparameter+
-   # Note -- at least one <tapas:parameter>, typically with port=source, is required so that
-   # tapas-xq knows which pipeline step to start with.
+   step+
+   # Note 1 -- at least one <tapas:step>, typically with port=source, is required so that
+   # tapas-xq knows which pipeline step to start with. If that step has other input ports,
+   # then multiple, slightly redundant <tapas:step> elements that have the same @step will
+   # be required. E.g.
+   #   <tapas:step step="check-ducklings" port="schema">duckling-checker.sch</tapas:step>
+   # Note 2 -- at some point we are likely to want to add the flexibility to provide some
+   # run-time input, e.g. associating other inputs with user schemas. Whether we would do
+   # this using <tapas:parameter> or need a new element to provide a <p:option> is yet to
+   # be determined.
 }
 
 file_type = 
@@ -117,10 +124,10 @@ element tapas:parameter {
    attribute as { xs:string },
    text
    }
-Pparameter = element tapas:parameter {
-   attribute port { xs:NMTOKEN },
+step = element tapas:step {
    attribute name { xs:NMTOKEN },
-   text
+   attribute port { xs:NMTOKEN },
+   filepath
    }
 
 constraint = 
