@@ -134,7 +134,7 @@ $(document).ready(function() {
   function inspectElement() {
     var shadowMax = 0.6,
         shadowMin = 1e-6,         // 0.000001
-        shadowColor = '#B02B3D',  // @raspberry-dark
+        shadowColor = '#9EAEC9',  // @raspberry-dark
         e = d3.event,
         el = d3.select(this),
         dataObj = el.node().dataset,

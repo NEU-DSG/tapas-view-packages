@@ -493,7 +493,7 @@
   border-width: thin 2px;
   border-style: none solid;
   border-radius: 0.5em;
-  border-color: #808080;
+  border-color: #9eaec9;
 }
 .hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed).familial-candidate {
   border-width: thin medium;
