@@ -489,16 +489,20 @@
   background-color: #ccebc5;
   fill: #ccebc5;
 }
-.hieractivity.hieractivity-familial .familial-candidate {
-  border-width: thin medium;
+.hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed) {
+  border-width: thin 2px;
   border-style: none solid;
   border-radius: 0.5em;
+  border-color: #808080;
 }
-.hieractivity.hieractivity-familial .familial-candidate:hover {
+.hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed).familial-candidate {
+  border-width: thin medium;
+}
+.hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed).familial-candidate:hover {
   border-style: solid;
   box-shadow: -0.2em -0.15em 0.3em rgba(0, 0, 0, 0.3);
 }
-.hieractivity.hieractivity-familial .familial-candidate.selected-gi {
+.hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed).familial-candidate.selected-gi {
   background-color: #8b1122;
 }
 .hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-dark {

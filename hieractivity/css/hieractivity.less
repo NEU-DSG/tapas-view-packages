@@ -664,20 +664,25 @@
       }
     } // .boxed-gen
     
-    .familial-candidate {
-      border-width: thin medium;
+    [data-tapas-gi]:not(.boxed) {
+      border-width: thin 2px;
       border-style: none solid;
       border-radius: 0.5em;
+      border-color: @gray;
       
-      &:hover {
-        border-style: solid;
-        box-shadow: -0.2em -0.15em 0.3em @smokey;
-      }
+      &.familial-candidate {
+        border-width: thin medium;
       
-      &.selected-gi {
-        background-color: @raspberry-darker;
-      }
-    } // .familial-candidate
+        &:hover {
+          border-style: solid;
+          box-shadow: -0.2em -0.15em 0.3em @smokey;
+        }
+      
+        &.selected-gi {
+          background-color: @raspberry-darker;
+        }
+      } // .familial-candidate
+    } // [data-tapas-gi]:not(.boxed)
     
     .family-bibliographic {
       
