@@ -263,10 +263,20 @@
         
         .legend {
           margin-top: 0.2em;
+          display: block;
           
-          .legend-key {
-            stroke-width: 1px;
-            stroke: @gray-dark;
+          svg {
+            margin: 0.15em 0.4em;
+            float: left;
+            
+            .legend-key {
+              stroke-width: 1px;
+              stroke: @gray-dark;
+            }
+          } // svg
+          
+          .legend-desc {
+            margin: 0.2em 0;
           }
         } // .legend
       } // #color-scheme-legend
@@ -551,14 +561,26 @@
     }
   }
   
+  .parenthetical() {
+    border-width: thin 2px;
+    border-style: none solid;
+    border-radius: 0.5em;
+    border-color: @slate;
+  }
+  
   *[data-tapas-gi] {
     padding: 0.15em;
     line-height: 1.4em;
     
-    /*&.familial-candidate {
-      border: solid @clear;
-      border-width: thin medium;
-    }*/
+    &:not(.boxed) {
+      border: 2px @clear;
+      border-style: none solid;
+      border-radius: 0.5em;
+      
+      &:hover {
+        .parenthetical();
+      }
+    } // .*[data-tapas-gi]:not(boxed)
   } // .*[data-tapas-gi]
   
   [data-tapas-gi=lb] {
@@ -665,10 +687,7 @@
     } // .boxed-gen
     
     [data-tapas-gi]:not(.boxed) {
-      border-width: thin 2px;
-      border-style: none solid;
-      border-radius: 0.5em;
-      border-color: @slate;
+      .parenthetical();
       
       &.familial-candidate {
         border-width: thin medium;

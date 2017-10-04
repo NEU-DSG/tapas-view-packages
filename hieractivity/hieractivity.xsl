@@ -156,12 +156,35 @@
   <xsl:param name="render-full-html"   select="false()" as="xs:boolean"/> <!-- set to 'true' to get browsable output for debugging -->
   <xsl:param name="contrast-default" select="'mid'" as="xs:string"/>
   
+  <xsl:variable name="css-class-map" as="node()*">
+    <class name="box-outermost"></class>
+    <class name="box-outer"></class>
+    <class name="box-p"></class>
+    <class name="box-tabularasa"></class>
+    <class name="family-bibliographic"></class>
+    <class name="family-choicepart"></class>
+    <class name="family-measurement"></class>
+    <class name="family-namelike"></class>
+    <class name="family-rhetorical"></class>
+    <class name="family-transcriptional"></class>
+  </xsl:variable>
   <xsl:variable name="defaultLanguage" select="'en'"/>
   <xsl:variable name="interjectStart">&lt;[ </xsl:variable>
   <xsl:variable name="interjectEnd"> ]&gt;</xsl:variable>
   <xsl:variable name="nbsp" select="'&#160;'"/>
   
 <!-- FUNCTIONS -->
+  
+  <xd:doc>
+    <xd:desc>Given a CSS class name</xd:desc>
+  </xd:doc>
+  <xsl:function name="tps:get-css-class-desc" as="node()*">
+    <xsl:param name="classname" as="xs:string"/>
+    <xsl:variable name="mapMatch" select="$css-class-map[@name eq $classname]"/>
+    <xsl:if test="exists($mapMatch)">
+      <xsl:copy-of select="$mapMatch/node()"/>
+    </xsl:if>
+  </xsl:function>
   
   <xd:doc>
     <xd:desc>Test if an element has only elements as significant children. Text nodes 
@@ -1740,7 +1763,7 @@
   </xd:doc>
   <xsl:template match="html:div[@id eq 'legend-depthwise']" mode="postprocessing">
     <xsl:param name="boxed-elements" as="attribute()*" tunnel="yes"/>
-    <xsl:variable name="width" select="10"/>
+    <xsl:variable name="width" select="20"/>
     <xsl:variable name="boxClassAttrs" select="$boxed-elements/parent::*/@class" as="attribute()*"/>
     <xsl:variable name="uniqueClasses" as="xs:string*">
       <xsl:variable name="splitTokens" as="xs:string*">
@@ -1760,23 +1783,27 @@
     </xsl:variable>
     <xsl:copy>
       <xsl:copy-of select="@*"/>
-      <svg xmlns="http://www.w3.org/2000/svg" xmlns:tps="http://tapas.northeastern.edu" 
-        width="82%" height="12" class="legend">
-        <xsl:for-each select="$uniqueClasses">
-          <xsl:variable name="thisType" select="."/>
-          <xsl:variable name="translateX">
-            <xsl:variable name="prevBoxes" select="index-of($uniqueClasses, $thisType) - 1"/>
-            <xsl:value-of select="$prevBoxes * $width  + 1"/>
-          </xsl:variable>
-          <rect width="{$width}" height="{$width}" class="legend-key {$thisType}"
-            transform="translate({$translateX} 1)">
-            <xsl:call-template name="set-legend-desc-depthwise">
-              <xsl:with-param name="boxed-elements" select="$boxed-elements"/>
-              <xsl:with-param name="current-type" select="$thisType"/>
-            </xsl:call-template>
-          </rect>
-        </xsl:for-each>
-      </svg>
+      <xsl:for-each-group select="$uniqueClasses" group-by="contains(., 'box-gen')">
+        <div style="border-top: thin solid black;">
+          <xsl:for-each select="current-group()">
+            <xsl:variable name="thisType" select="."/>
+            <div class="legend">
+              <svg xmlns="http://www.w3.org/2000/svg" 
+                width="{ $width + 2 }" height="{ $width + 2 }">
+                <rect width="{$width}" height="{$width}" transform="translate(1 1)"
+                  class="legend-key {$thisType}">
+                </rect>
+              </svg>
+              <p class="legend-desc">
+                <xsl:call-template name="set-legend-desc-depthwise">
+                  <xsl:with-param name="boxed-elements" select="$boxed-elements"/>
+                  <xsl:with-param name="current-type" select="$thisType"/>
+                </xsl:call-template>
+              </p>
+            </div>
+          </xsl:for-each>
+        </div>
+      </xsl:for-each-group>
     </xsl:copy>
   </xsl:template>
   
@@ -2295,13 +2322,13 @@
     <xsl:param name="current-type" as="xs:string" required="yes"/>
     <xsl:variable name="matches" select="$boxed-elements/parent::html:*
                                           [matches(@class/data(.), concat($current-type,'( +.*)?$'))]"/>
-    <xsl:variable name="sortedElements" as="xs:string+">
+    <!--<xsl:variable name="sortedElements" as="xs:string+">
       <xsl:variable name="elements" select="distinct-values($matches/@data-tapas-gi/data(.))"/>
       <xsl:for-each select="$elements">
         <xsl:sort select="." order="ascending"/>
         <xsl:copy-of select="."/>
       </xsl:for-each>
-    </xsl:variable>
+    </xsl:variable>-->
     <xsl:variable name="sortedDepths" as="xs:string+">
       <xsl:variable name="depths" 
         select="distinct-values($matches/@data-tapas-box-depth/data(.))" as="xs:integer+"/>
@@ -2310,12 +2337,10 @@
         <xsl:copy-of select="xs:string(.)"/>
       </xsl:for-each>
     </xsl:variable>
-    <xsl:attribute name="tps:legend-elements">
-      <xsl:value-of select="string-join($sortedElements,' ')"/>
-    </xsl:attribute>
-    <xsl:attribute name="tps:legend-depths">
-      <xsl:value-of select="string-join($sortedDepths,' ')"/>
-    </xsl:attribute>
+    
+    <xsl:text>Depth </xsl:text>
+    <xsl:value-of select="string-join($sortedDepths,', ')"/>
+    <small> from closest ancestor <code>&lt;text&gt;</code> or <code>&lt;floatingText&gt;</code></small>
   </xsl:template>
   
 </xsl:stylesheet>

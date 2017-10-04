@@ -174,10 +174,18 @@
 }
 .hieractivity #control-panel #controls-container #color-scheme-legend .legend {
   margin-top: 0.2em;
+  display: block;
 }
-.hieractivity #control-panel #controls-container #color-scheme-legend .legend .legend-key {
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend svg {
+  margin: 0.15em 0.4em;
+  float: left;
+}
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend svg .legend-key {
   stroke-width: 1px;
   stroke: #555555;
+}
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend .legend-desc {
+  margin: 0.2em 0;
 }
 .hieractivity #control-panel #controls-container #gi-properties {
   margin: 0.5em;
@@ -394,10 +402,17 @@
 .hieractivity *[data-tapas-gi] {
   padding: 0.15em;
   line-height: 1.4em;
-  /*&.familial-candidate {
-      border: solid @clear;
-      border-width: thin medium;
-    }*/
+}
+.hieractivity *[data-tapas-gi]:not(.boxed) {
+  border: 2px rgba(255, 255, 255, 0);
+  border-style: none solid;
+  border-radius: 0.5em;
+}
+.hieractivity *[data-tapas-gi]:not(.boxed):hover {
+  border-width: thin 2px;
+  border-style: none solid;
+  border-radius: 0.5em;
+  border-color: #9eaec9;
 }
 .hieractivity [data-tapas-gi=lb]::before {
   content: '↵';
