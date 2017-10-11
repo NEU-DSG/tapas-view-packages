@@ -157,6 +157,25 @@
   margin: 0 0.35em;
   font-size: 0.85em;
 }
+.hieractivity #control-panel #controls-container table {
+  margin-bottom: 0.2em;
+}
+.hieractivity #control-panel #controls-container table tbody {
+  border: none;
+}
+.hieractivity #control-panel #controls-container table tr {
+  border-top: thin solid #dddddd;
+}
+.hieractivity #control-panel #controls-container table tr:first-child {
+  border-top: none;
+}
+.hieractivity #control-panel #controls-container table td {
+  padding-left: 0.2em;
+  vertical-align: top;
+}
+.hieractivity #control-panel #controls-container table td:first-child {
+  padding-left: 0;
+}
 .hieractivity #control-panel #controls-container #zoom-container {
   padding: 0.4em;
   display: flex;
@@ -172,13 +191,19 @@
   margin-top: 0.2em;
   float: right;
 }
+.hieractivity #control-panel #controls-container #color-scheme-selector-container {
+  height: initial;
+}
+.hieractivity #control-panel #controls-container #color-scheme-legend #legend-depthwise,
+.hieractivity #control-panel #controls-container #color-scheme-legend #legend-familial {
+  width: 100%;
+}
 .hieractivity #control-panel #controls-container #color-scheme-legend .legend {
-  margin-top: 0.2em;
+  padding: 0.2em 0;
   display: block;
 }
 .hieractivity #control-panel #controls-container #color-scheme-legend .legend svg {
-  margin: 0.15em 0.4em;
-  float: left;
+  margin-top: 0.15em;
 }
 .hieractivity #control-panel #controls-container #color-scheme-legend .legend svg .legend-key {
   stroke-width: 1px;
@@ -186,6 +211,9 @@
 }
 .hieractivity #control-panel #controls-container #color-scheme-legend .legend .legend-desc {
   margin: 0.2em 0;
+}
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend .encoded {
+  font-size: 0.9em;
 }
 .hieractivity #control-panel #controls-container #gi-properties {
   margin: 0.5em;
@@ -233,11 +261,6 @@
 .hieractivity .expandable-heading > button > code {
   padding-top: 0.15em;
   display: inline-block;
-}
-.hieractivity .expandable {
-  border: thin solid #808080;
-  border-top: none;
-  padding: 0.15em 0.75em 0.4em;
 }
 .hieractivity .expandable-heading + .expandable[aria-hidden=true] {
   display: none !important;

@@ -157,16 +157,41 @@
   <xsl:param name="contrast-default" select="'mid'" as="xs:string"/>
   
   <xsl:variable name="css-class-map" as="node()*">
-    <class name="box-outermost"></class>
-    <class name="box-outer"></class>
-    <class name="box-p"></class>
-    <class name="box-tabularasa"></class>
-    <class name="family-bibliographic"></class>
-    <class name="family-choicepart"></class>
-    <class name="family-measurement"></class>
-    <class name="family-namelike"></class>
-    <class name="family-rhetorical"></class>
-    <class name="family-transcriptional"></class>
+    <!-- The classes below are those boxes which are strictly based on element identity. -->
+    <class name="box-outermost">
+      <span class="encoded encoded-gi">text</span>,
+      <span class="encoded encoded-gi">floatingText</span>
+    </class>
+    <class name="box-outer">
+      <span class="encoded encoded-gi">body</span>,
+      <span class="encoded encoded-gi">front</span>,
+      <span class="encoded encoded-gi">back</span>
+    </class>
+    <class name="box-p">
+      <span class="encoded encoded-gi">p</span>
+    </class>
+    <class name="box-tabularasa">
+      <span class="encoded encoded-gi">group</span>
+    </class>
+    <!-- The classes below are those families into which phrase-level elements might be sorted. -->
+    <class name="family-bibliographic">
+      
+    </class>
+    <class name="family-choicepart">
+      
+    </class>
+    <class name="family-measurement">
+      
+    </class>
+    <class name="family-namelike">
+      
+    </class>
+    <class name="family-rhetorical">
+      
+    </class>
+    <class name="family-transcriptional">
+      
+    </class>
   </xsl:variable>
   <xsl:variable name="defaultLanguage" select="'en'"/>
   <xsl:variable name="interjectStart">&lt;[ </xsl:variable>
@@ -176,7 +201,8 @@
 <!-- FUNCTIONS -->
   
   <xd:doc>
-    <xd:desc>Given a CSS class name</xd:desc>
+    <xd:desc>Given a CSS class name, get its description from the $css-class-map.</xd:desc>
+    <xd:param name="classname">The class name which should be described.</xd:param>
   </xd:doc>
   <xsl:function name="tps:get-css-class-desc" as="node()*">
     <xsl:param name="classname" as="xs:string"/>
@@ -1783,27 +1809,38 @@
     </xsl:variable>
     <xsl:copy>
       <xsl:copy-of select="@*"/>
-      <xsl:for-each-group select="$uniqueClasses" group-by="contains(., 'box-gen')">
-        <div style="border-top: thin solid black;">
+      <table>
+        <xsl:for-each-group select="$uniqueClasses" group-by="contains(., 'box-gen')">
+          <xsl:sort select="current-grouping-key()" order="descending"/>
+          <xsl:variable name="isGenericClass" select="current-grouping-key()"/>
           <xsl:for-each select="current-group()">
             <xsl:variable name="thisType" select="."/>
-            <div class="legend">
-              <svg xmlns="http://www.w3.org/2000/svg" 
-                width="{ $width + 2 }" height="{ $width + 2 }">
-                <rect width="{$width}" height="{$width}" transform="translate(1 1)"
-                  class="legend-key {$thisType}">
-                </rect>
-              </svg>
-              <p class="legend-desc">
-                <xsl:call-template name="set-legend-desc-depthwise">
-                  <xsl:with-param name="boxed-elements" select="$boxed-elements"/>
-                  <xsl:with-param name="current-type" select="$thisType"/>
-                </xsl:call-template>
-              </p>
-            </div>
+            <tr class="legend">
+              <td>
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                  width="{ $width + 2 }" height="{ $width + 2 }">
+                  <rect width="{$width}" height="{$width}" transform="translate(1 1)"
+                    class="legend-key {$thisType}">
+                  </rect>
+                </svg>
+              </td>
+              <td class="legend-desc">
+                <xsl:choose>
+                  <xsl:when test="$isGenericClass">
+                    <xsl:call-template name="set-legend-desc-depthwise">
+                      <xsl:with-param name="boxed-elements" select="$boxed-elements"/>
+                      <xsl:with-param name="current-type" select="$thisType"/>
+                    </xsl:call-template>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:copy-of select="tps:get-css-class-desc($thisType)"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
           </xsl:for-each>
-        </div>
-      </xsl:for-each-group>
+        </xsl:for-each-group>
+      </table>
     </xsl:copy>
   </xsl:template>
   
@@ -1936,23 +1973,25 @@
         </div>
         <div class="control-widget">
           <h3 class="expandable-heading">Legend</h3>
-          <div id="color-scheme" class="control-widget-component expandable">
-            <fieldset id="color-scheme-selector" disabled="disabled">
-              <legend>Color scheme</legend>
-              <xsl:call-template name="make-radio-button">
-                <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
-                <xsl:with-param name="value" select="'depthwise'"/>
-                <xsl:with-param name="label" select="'Depth-wise hierarchy'"/>
-                <xsl:with-param name="is-checked" select="true()"/>
-              </xsl:call-template>
-              <xsl:call-template name="make-radio-button">
-                <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
-                <xsl:with-param name="value" select="'familial'"/>
-                <xsl:with-param name="label" select="'Familial elements'"/>
-                <xsl:with-param name="is-checked" select="false()"/>
-              </xsl:call-template>
-            </fieldset>
-            <div id="color-scheme-legend">
+          <div id="color-scheme" class="expandable">
+            <div id="color-scheme-selector-container" class="control-widget-component">
+              <fieldset id="color-scheme-selector" disabled="disabled">
+                <legend>Color scheme</legend>
+                <xsl:call-template name="make-radio-button">
+                  <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
+                  <xsl:with-param name="value" select="'depthwise'"/>
+                  <xsl:with-param name="label" select="'Depth-wise hierarchy'"/>
+                  <xsl:with-param name="is-checked" select="true()"/>
+                </xsl:call-template>
+                <xsl:call-template name="make-radio-button">
+                  <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
+                  <xsl:with-param name="value" select="'familial'"/>
+                  <xsl:with-param name="label" select="'Familial elements'"/>
+                  <xsl:with-param name="is-checked" select="false()"/>
+                </xsl:call-template>
+              </fieldset>
+            </div>
+            <div id="color-scheme-legend" class="control-widget-component">
               <div id="legend-depthwise"></div>
               <div id="legend-familial"></div>
             </div>
@@ -2338,9 +2377,10 @@
       </xsl:for-each>
     </xsl:variable>
     
-    <xsl:text>Depth </xsl:text>
+    <xsl:text>container at depth </xsl:text>
     <xsl:value-of select="string-join($sortedDepths,', ')"/>
-    <small> from closest ancestor <code>&lt;text&gt;</code> or <code>&lt;floatingText&gt;</code></small>
+    <small> from closest ancestor <span class="encoded encoded-gi">text</span> or 
+      <span class="encoded encoded-gi">floatingText</span></small>
   </xsl:template>
   
 </xsl:stylesheet>
