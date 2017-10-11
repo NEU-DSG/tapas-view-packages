@@ -209,6 +209,11 @@
         overflow-y: auto;
       }
       
+      .expandable {
+        border: none;
+        padding: inherit;
+      }
+      
       .control-widget {
         margin-top: 0.5em;
         border-radius: 0.4em;
@@ -393,9 +398,9 @@
   } // .expandable-heading
   
   .expandable {
-    //border: thin solid @gray;
-    //border-top: none;
-    //padding: 0.15em 0.75em 0.4em;
+    border: thin solid @gray;
+    border-top: none;
+    padding: 0.15em 0.75em 0.4em;
   } // .expandable
   
   .expandable-heading + .expandable[aria-hidden=true] {

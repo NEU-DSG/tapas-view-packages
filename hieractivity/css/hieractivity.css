@@ -132,6 +132,10 @@
   cursor: default;
   /* Widget customizations */
 }
+.hieractivity #control-panel #controls-container .expandable {
+  border: none;
+  padding: inherit;
+}
 .hieractivity #control-panel #controls-container .control-widget {
   margin-top: 0.5em;
   border-radius: 0.4em;
@@ -266,6 +270,11 @@
 .hieractivity .expandable-heading > button > code {
   padding-top: 0.15em;
   display: inline-block;
+}
+.hieractivity .expandable {
+  border: thin solid #808080;
+  border-top: none;
+  padding: 0.15em 0.75em 0.4em;
 }
 .hieractivity .expandable-heading + .expandable[aria-hidden=true] {
   display: none !important;
