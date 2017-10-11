@@ -66,6 +66,11 @@
 .hieractivity .list-dl dd + dt {
   margin-top: 0.2em;
 }
+.hieractivity a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration: dotted underline;
+}
 .hieractivity #control-panel {
   border-radius: 0.4em;
   padding: 0.5em;
