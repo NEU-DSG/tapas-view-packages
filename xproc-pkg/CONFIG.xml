@@ -14,6 +14,9 @@
     <parameter name="file" as="node(tei:TEI)">A TEI-encoded XML document.</parameter>
   </parameters>
   <run type="xproc" pgm="xproc_test_3.xpl">
-    <step name="relax-ng-report" port="source"/>
+    <step name="relax-ng-report" ns="http://www.wheatoncollege.edu/TAPAS/1.0">
+      <port put="in" primary="true">source</port>
+      <port put="out" primary="true">result</port>
+    </step>
   </run>
 </view_package>
