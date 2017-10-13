@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step version="1.0"
   xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-  xmlns:l="http://xproc.org/library"
+  xmlns:l="http://www.wheatoncollege.edu/TAPAS/1.0"
   name="main"
   type="l:relax-ng-report">
   
