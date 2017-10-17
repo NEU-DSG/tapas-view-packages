@@ -122,10 +122,11 @@ step = element tapas:step {
       # is just wrong, but there you have it)
       attribute qname { xs:QName }
       |
-      # for eXist 3.5 and later (we hope), we will be able to correctly
-      # separate these two bits of information from the namespace prefix
-      # you happen to choose.
-      ( attribute ncname { xs:NCName }, attribute ns { xs:anyURI } )
+      # for eXist 3.5 and later we will be able to correctly separate
+      # these two bits of information from the namespace prefix you
+      # happen to choose; not sure if we're going to want to use these
+      # or not, but here they are just in case.
+      ( attribute ns { xs:anyURI }, attribute localname { xs:NCName } )
    ),
    # Has to be at least one primary input port, probably 'source', whose input is the input file
    # Someday there might be more than one input, though.
