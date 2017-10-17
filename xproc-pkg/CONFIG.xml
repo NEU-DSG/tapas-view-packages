@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="file:/Users/ashleyclark/TAPAS/view-packages/config.rnc" type="application/relax-ng-compact-syntax"?>
-<view_package xmlns="http://www.wheatoncollege.edu/TAPAS/1.0" version="0.0.1" xml:id="test-xproc" dynamic="false" scope="file">
+<view_package xmlns="http://www.wheatoncollege.edu/TAPAS/1.0"
+  xmlns:tapas="http://www.wheatoncollege.edu/TAPAS/1.0"
+  version="0.0.1" xml:id="test-xproc" dynamic="false" scope="file">
   <human_name>XProc view package</human_name>
   <description>A test view package with an XProc program.</description>
   <file_types>
@@ -14,7 +16,7 @@
     <parameter name="file" as="node(tei:TEI)">A TEI-encoded XML document.</parameter>
   </parameters>
   <run type="xproc" pgm="xproc_test_3.xpl">
-    <step name="l:relax-ng-report" ns="http://www.wheatoncollege.edu/TAPAS/1.0">
+    <step qname="tapas:relax-ng-report">
       <port put="in" primary="true">source</port>
       <port put="out" primary="true">result</port>
       <option name="assert-valid"/>
