@@ -126,7 +126,7 @@ step = element tapas:step {
       # separate these two bits of information from the namespace prefix
       # you happen to choose.
       ( attribute ncname { xs:NCName }, attribute ns { xs:anyURI } )
-   )
+   ),
    # Has to be at least one primary input port, probably 'source', whose input is the input file
    # Someday there might be more than one input, though.
    input_port+,
