@@ -116,8 +116,17 @@ element tapas:parameter {
    text
    }
 step = element tapas:step {
-   attribute name { xs:NCName },
-   attribute ns { xs:anyURI },
+   (
+      # for our current eXist (2.2) we need to specify the step name
+      # by matching the value of @type exactly, including prefix (which
+      # is just wrong, but there you have it)
+      attribute qname { xs:QName }
+      |
+      # for eXist 3.5 and later (we hope), we will be able to correctly
+      # separate these two bits of information from the namespace prefix
+      # you happen to choose.
+      ( attribute ncname { xs:NCName }, attribute ns { xs:anyURI } )
+   )
    # Has to be at least one primary input port, probably 'source', whose input is the input file
    # Someday there might be more than one input, though.
    input_port+,
