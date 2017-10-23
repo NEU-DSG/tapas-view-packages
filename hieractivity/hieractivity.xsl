@@ -161,7 +161,7 @@
   
   <xsl:variable name="css-class-map" as="node()*">
     <!-- The classes below are those boxes which are strictly based on element identity. -->
-    <class name="box-outermost">
+    <!--<class name="box-outermost">
       <span class="encoded encoded-gi">text</span>
       <span class="encoded encoded-gi">floatingText</span>
     </class>
@@ -175,46 +175,25 @@
     </class>
     <class name="box-tabularasa">
       <span class="encoded encoded-gi">group</span>
-    </class>
+    </class>-->
     <!-- The classes below are those families into which phrase-level elements might be sorted. -->
     <class name="family-bibliographic">
-      <span class="encoded encoded-gi">author</span>
-      <span class="encoded encoded-gi">availability</span>
-      <span class="encoded encoded-gi">bibl</span>
-      <span class="encoded encoded-gi">biblScope</span>
-      <span class="encoded encoded-gi">citedRange</span>
-      <span class="encoded encoded-gi">distributor</span>
-      <span class="encoded encoded-gi">edition</span>
-      <span class="encoded encoded-gi">editor</span>
-      <span class="encoded encoded-gi">extent</span>
-      <span class="encoded encoded-gi">funder</span>
-      <span class="encoded encoded-gi">listRelation</span>
-      <span class="encoded encoded-gi">meeting</span>
-      <span class="encoded encoded-gi">msIdentifier</span>
-      <span class="encoded encoded-gi">principal</span>
-      <span class="encoded encoded-gi">pubPlace</span>
-      <span class="encoded encoded-gi">publisher</span>
-      <span class="encoded encoded-gi">relatedItem</span>
-      <span class="encoded encoded-gi">respStmt</span>
-      <span class="encoded encoded-gi">series</span>
-      <span class="encoded encoded-gi">sponsor</span>
-      <span class="encoded encoded-gi">textLang</span>
-      <span class="encoded encoded-gi">title</span>
+      <span>bibliographic:</span>
     </class>
     <class name="family-choicepart">
-      
+      <span>choice parts:</span>
     </class>
     <class name="family-measurement">
-      
+      <span>measurements:</span>
     </class>
     <class name="family-namelike">
-      
+      <span>name-likes:</span>
     </class>
     <class name="family-rhetorical">
-      
+      <span>rhetorical:</span>
     </class>
     <class name="family-transcriptional">
-      
+      <span>transcriptional:</span>
     </class>
   </xsl:variable>
   <xsl:variable name="defaultLanguage" select="'en'"/>
@@ -1951,6 +1930,7 @@
       select="$distinct-classes[matches(.,'^family-')]" as="xs:string*"/>
     <xsl:variable name="rows" as="node()*">
       <xsl:for-each select="$relevantClasses">
+        <xsl:sort select="."/>
         <xsl:variable name="thisClass" select="."/>
         <xsl:call-template name="create-legend-row">
           <xsl:with-param name="icon">
@@ -1969,6 +1949,10 @@
           <xsl:with-param name="desc">
             <xsl:variable name="classMatches"
               select="$all-familial[tps:matches-classname(.,$thisClass)]"/>
+            <xsl:if test="$thisClass = $css-class-map/@name">
+              <xsl:copy-of select="$css-class-map[@name eq $thisClass]/node()"/>
+              <xsl:text> </xsl:text>
+            </xsl:if>
             <xsl:call-template name="set-legend-desc-by-identity">
               <xsl:with-param name="matched-elements" select="$classMatches"/>
             </xsl:call-template>
@@ -2461,15 +2445,33 @@
     <xsl:variable name="distinctGIs"
       select="distinct-values($matched-elements/@data-tapas-gi)"/>
     <xsl:variable name="numDistinct" select="count($distinctGIs)"/>
-    <xsl:for-each select="1 to $numDistinct">
-      <xsl:variable name="index" select="."/>
-      <span class="encoded encoded-gi">
-        <xsl:value-of select="$distinctGIs[$index]"/>
-      </span>
-      <xsl:if test="$index ne $numDistinct">
-        <xsl:text>, </xsl:text>
-      </xsl:if>
-    </xsl:for-each>
+    <xsl:if test="$numDistinct gt 0">
+      <xsl:choose>
+        <!-- If there is more than one element for this description, create a list. -->
+        <xsl:when test="$numDistinct gt 1">
+          <ul>
+            <xsl:for-each select="1 to $numDistinct">
+              <xsl:variable name="index" select="."/>
+              <li>
+                <span class="encoded encoded-gi">
+                  <xsl:value-of select="$distinctGIs[$index]"/>
+                </span>
+                <xsl:if test="$index ne $numDistinct">
+                  <xsl:text>, </xsl:text>
+                </xsl:if>
+              </li>
+            </xsl:for-each>
+          </ul>
+        </xsl:when>
+        <!-- If there is only one kind of element matched, don't bother to wrap that gi 
+          in an HTML list. -->
+        <xsl:otherwise>
+          <span class="encoded encoded-gi">
+            <xsl:value-of select="$distinctGIs"/>
+          </span>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
   </xsl:template>
   
   <xd:doc>
@@ -2483,13 +2485,6 @@
     <xsl:param name="current-type" as="xs:string" required="yes"/>
     <xsl:variable name="matches" select="$boxed-elements/parent::html:*
                                           [tps:matches-classname(.,$current-type)]"/>
-    <!--<xsl:variable name="sortedElements" as="xs:string+">
-      <xsl:variable name="elements" select="distinct-values($matches/@data-tapas-gi/data(.))"/>
-      <xsl:for-each select="$elements">
-        <xsl:sort select="." order="ascending"/>
-        <xsl:copy-of select="."/>
-      </xsl:for-each>
-    </xsl:variable>-->
     <xsl:variable name="sortedDepths" as="xs:string*">
       <xsl:variable name="depths" 
         select="distinct-values($matches/@data-tapas-box-depth/data(.))" as="xs:integer*"/>
@@ -2498,7 +2493,6 @@
         <xsl:copy-of select="xs:string(.)"/>
       </xsl:for-each>
     </xsl:variable>
-    
     <xsl:text>container at depth </xsl:text>
     <xsl:value-of select="string-join($sortedDepths,', ')"/>
     <small> from closest ancestor <span class="encoded encoded-gi">text</span> or 

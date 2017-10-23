@@ -225,6 +225,9 @@
 .hieractivity #control-panel #controls-container #color-scheme-legend .legend .legend-desc {
   margin: 0.2em 0;
 }
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend .legend-desc ul {
+  margin: 0;
+}
 .hieractivity #control-panel #controls-container #color-scheme-legend .legend .encoded {
   font-size: 0.9em;
 }
