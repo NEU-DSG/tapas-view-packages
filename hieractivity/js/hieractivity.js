@@ -135,6 +135,7 @@ $(document).ready(function() {
     var shadowMax = 0.6,
         shadowMin = 1e-6,         // 0.000001
         shadowColor = '#9EAEC9',  // @raspberry-dark
+        oldSelection = d3.select('.currently-inspected'),
         e = d3.event,
         el = d3.select(this),
         dataObj = el.node().dataset,
@@ -142,22 +143,10 @@ $(document).ready(function() {
         attrNames = dataObj['tapasAttributes'] === '' ? [] : dataObj['tapasAttributes'].split(' ');
     e.stopPropagation();
     //e.preventDefault();
-    // Animate a box shadow to indicate the element the user selected.
-    el
-      // First, the shadow expands outward to shadowMax.
+    // The previously-selected element's box shadow contracts back in on itself.
+    oldSelection.classed('currently-inspected', false)
       .transition()
         .duration(200)
-        .ease(d3.easeExpOut)
-        .styleTween('box-shadow', function() {
-          return function (t) {
-            return '0 0 ' 
-                  + d3.interpolateNumber(shadowMin, shadowMax)(t) + 'em ' 
-                  + shadowColor;
-          };
-        })
-      // Then, the shadow contracts back in on itself.
-      .transition()
-        .duration(500)
         .ease(d3.easeExpIn)
         .styleTween('box-shadow', function() {
           return function (t) {
@@ -168,6 +157,18 @@ $(document).ready(function() {
             }
             return '0 0 '
                   + d3.interpolateNumber(0.6, 1e-6)(t) + 'em ' 
+                  + shadowColor;
+          };
+        });
+    // Animate a box shadow to indicate the element the user selected.
+    el.classed('currently-inspected', true)
+      .transition()
+        .duration(250)
+        .ease(d3.easeExpOut)
+        .styleTween('box-shadow', function() {
+          return function (t) {
+            return '0 0 ' 
+                  + d3.interpolateNumber(shadowMin, shadowMax)(t) + 'em ' 
                   + shadowColor;
           };
         });
