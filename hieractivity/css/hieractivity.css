@@ -209,7 +209,7 @@
   width: 100%;
 }
 .hieractivity #control-panel #controls-container #color-scheme-legend #legend-constants {
-  border-bottom: medium double #808080;
+  border-top: medium double #808080;
 }
 .hieractivity #control-panel #controls-container #color-scheme-legend .legend {
   padding: 0.2em 0;
@@ -564,36 +564,84 @@
 .hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-dark {
   border-color: #33a02c;
 }
+.hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #33a02c;
+}
 .hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-light {
   border-color: #83cd41;
+}
+.hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #83cd41;
 }
 .hieractivity.hieractivity-familial .family-choicepart.familial-candidate-dark {
   border-color: #ff7f00;
 }
+.hieractivity.hieractivity-familial .family-choicepart.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #ff7f00;
+}
 .hieractivity.hieractivity-familial .family-choicepart.familial-candidate-light {
   border-color: #fdbf6f;
+}
+.hieractivity.hieractivity-familial .family-choicepart.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #fdbf6f;
 }
 .hieractivity.hieractivity-familial .family-measurement.familial-candidate-dark {
   border-color: #a97211;
 }
+.hieractivity.hieractivity-familial .family-measurement.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #a97211;
+}
 .hieractivity.hieractivity-familial .family-measurement.familial-candidate-light {
   border-color: #d6d63a;
+}
+.hieractivity.hieractivity-familial .family-measurement.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #d6d63a;
 }
 .hieractivity.hieractivity-familial .family-namelike.familial-candidate-dark {
   border-color: #6a3d9a;
 }
+.hieractivity.hieractivity-familial .family-namelike.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #6a3d9a;
+}
 .hieractivity.hieractivity-familial .family-namelike.familial-candidate-light {
   border-color: #cab2d6;
+}
+.hieractivity.hieractivity-familial .family-namelike.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #cab2d6;
 }
 .hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-dark {
   border-color: #1f78b4;
 }
+.hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #1f78b4;
+}
 .hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-light {
   border-color: #a6cee3;
+}
+.hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #a6cee3;
 }
 .hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-dark {
   border-color: #ff181b;
 }
+.hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #ff181b;
+}
 .hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-light {
   border-color: #ff96cb;
+}
+.hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #ff96cb;
 }

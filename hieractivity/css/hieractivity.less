@@ -309,7 +309,7 @@
         }
         
         #legend-constants {
-          border-bottom: medium double @gray;
+          border-top: medium double @gray;
         }
         
         .legend {
@@ -724,6 +724,15 @@
   
   &.hieractivity-familial {
     
+    .parenthetical-of-color(@color) {
+      border-color: @color;
+      
+      &.legend-key {
+        border-color: inherit;
+        fill: @color;
+      }
+    }
+    
     #legend-depthwise {
       display: none;
     }
@@ -760,60 +769,60 @@
     .family-bibliographic {
       
       &.familial-candidate-dark {
-        border-color: @green-dark;
+        .parenthetical-of-color(@green-dark);
       }
       &.familial-candidate-light {
-        border-color: @green-light;
+        .parenthetical-of-color(@green-light);
       }
     } // .family-bibliographic
     
     .family-choicepart {
       
       &.familial-candidate-dark {
-        border-color: @orange-dark;
+        .parenthetical-of-color(@orange-dark);
       }
       &.familial-candidate-light {
-        border-color: @orange-light;
+        .parenthetical-of-color(@orange-light);
       }
     } // .family-choicepart
     
     .family-measurement {
       
       &.familial-candidate-dark {
-        border-color: @brown-dark;
+        .parenthetical-of-color(@brown-dark);
       }
       &.familial-candidate-light {
-        border-color: @yellow-light;
+        .parenthetical-of-color(@yellow-light);
       }
     } // .family-measurement
     
     .family-namelike {
       
       &.familial-candidate-dark {
-        border-color: @purple-dark;
+        .parenthetical-of-color(@purple-dark);
       }
       &.familial-candidate-light {
-        border-color: @purple-light;
+        .parenthetical-of-color(@purple-light);
       }
     } // .family-namelike
     
     .family-rhetorical {
       
       &.familial-candidate-dark {
-        border-color: @blue-dark;
+        .parenthetical-of-color(@blue-dark);
       }
       &.familial-candidate-light {
-        border-color: @blue-light;
+        .parenthetical-of-color(@blue-light);
       }
     } // .family-rhetorical
     
     .family-transcriptional {
       
       &.familial-candidate-dark {
-        border-color: @red-dark;
+        .parenthetical-of-color(@red-dark);
       }
       &.familial-candidate-light {
-        border-color: @red-light;
+        .parenthetical-of-color(@red-light);
       }
     } // .family-transcriptional
   } // .hieractivity.hieractivity-familial

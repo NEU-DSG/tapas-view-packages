@@ -447,7 +447,9 @@
   </xd:doc>
   <xsl:template match="/">
     <xsl:variable name="main-transform" as="node()">
-      <xsl:apply-templates/>
+      <xsl:document>
+        <xsl:apply-templates/>
+      </xsl:document>
     </xsl:variable>
     <xsl:variable name="boxed-elements" 
       select="$main-transform//*[@id eq 'tei-container']//*[@data-tapas-box-depth]/@data-tapas-gi"/>
@@ -1927,76 +1929,57 @@
     </xsl:call-template>
   </xsl:template>
   
-  <!--<xd:doc>
-    <xd:desc>Create a legend for the colors assigned to the TEI element, if boxable.</xd:desc>
-    <xd:param name="boxed-elements">A sequence of @data-tapas-gi attributes which occur on 
-      boxable HTML elements.</xd:param>
+  <xd:doc>
+    <xd:desc>Create a legend for the colors which will always be assigned to certain TEI 
+      elements, no matter the color scheme.</xd:desc>
+    <!--<xd:param name="boxed-elements">A sequence of @data-tapas-gi attributes which occur 
+      on boxable HTML elements.</xd:param>
+    <xd:param name="distinct-classes">A sequence of distinct classnames (strings) which 
+      occur on the HTML elements represented by the parents of $boxed-elements.</xd:param>-->
   </xd:doc>
-  <xsl:template match="html:label[html:input[@name eq 'element']]" mode="postprocessing">
-    <xsl:param name="boxed-elements" as="attribute()*" tunnel="yes"/>
-    <xsl:variable name="currentValue" select="html:input/@value"/>
-    <xsl:variable name="distinctBoxed" select="distinct-values($boxed-elements/data(.))"/>
-    <xsl:variable name="width" select="10"/>
-    <xsl:copy>
-      <xsl:copy-of select="@*"/>
-      <xsl:apply-templates mode="#current"/>
-      <!-\- Create an SVG legend for boxable elements. -\->
-      <xsl:if test="$currentValue eq 'p' or $currentValue = $distinctBoxed">
-        <svg xmlns="http://www.w3.org/2000/svg" width="82%" height="12" class="legend">
-          <xsl:choose>
-            <!-\- <p> isn't covered in $distinctBoxed, so it's handled separately. -\->
-            <xsl:when test="$currentValue eq 'p'">
-              <rect width="{$width}" height="{$width}" class="legend-key box-p" 
-                transform="translate(1 1)">
-                <xsl:call-template name="set-legend-tooltip">
-                  <xsl:with-param name="boxed-elements" select="$boxed-elements"/>
-                  <xsl:with-param name="current-gi" select="$currentValue"/>
-                  <xsl:with-param name="current-type" select="'box-p'"/>
-                </xsl:call-template>
+  <xsl:template match="html:div[@id eq 'legend-familial']" mode="postprocessing">
+    <!--<xsl:param name="boxed-elements" as="attribute()*" tunnel="yes"/>
+    <xsl:param name="distinct-classes" as="xs:string+" tunnel="yes"/>-->
+    <xsl:variable name="all-familial"
+      select="//html:div[@id eq 'tei-container']
+              //html:*[@data-tapas-gi][@class[contains(.,'familial-candidate')]]"/>
+    <xsl:variable name="distinct-classes" as="xs:string*">
+      <xsl:variable name="classes" select="$all-familial/@class/tokenize(data(.),'\s+')"/>
+      <xsl:copy-of select="distinct-values($classes)"/>
+    </xsl:variable>
+    <xsl:variable name="relevantClasses"
+      select="$distinct-classes[matches(.,'^family-')]" as="xs:string*"/>
+    <xsl:variable name="rows" as="node()*">
+      <xsl:for-each select="$relevantClasses">
+        <xsl:variable name="thisClass" select="."/>
+        <xsl:call-template name="create-legend-row">
+          <xsl:with-param name="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" 
+              width="{ $legend-icon-width + 2 }" height="{ $legend-icon-width + 2 }">
+              <rect width="{$legend-icon-width div 2}" height="{$legend-icon-width}" 
+                transform="translate(1 1)" 
+                class="legend-key familial-candidate {$thisClass} familial-candidate-dark">
               </rect>
-            </xsl:when>
-            <!-\- Handle all other elements that get boxed in the output. -\->
-            <xsl:when test="$currentValue = $distinctBoxed">
-              <xsl:variable name="distinctTypes" as="xs:string+">
-                <xsl:variable name="classes" 
-                  select="$boxed-elements[. eq $currentValue]/parent::html:*/@class"/>
-                <xsl:variable name="boxTypes" as="xs:string+">
-                  <xsl:for-each select="$classes">
-                    <xsl:variable name="split" select="tokenize(data(.),' ')"/>
-                    <xsl:value-of select="$split[contains(.,'box-')]"/>
-                  </xsl:for-each>
-                </xsl:variable>
-                <xsl:for-each select="distinct-values($boxTypes)">
-                  <xsl:sort data-type="number"
-                    select="if ( . eq 'box-gen0' ) then 99
-                            else if ( contains(., 'box-gen') ) then 
-                              xs:integer(substring-after(.,'box-gen'))
-                            else -1" order="ascending"/>
-                  <xsl:copy/>
-                </xsl:for-each>
-              </xsl:variable>
-              <!-\- For each class of box, add a rectangle to the legend. -\->
-              <xsl:for-each select="$distinctTypes">
-                <xsl:variable name="thisType" select="."/>
-                <xsl:variable name="translateX">
-                  <xsl:variable name="prevBoxes" select="index-of($distinctTypes, $thisType) - 1"/>
-                  <xsl:value-of select="$prevBoxes * $width  + 1"/>
-                </xsl:variable>
-                <rect width="{$width}" height="{$width}" class="legend-key {$thisType}"
-                  transform="translate({$translateX} 1)">
-                  <xsl:call-template name="set-legend-tooltip">
-                    <xsl:with-param name="boxed-elements" select="$boxed-elements"/>
-                    <xsl:with-param name="current-gi" select="$currentValue"/>
-                    <xsl:with-param name="current-type" select="$thisType"/>
-                  </xsl:call-template>
-                </rect>
-              </xsl:for-each>
-            </xsl:when>
-          </xsl:choose>
-        </svg>
-      </xsl:if>
-    </xsl:copy>
-  </xsl:template>-->
+              <rect width="{$legend-icon-width div 2}" height="{$legend-icon-width}" 
+                transform="translate({($legend-icon-width div 2) + 1} 1)" 
+                class="legend-key familial-candidate {$thisClass} familial-candidate-light">
+              </rect>
+            </svg>
+          </xsl:with-param>
+          <xsl:with-param name="desc">
+            <xsl:variable name="classMatches"
+              select="$all-familial[tps:matches-classname(.,$thisClass)]"/>
+            <xsl:call-template name="set-legend-desc-by-identity">
+              <xsl:with-param name="matched-elements" select="$classMatches"/>
+            </xsl:call-template>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:call-template name="create-legend">
+      <xsl:with-param name="rows" select="$rows"/>
+    </xsl:call-template>
+  </xsl:template>
   
   
 <!-- SUPPLEMENTAL TEMPLATES -->
@@ -2075,9 +2058,9 @@
               </fieldset>
             </div>
             <div id="color-scheme-legend" class="control-widget-component">
-              <div id="legend-constants"></div>
               <div id="legend-depthwise"></div>
               <div id="legend-familial"></div>
+              <div id="legend-constants"></div>
             </div>
           </div>
         </div>
