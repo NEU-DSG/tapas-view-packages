@@ -203,9 +203,13 @@
 .hieractivity #control-panel #controls-container #color-scheme-selector-container {
   height: initial;
 }
+.hieractivity #control-panel #controls-container #color-scheme-legend #legend-constants,
 .hieractivity #control-panel #controls-container #color-scheme-legend #legend-depthwise,
 .hieractivity #control-panel #controls-container #color-scheme-legend #legend-familial {
   width: 100%;
+}
+.hieractivity #control-panel #controls-container #color-scheme-legend #legend-constants {
+  border-bottom: medium double #808080;
 }
 .hieractivity #control-panel #controls-container #color-scheme-legend .legend {
   padding: 0.2em 0;
