@@ -2450,11 +2450,13 @@
         <!-- If there is more than one element for this description, create a list. -->
         <xsl:when test="$numDistinct gt 1">
           <ul>
-            <xsl:for-each select="1 to $numDistinct">
-              <xsl:variable name="index" select="."/>
+            <xsl:for-each select="$distinctGIs">
+              <xsl:sort select="."/>
+              <xsl:variable name="gi" select="."/>
+              <xsl:variable name="index" select="index-of($distinctGIs, $gi)"/>
               <li>
                 <span class="encoded encoded-gi">
-                  <xsl:value-of select="$distinctGIs[$index]"/>
+                  <xsl:value-of select="$gi"/>
                 </span>
                 <xsl:if test="$index ne $numDistinct">
                   <xsl:text>, </xsl:text>
@@ -2495,8 +2497,8 @@
     </xsl:variable>
     <xsl:text>container at depth </xsl:text>
     <xsl:value-of select="string-join($sortedDepths,', ')"/>
-    <small> from closest ancestor <span class="encoded encoded-gi">text</span> or 
-      <span class="encoded encoded-gi">floatingText</span></small>
+    <!--<small> from closest ancestor <span class="encoded encoded-gi">text</span> or 
+      <span class="encoded encoded-gi">floatingText</span></small>-->
   </xsl:template>
   
 </xsl:stylesheet>
