@@ -2488,10 +2488,15 @@
         <!-- If there is more than one element for this description, create a list. -->
         <xsl:when test="$numDistinct gt 1">
           <ul>
-            <xsl:for-each select="$distinctGIs">
-              <xsl:sort select="."/>
+            <xsl:variable name="sortedGIs">
+              <xsl:for-each select="$distinctGIs">
+                <xsl:sort select="."/>
+                <xsl:value-of select="."/>
+              </xsl:for-each>
+            </xsl:variable>
+            <xsl:for-each select="$sortedGIs">
               <xsl:variable name="gi" select="."/>
-              <xsl:variable name="index" select="index-of($distinctGIs, $gi)"/>
+              <xsl:variable name="index" select="index-of($sortedGIs, $gi)"/>
               <li>
                 <span class="encoded encoded-gi">
                   <xsl:value-of select="$gi"/>
