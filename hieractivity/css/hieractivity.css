@@ -11,6 +11,7 @@
 }
 /* Hieractivity */
 .hieractivity {
+  height: 100%;
   background-color: #ffffff;
   font-family: 'Times', 'Times New Roman', serif;
   /* Control panel */
@@ -18,6 +19,9 @@
   /* Containers for the <teiHeader> and <text> */
   /* TEI header */
   /* <text>-specific styles */
+}
+.hieractivity .block {
+  display: block;
 }
 .hieractivity .encoded {
   font-family: 'Courier', 'Courier New', monospace;
@@ -72,23 +76,21 @@
   text-decoration: dotted underline;
 }
 .hieractivity #control-panel {
-  border-radius: 0.4em;
   padding: 0.5em;
+  padding-right: 0.25em;
+  height: 100%;
   width: 185px;
   position: fixed;
   z-index: 900;
-  top: 4px;
-  right: 4px;
+  top: 0;
+  right: 0;
   background-color: #555555;
+  overflow: hidden;
   color: black;
+  font-size: 11.5pt;
 }
-.hieractivity #control-panel.ui-draggable:hover {
-  cursor: move;
-  cursor: grab;
-}
-.hieractivity #control-panel.ui-draggable-dragging {
-  cursor: move !important;
-  cursor: grabbing !important;
+.hieractivity #control-panel table {
+  font-size: 11.5pt;
 }
 .hieractivity #control-panel h2,
 .hieractivity #control-panel h3,
@@ -108,7 +110,7 @@
   width: 100%;
   box-shadow: none;
   color: black;
-  font-size: 0.85em;
+  font-size: 0.9em;
 }
 .hieractivity #control-panel .expandable-heading > button[aria-expanded=true] {
   box-shadow: unset;
@@ -129,6 +131,8 @@
 .hieractivity #control-panel #controls-container {
   border: none;
   padding: 0;
+  padding-right: 0.25em;
+  height: 90%;
   overflow: auto;
   cursor: default;
   /* Widget customizations */
@@ -138,7 +142,7 @@
   padding: inherit;
 }
 .hieractivity #control-panel #controls-container .control-widget {
-  margin-top: 0.5em;
+  margin-top: 0.25em;
   border-radius: 0.4em;
   padding-bottom: 0.1em;
   background-color: #8b1122;
@@ -163,8 +167,13 @@
 .hieractivity #control-panel #controls-container fieldset label {
   display: table-row;
 }
+.hieractivity #control-panel #controls-container fieldset label input[type=radio] {
+  margin: 0 0.25em;
+  display: table-cell;
+}
 .hieractivity #control-panel #controls-container fieldset label .label-desc {
   margin: 0 0.35em;
+  display: table-cell;
   font-size: 0.85em;
 }
 .hieractivity #control-panel #controls-container table {
@@ -200,13 +209,12 @@
   text-align: center;
 }
 .hieractivity #control-panel #controls-container #zoom-container .slidebar #zoom-slide {
-  width: 130px;
+  width: 110px;
 }
 .hieractivity #control-panel #controls-container #text-contrasts {
   height: unset;
 }
 .hieractivity #control-panel #controls-container #gi-option-selector .gi-count {
-  margin-top: 0.2em;
   float: right;
 }
 .hieractivity #control-panel #controls-container #color-scheme-selector-container {
@@ -221,7 +229,7 @@
   border-top: medium double #808080;
 }
 .hieractivity #control-panel #controls-container #color-scheme-legend .legend {
-  padding: 0.2em 0;
+  padding: 0.2em 0 0;
   display: block;
 }
 .hieractivity #control-panel #controls-container #color-scheme-legend .legend svg {
@@ -429,9 +437,6 @@
 .hieractivity .box-gen8 {
   background-color: rgba(190, 186, 218, 0.85);
   fill: rgba(190, 186, 218, 0.85);
-}
-.hieractivity .block {
-  display: block;
 }
 .hieractivity .block[data-tapas-gi=pb],
 .hieractivity .block[data-tapas-gi=cb] {
@@ -659,4 +664,15 @@
 .hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-light.legend-key {
   border-color: inherit;
   fill: #ff96cb;
+}
+@media (device-width: 768px) and (device-height: 1024px) {
+  .hieractivity ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+  }
+  .hieractivity ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+  }
 }
