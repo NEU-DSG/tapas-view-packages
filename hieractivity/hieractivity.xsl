@@ -2490,7 +2490,7 @@
         <!-- If there is more than one element for this description, create a list. -->
         <xsl:when test="$numDistinct gt 1">
           <ul>
-            <xsl:variable name="sortedGIs">
+            <xsl:variable name="sortedGIs" as="xs:string+">
               <xsl:for-each select="$distinctGIs">
                 <xsl:sort select="."/>
                 <xsl:value-of select="."/>
