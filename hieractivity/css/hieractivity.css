@@ -66,6 +66,11 @@
 .hieractivity .list-dl dd + dt {
   margin-top: 0.2em;
 }
+.hieractivity a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration: dotted underline;
+}
 .hieractivity #control-panel {
   border-radius: 0.4em;
   padding: 0.5em;
@@ -128,6 +133,10 @@
   cursor: default;
   /* Widget customizations */
 }
+.hieractivity #control-panel #controls-container .expandable {
+  border: none;
+  padding: inherit;
+}
 .hieractivity #control-panel #controls-container .control-widget {
   margin-top: 0.5em;
   border-radius: 0.4em;
@@ -158,6 +167,25 @@
   margin: 0 0.35em;
   font-size: 0.85em;
 }
+.hieractivity #control-panel #controls-container table {
+  margin-bottom: 0.2em;
+}
+.hieractivity #control-panel #controls-container table tbody {
+  border: none;
+}
+.hieractivity #control-panel #controls-container table tr {
+  border-top: thin solid #dddddd;
+}
+.hieractivity #control-panel #controls-container table tr:first-child {
+  border-top: none;
+}
+.hieractivity #control-panel #controls-container table td {
+  padding-left: 0.2em;
+  vertical-align: top;
+}
+.hieractivity #control-panel #controls-container table td:first-child {
+  padding-left: 0;
+}
 .hieractivity #control-panel #controls-container #zoom-container {
   padding: 0.4em;
   height: initial;
@@ -181,12 +209,36 @@
   margin-top: 0.2em;
   float: right;
 }
-.hieractivity #control-panel #controls-container #color-scheme-legend .legend {
-  margin-top: 0.2em;
+.hieractivity #control-panel #controls-container #color-scheme-selector-container {
+  height: initial;
 }
-.hieractivity #control-panel #controls-container #color-scheme-legend .legend .legend-key {
+.hieractivity #control-panel #controls-container #color-scheme-legend #legend-constants,
+.hieractivity #control-panel #controls-container #color-scheme-legend #legend-depthwise,
+.hieractivity #control-panel #controls-container #color-scheme-legend #legend-familial {
+  width: 100%;
+}
+.hieractivity #control-panel #controls-container #color-scheme-legend #legend-constants {
+  border-top: medium double #808080;
+}
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend {
+  padding: 0.2em 0;
+  display: block;
+}
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend svg {
+  margin-top: 0.15em;
+}
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend svg .legend-key {
   stroke-width: 1px;
   stroke: #555555;
+}
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend .legend-desc {
+  margin: 0.2em 0;
+}
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend .legend-desc ul {
+  margin: 0;
+}
+.hieractivity #control-panel #controls-container #color-scheme-legend .legend .encoded {
+  font-size: 0.9em;
 }
 .hieractivity #control-panel #controls-container #gi-properties {
   margin: 0.5em;
@@ -300,7 +352,8 @@
   margin: 0 0 2em;
 }
 .hieractivity [data-tapas-gi].boxed.selected-gi {
-  border-left: 1em solid #8b1122;
+  border-left: 0.5em solid #8b1122;
+  padding-left: 0.35em;
   color: black;
 }
 .hieractivity [data-tapas-gi].boxed.box-tabularasa {
@@ -403,9 +456,16 @@
   padding: 0.15em;
   line-height: 1.4em;
 }
-.hieractivity *[data-tapas-gi].familial-candidate {
-  border: solid rgba(255, 255, 255, 0);
-  border-width: thin medium;
+.hieractivity *[data-tapas-gi]:not(.boxed) {
+  border: 2px rgba(255, 255, 255, 0);
+  border-style: none solid;
+  border-radius: 0.5em;
+}
+.hieractivity *[data-tapas-gi]:not(.boxed):hover {
+  border-width: thin 2px;
+  border-style: none solid;
+  border-radius: 0.5em;
+  border-color: #9eaec9;
 }
 .hieractivity [data-tapas-gi=lb]::before {
   content: '↵';
@@ -478,7 +538,7 @@
   padding: 0.25em;
   display: block;
   overflow: auto;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(200, 200, 200, 0.1);
   white-space: pre;
 }
 .hieractivity.hieractivity-depthwise #legend-familial {
@@ -491,58 +551,112 @@
   margin: 0.5em 0 0;
   background-color: rgba(255, 255, 255, 0.3);
 }
+.hieractivity.hieractivity-familial .boxed-gen.legend-key {
+  fill: rgba(255, 255, 255, 0.3);
+}
 .hieractivity.hieractivity-familial .boxed-gen.box-gen1,
 .hieractivity.hieractivity-familial .boxed-gen.box-gen4,
 .hieractivity.hieractivity-familial .boxed-gen.box-gen7 {
   background-color: #ccebc5;
   fill: #ccebc5;
 }
-.hieractivity.hieractivity-familial .familial-candidate {
-  border-width: thin medium;
+.hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed) {
+  border-width: thin 2px;
   border-style: none solid;
   border-radius: 0.5em;
+  border-color: #9eaec9;
 }
-.hieractivity.hieractivity-familial .familial-candidate:hover {
+.hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed).familial-candidate {
+  border-width: thin medium;
+}
+.hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed).familial-candidate:hover {
   border-style: solid;
   box-shadow: -0.2em -0.15em 0.3em rgba(0, 0, 0, 0.3);
 }
-.hieractivity.hieractivity-familial .familial-candidate.selected-gi {
-  border-radius: 0;
+.hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed).familial-candidate.selected-gi {
   background-color: #8b1122;
 }
 .hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-dark {
   border-color: #33a02c;
 }
+.hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #33a02c;
+}
 .hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-light {
   border-color: #83cd41;
+}
+.hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #83cd41;
 }
 .hieractivity.hieractivity-familial .family-choicepart.familial-candidate-dark {
   border-color: #ff7f00;
 }
+.hieractivity.hieractivity-familial .family-choicepart.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #ff7f00;
+}
 .hieractivity.hieractivity-familial .family-choicepart.familial-candidate-light {
   border-color: #fdbf6f;
+}
+.hieractivity.hieractivity-familial .family-choicepart.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #fdbf6f;
 }
 .hieractivity.hieractivity-familial .family-measurement.familial-candidate-dark {
   border-color: #a97211;
 }
+.hieractivity.hieractivity-familial .family-measurement.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #a97211;
+}
 .hieractivity.hieractivity-familial .family-measurement.familial-candidate-light {
   border-color: #d6d63a;
+}
+.hieractivity.hieractivity-familial .family-measurement.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #d6d63a;
 }
 .hieractivity.hieractivity-familial .family-namelike.familial-candidate-dark {
   border-color: #6a3d9a;
 }
+.hieractivity.hieractivity-familial .family-namelike.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #6a3d9a;
+}
 .hieractivity.hieractivity-familial .family-namelike.familial-candidate-light {
   border-color: #cab2d6;
+}
+.hieractivity.hieractivity-familial .family-namelike.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #cab2d6;
 }
 .hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-dark {
   border-color: #1f78b4;
 }
+.hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #1f78b4;
+}
 .hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-light {
   border-color: #a6cee3;
+}
+.hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #a6cee3;
 }
 .hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-dark {
   border-color: #ff181b;
 }
+.hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #ff181b;
+}
 .hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-light {
   border-color: #ff96cb;
+}
+.hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #ff96cb;
 }

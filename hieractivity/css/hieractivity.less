@@ -11,6 +11,7 @@
 @clear:             rgba(255, 255, 255, 0);
 @cloudy:            rgba(255, 255, 255, 0.3);
 @smokey:            rgba(0, 0, 0, 0.3);
+@shadow-touched:    rgba(200, 200, 200, 0.1);
 @gray-darker:       #202020;
 @gray-dark:         #555555;
 @gray:              #808080;
@@ -123,6 +124,12 @@
     }
   } // dl
   
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration: dotted underline;
+  }
+  
   
   /* Control panel */
 
@@ -203,6 +210,11 @@
         overflow-y: auto;
       }
       
+      .expandable {
+        border: none;
+        padding: inherit;
+      }
+      
       .control-widget {
         margin-top: 0.5em;
         border-radius: 0.4em;
@@ -234,6 +246,32 @@
           }
         } // label
       } // fieldset
+      
+      table {
+        margin-bottom: 0.2em;
+        //border: thin solid @gray-light;
+        
+        tbody {
+          border: none;
+        }
+        
+        tr {
+          border-top: thin solid @gray-light;
+          
+          &:first-child {
+            border-top: none;
+          }
+        } // tr
+        
+        td {
+          padding-left: 0.2em;
+          vertical-align: top;
+          
+          &:first-child {
+            padding-left: 0;
+          }
+        } // td
+      } // table
       
       /* Widget customizations */
       
@@ -269,14 +307,45 @@
         }
       } // #gi-option-selector
       
+      #color-scheme-selector-container {
+        height: initial;
+      }
+      
       #color-scheme-legend {
         
+        #legend-constants,
+        #legend-depthwise,
+        #legend-familial {
+          width: 100%;
+        }
+        
+        #legend-constants {
+          border-top: medium double @gray;
+        }
+        
         .legend {
-          margin-top: 0.2em;
+          padding: 0.2em 0;
+          display: block;
           
-          .legend-key {
-            stroke-width: 1px;
-            stroke: @gray-dark;
+          svg {
+            margin-top: 0.15em;
+            
+            .legend-key {
+              stroke-width: 1px;
+              stroke: @gray-dark;
+            }
+          } // svg
+          
+          .legend-desc {
+            margin: 0.2em 0;
+            
+            ul {
+              margin: 0;
+            }
+          } // .legend-desc
+          
+          .encoded {
+            font-size: 0.9em;
           }
         } // .legend
       } // #color-scheme-legend
@@ -447,7 +516,8 @@
     }
     
     &.selected-gi {
-      border-left: 1em solid @raspberry-darker;
+      border-left: 0.5em solid @raspberry-darker;
+      padding-left: 0.35em;
       color: black;
     }
     
@@ -560,14 +630,26 @@
     }
   }
   
+  .parenthetical() {
+    border-width: thin 2px;
+    border-style: none solid;
+    border-radius: 0.5em;
+    border-color: @slate;
+  }
+  
   *[data-tapas-gi] {
     padding: 0.15em;
     line-height: 1.4em;
     
-    &.familial-candidate {
-      border: solid @clear;
-      border-width: thin medium;
-    }
+    &:not(.boxed) {
+      border: 2px @clear;
+      border-style: none solid;
+      border-radius: 0.5em;
+      
+      &:hover {
+        .parenthetical();
+      }
+    } // .*[data-tapas-gi]:not(boxed)
   } // .*[data-tapas-gi]
   
   [data-tapas-gi=lb] {
@@ -642,9 +724,10 @@
     padding: 0.25em;
     display: block;
     overflow: auto;
-    background-color: @cloudy;
+    background-color: @shadow-touched;
     white-space: pre;
   }
+  
   
   &.hieractivity-depthwise {
     
@@ -653,7 +736,17 @@
     }
   } // .hieractivity.hieractivity-depthwise
   
+  
   &.hieractivity-familial {
+    
+    .parenthetical-of-color(@color) {
+      border-color: @color;
+      
+      &.legend-key {
+        border-color: inherit;
+        fill: @color;
+      }
+    }
     
     #legend-depthwise {
       display: none;
@@ -663,6 +756,10 @@
       margin: 0.5em 0 0;
       background-color: @cloudy;
       
+      &.legend-key {
+        fill: @cloudy;
+      }
+      
       // Every third box refreshes the color scheme by returning to Box Color 1.
       &.box-gen1,
       &.box-gen4,
@@ -671,80 +768,80 @@
       }
     } // .boxed-gen
     
-    .familial-candidate {
-      border-width: thin medium;
-      border-style: none solid;
-      border-radius: 0.5em;
-      //background-color: @clear;
+    [data-tapas-gi]:not(.boxed) {
+      .parenthetical();
       
-      &:hover {
-        border-style: solid;
-        box-shadow: -0.2em -0.15em 0.3em @smokey;
-      }
+      &.familial-candidate {
+        border-width: thin medium;
       
-      &.selected-gi {
-        border-radius: 0;
-        background-color: @raspberry-darker;
-      }
-    } // .familial-candidate
+        &:hover {
+          border-style: solid;
+          box-shadow: -0.2em -0.15em 0.3em @smokey;
+        }
+      
+        &.selected-gi {
+          background-color: @raspberry-darker;
+        }
+      } // .familial-candidate
+    } // [data-tapas-gi]:not(.boxed)
     
     .family-bibliographic {
       
       &.familial-candidate-dark {
-        border-color: @green-dark;
+        .parenthetical-of-color(@green-dark);
       }
       &.familial-candidate-light {
-        border-color: @green-light;
+        .parenthetical-of-color(@green-light);
       }
     } // .family-bibliographic
     
     .family-choicepart {
       
       &.familial-candidate-dark {
-        border-color: @orange-dark;
+        .parenthetical-of-color(@orange-dark);
       }
       &.familial-candidate-light {
-        border-color: @orange-light;
+        .parenthetical-of-color(@orange-light);
       }
     } // .family-choicepart
     
     .family-measurement {
       
       &.familial-candidate-dark {
-        border-color: @brown-dark;
+        .parenthetical-of-color(@brown-dark);
       }
       &.familial-candidate-light {
-        border-color: @yellow-light;
+        .parenthetical-of-color(@yellow-light);
       }
     } // .family-measurement
     
     .family-namelike {
       
       &.familial-candidate-dark {
-        border-color: @purple-dark;
+        .parenthetical-of-color(@purple-dark);
       }
       &.familial-candidate-light {
-        border-color: @purple-light;
+        .parenthetical-of-color(@purple-light);
       }
     } // .family-namelike
     
     .family-rhetorical {
       
       &.familial-candidate-dark {
-        border-color: @blue-dark;
+        .parenthetical-of-color(@blue-dark);
       }
       &.familial-candidate-light {
-        border-color: @blue-light;
+        .parenthetical-of-color(@blue-light);
       }
     } // .family-rhetorical
     
     .family-transcriptional {
       
       &.familial-candidate-dark {
-        border-color: @red-dark;
+        .parenthetical-of-color(@red-dark);
       }
       &.familial-candidate-light {
-        border-color: @red-light;
+        .parenthetical-of-color(@red-light);
       }
     } // .family-transcriptional
   } // .hieractivity.hieractivity-familial
