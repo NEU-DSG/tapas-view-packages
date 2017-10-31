@@ -151,10 +151,10 @@
     background-color: @gray-dark;
     overflow: hidden;
     color: black;
-    font-size: 11.5pt;
+    font-size: 0.95em;
     
     table {
-      font-size: 11.5pt;
+      font-size: 1em;
     }
     
     h2, h3, h4 {
@@ -170,14 +170,14 @@
         border: none;
         border-top: thin solid @raspberry-darker;
         border-radius: 0;
-        padding: 0.1em;//0.25em;
+        padding: 0.25em 0.1em 0.1em;
         background-color: #FFF8F3;
         opacity: 1;
         width: 100%;
         box-shadow: none;
         color: black;
         //font-family: "Trebuchet MS", Helvetica, sans-serif;
-        font-size: 0.9em;
+        font-size: 0.95em;
         
         &[aria-expanded=true] {
           box-shadow: unset;
@@ -234,28 +234,32 @@
         
         .control-widget-component {
           .component-inner();
-          padding: 0.25em;
+          padding: 0.15em;
           display: block;
         }
       } // .control-widget
       
       fieldset {
         border: thin solid @gray-light;
-        padding: 0.15em 0;
+        padding: 0.15em 0.1em;
         text-align: left;
         
         label {
           display: table-row;
           
           input[type=radio] {
-            margin: 0 0.25em;
+            margin: 0.2em 0.25em;
             display: table-cell;
           }
           
           .label-desc {
-            margin: 0 0.35em;
+            padding-left: 0.2em;
             display: table-cell;
-            font-size: 0.85em;
+            font-size: 0.95em;
+            
+            .encoded {
+              font-size: 0.93em;
+            }
           }
         } // label
       } // fieldset

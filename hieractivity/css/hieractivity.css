@@ -87,10 +87,10 @@
   background-color: #555555;
   overflow: hidden;
   color: black;
-  font-size: 11.5pt;
+  font-size: 0.95em;
 }
 .hieractivity #control-panel table {
-  font-size: 11.5pt;
+  font-size: 1em;
 }
 .hieractivity #control-panel h2,
 .hieractivity #control-panel h3,
@@ -104,13 +104,13 @@
   border: none;
   border-top: thin solid #8b1122;
   border-radius: 0;
-  padding: 0.1em;
+  padding: 0.25em 0.1em 0.1em;
   background-color: #FFF8F3;
   opacity: 1;
   width: 100%;
   box-shadow: none;
   color: black;
-  font-size: 0.9em;
+  font-size: 0.95em;
 }
 .hieractivity #control-panel .expandable-heading > button[aria-expanded=true] {
   box-shadow: unset;
@@ -125,7 +125,7 @@
   border: medium solid #8b1122;
   border-radius: 0.4em;
   padding: 0.25em 0.5em;
-  box-shadow: 0.1em 0.1em 0.2em #000000;
+  box-shadow: 0.1em 0.1em 0.2em black;
   font-variant: inherit;
 }
 .hieractivity #control-panel #controls-container {
@@ -156,25 +156,28 @@
   height: 100px;
   background-color: white;
   overflow-y: auto;
-  padding: 0.25em;
+  padding: 0.15em;
   display: block;
 }
 .hieractivity #control-panel #controls-container fieldset {
   border: thin solid #dddddd;
-  padding: 0.15em 0;
+  padding: 0.15em 0.1em;
   text-align: left;
 }
 .hieractivity #control-panel #controls-container fieldset label {
   display: table-row;
 }
 .hieractivity #control-panel #controls-container fieldset label input[type=radio] {
-  margin: 0 0.25em;
+  margin: 0.2em 0.25em;
   display: table-cell;
 }
 .hieractivity #control-panel #controls-container fieldset label .label-desc {
-  margin: 0 0.35em;
+  padding-left: 0.2em;
   display: table-cell;
-  font-size: 0.85em;
+  font-size: 0.95em;
+}
+.hieractivity #control-panel #controls-container fieldset label .label-desc .encoded {
+  font-size: 0.93em;
 }
 .hieractivity #control-panel #controls-container table {
   margin-bottom: 0.2em;
