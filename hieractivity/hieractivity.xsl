@@ -2013,6 +2013,51 @@
     <div id="control-panel" lang="en">
       <h2 class="expandable-heading">Controls</h2>
       <div id="controls-container" class="expandable">
+        <!-- Legend and color view selector -->
+        <div class="control-widget">
+          <h3 class="expandable-heading">Legend</h3>
+          <div id="color-scheme" class="expandable">
+            <div id="color-scheme-selector-container" class="control-widget-component">
+              <fieldset id="color-scheme-selector" disabled="disabled">
+                <legend>Color scheme</legend>
+                <xsl:call-template name="make-radio-button">
+                  <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
+                  <xsl:with-param name="value" select="'depthwise'"/>
+                  <xsl:with-param name="label" select="'Depth-wise hierarchy'"/>
+                  <xsl:with-param name="is-checked" select="true()"/>
+                </xsl:call-template>
+                <xsl:call-template name="make-radio-button">
+                  <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
+                  <xsl:with-param name="value" select="'familial'"/>
+                  <xsl:with-param name="label" select="'Familial elements'"/>
+                  <xsl:with-param name="is-checked" select="false()"/>
+                </xsl:call-template>
+              </fieldset>
+            </div>
+            <div id="color-scheme-legend" class="control-widget-component">
+              <div id="legend-depthwise"></div>
+              <div id="legend-familial"></div>
+              <div id="legend-constants"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Clicked element properties -->
+        <div class="control-widget">
+          <h3 class="expandable-heading">Clicked element</h3>
+          <dl id="gi-properties" class="control-widget-component expandable"></dl>
+        </div>
+        <!-- Elements by frequency -->
+        <div class="control-widget">
+          <h3 class="expandable-heading">Elements by frequency</h3>
+          <div id="gi-frequencies" class="control-widget-component expandable">
+            <fieldset id="gi-option-selector" disabled="disabled">
+              <legend>Mark</legend>
+              <xsl:call-template name="gi-counting-robot">
+                <xsl:with-param name="start" select="text"/>
+              </xsl:call-template>
+            </fieldset>
+          </div>
+        </div>
         <!-- Zoom -->
         <div class="control-widget">
           <h3 class="expandable-heading">Zoom</h3>
@@ -2048,50 +2093,6 @@
               </xsl:for-each>
             </fieldset>
           </div>
-        </div>
-        <!-- Elements by frequency -->
-        <div class="control-widget">
-          <h3 class="expandable-heading">Elements by frequency</h3>
-          <div id="gi-frequencies" class="control-widget-component expandable">
-            <fieldset id="gi-option-selector" disabled="disabled">
-              <legend>Mark</legend>
-              <xsl:call-template name="gi-counting-robot">
-                <xsl:with-param name="start" select="text"/>
-              </xsl:call-template>
-            </fieldset>
-          </div>
-        </div>
-        <div class="control-widget">
-          <h3 class="expandable-heading">Legend</h3>
-          <div id="color-scheme" class="expandable">
-            <div id="color-scheme-selector-container" class="control-widget-component">
-              <fieldset id="color-scheme-selector" disabled="disabled">
-                <legend>Color scheme</legend>
-                <xsl:call-template name="make-radio-button">
-                  <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
-                  <xsl:with-param name="value" select="'depthwise'"/>
-                  <xsl:with-param name="label" select="'Depth-wise hierarchy'"/>
-                  <xsl:with-param name="is-checked" select="true()"/>
-                </xsl:call-template>
-                <xsl:call-template name="make-radio-button">
-                  <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
-                  <xsl:with-param name="value" select="'familial'"/>
-                  <xsl:with-param name="label" select="'Familial elements'"/>
-                  <xsl:with-param name="is-checked" select="false()"/>
-                </xsl:call-template>
-              </fieldset>
-            </div>
-            <div id="color-scheme-legend" class="control-widget-component">
-              <div id="legend-depthwise"></div>
-              <div id="legend-familial"></div>
-              <div id="legend-constants"></div>
-            </div>
-          </div>
-        </div>
-        <!-- Clicked element properties -->
-        <div class="control-widget">
-          <h3 class="expandable-heading">Clicked element</h3>
-          <dl id="gi-properties" class="control-widget-component expandable"></dl>
         </div>
       </div>
     </div>
