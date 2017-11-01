@@ -695,33 +695,31 @@
     text-align: center;
   }
   
-  table, .table {
-    width: 100%;
-    display: table;
-    color: inherit;
+  [data-tapas-gi=table] {
     
-    > span[data-tapas-gi=head] {
-      display: table-caption;
-    }
+    table, .table {
+      border-collapse: collapse;
+      width: 100%;
+      display: table;
+      color: inherit;
     
-    span[data-tapas-gi=row] {
-      display: table-row;
-      
-      span[data-tapas-gi=cell], .colspanned {
-        border-top: thin solid @gray-dark;
-        padding: 0.15em 0.2em;
-        display: table-cell;
+      > [data-tapas-gi=head] {
+        display: table-caption;
       }
+    
+      [data-tapas-gi=row] {
+        display: table-row;
+        border: thin @slate;
       
-      &:first-child {
-        
-        span[data-tapas-gi=cell], .colspanned {
-          border-top: none;
+        [data-tapas-gi=cell], .colspanned {
+          border: thin solid @slate;
+          border-radius: 0;
+          padding: 0.15em 0.2em;
           display: table-cell;
         }
-      }
-    }
-  } // span[data-tapas-gi=table]
+      } // [data-tapas-gi=row]
+    } // table, .table
+  } // [data-tapas-gi=table]
   
   [data-tapas-gi=titlePage] {
     .centered();
