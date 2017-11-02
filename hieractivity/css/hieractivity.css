@@ -119,10 +119,12 @@
   margin-left: 0;
   margin-right: 0;
   font-variant: small-caps;
+  text-transform: lowercase;
   text-align: center;
 }
 .hieractivity #control-panel h2.expandable-heading > button {
-  border: medium solid #8b1122;
+  border: thin solid #8b1122;
+  border-bottom-width: medium;
   border-radius: 0.4em;
   padding: 0.25em 0.5em;
   box-shadow: 0.1em 0.1em 0.2em black;
@@ -142,7 +144,7 @@
   padding: inherit;
 }
 .hieractivity #control-panel #controls-container .control-widget {
-  margin-top: 0.25em;
+  margin-top: 0.35em;
   border-radius: 0.4em;
   padding-bottom: 0.1em;
   background-color: #8b1122;

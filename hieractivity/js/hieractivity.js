@@ -34,6 +34,7 @@ $(document).ready(function() {
   });
   
   // Set up variables with relevant d3 selections.
+  var controlPanel = d3.select('#control-panel');
   var teiContainer = d3.select('#tei-container');
   var scrollElement = d3.select('#tei-resources-box');
   var scrollElementNode = scrollElement.node();
@@ -119,7 +120,7 @@ $(document).ready(function() {
       heightData.push($(obj).height());
     });
     // Assign the height of the scrollElement back to it.
-    scrollElement.style('height', $(scrollElementNode).height()+'px');
+    assignHeightBack(scrollElementNode);
     // Assign the other boxes' heights back to them.
     containers
         .data(heightData)
@@ -127,6 +128,11 @@ $(document).ready(function() {
           //console.log(d);
           return d + 'px';
         });
+  }
+  
+  // Assign the height of an element back to it.
+  function assignHeightBack(element) {
+    d3.select(element).style('height', $(element).height()+'px');
   }
   
   // Get the data attributes associated with an HTML element, and display information
