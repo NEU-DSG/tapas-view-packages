@@ -78,7 +78,6 @@
 .hieractivity #control-panel {
   padding: 0.3em;
   padding-right: 0.25em;
-  height: 100%;
   max-height: 100%;
   width: 185px;
   position: fixed;
@@ -125,7 +124,7 @@
 .hieractivity #control-panel h2.expandable-heading > button {
   border-radius: 0;
   padding: 0.25em 0.5em;
-  box-shadow: 0.1em 0.1em 0.2em #000000;
+  box-shadow: 0.1em 0.1em 0.2em black;
   font-variant: inherit;
 }
 .hieractivity #control-panel #controls-container {

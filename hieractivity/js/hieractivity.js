@@ -48,9 +48,9 @@ $(document).ready(function() {
   var teiElements = d3.selectAll('[data-tapas-gi]')
       .on('click', inspectElement);
   var containers = teiElements.filter('.boxed');
-  // Assign box heights now, and when the window is resized.
-  assignHeights();
-  $(window).resize(assignHeights);
+  // Assign box (and control panel) heights now, and when the window is resized.
+  assignAllHeights();
+  $(window).resize(assignAllHeights);
   
   // When the radio buttons' input value changes, mark HTML elements that correspond
     // to the chosen TEI element.
@@ -86,10 +86,10 @@ $(document).ready(function() {
   /* Use the color scheme selected by the user. */
   $('input[name=color-scheme]').change(function(e) {
     e.preventDefault();
-    unassignHeights();
+    //unassignTextHeights();
     var divContainer = $('div.hieractivity');
     divContainer.toggleClass('hieractivity-depthwise hieractivity-familial');
-    assignHeights();
+    assignTextHeights();
   });
   
   // Enable remaining form controls.
@@ -105,6 +105,9 @@ $(document).ready(function() {
     cancel: 'h2, #controls-container',
     containment: 'window'
   });
+  /*controlPanel.selectAll('.expandable-heading button').on('click', function(e) {
+    assignHeightBack(controlPanel.node());
+  });*/
 
 
 /*  FUNCTIONS  */
@@ -112,8 +115,9 @@ $(document).ready(function() {
   // Use the browser to calculate the heights of boxed elements, and then assign 
     // those heights back to them. d3.js requires some absolute height value in order 
     // to zoom on HTML elements.
-  function assignHeights() {
-    unassignHeights();
+  function assignTextHeights() {
+    // Remove previous height calculation.
+    containers.style('height', null);
     // Get the calculated heights of each div with a @data-tapas-gi on it.
     var heightData = [];
     $('[data-tapas-gi].boxed').toArray().forEach(function(obj) {
@@ -130,9 +134,18 @@ $(document).ready(function() {
         });
   }
   
+  function assignAllHeights() {
+    assignHeightBack(controlPanel.node());
+    assignTextHeights();
+  }
+  
   // Assign the height of an element back to it.
   function assignHeightBack(element) {
-    d3.select(element).style('height', $(element).height()+'px');
+    var el = d3.select(element);
+    // Remove previous height calculation.
+    el.style('height', null);
+    // Assign the browser-calculated height to the element.
+    el.style('height', $(element).height()+'px');
   }
   
   // Get the data attributes associated with an HTML element, and display information
@@ -227,13 +240,6 @@ $(document).ready(function() {
         "translate("+ xNew + "px,"+ yNew +"px)"
       + "scale(" + scale + ")");
     workedHeight();
-  }
-  
-  // Unassign any height data.
-  function unassignHeights() {
-    scrollElement.style('height', null);
-    containers
-        .style('height', null);
   }
   
   // Change the height of the teiContainer to match the working (scaled) height of
