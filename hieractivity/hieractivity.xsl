@@ -286,7 +286,7 @@
     <xsl:param name="element" as="element()"/>
     <xsl:value-of select="exists($element[self::abbr or self::am or self::choice or self::corr  
               or self::ex or self::expan or self::orig or self::reg 
-              or self::seg[parent::choice] or self::sic or self::supplied or self::unclear 
+              or self::seg[parent::choice] or self::sic 
               ])"/>
   </xsl:function>
   
@@ -404,7 +404,7 @@
     <xsl:param name="element" as="element()"/>
     <xsl:value-of select="exists($element[self::add or self::damage or self::del or self::gap 
               or self::handShift or self::redo or self::restore or self::retrace or self::secl 
-              or self::subst or self::supplied or self::surplus or self::undo
+              or self::subst or self::supplied or self::surplus or self::unclear or self::undo
               ])"/>
   </xsl:function>
   
