@@ -76,6 +76,7 @@
   text-decoration: dotted underline;
 }
 .hieractivity #control-panel {
+  border-radius: 2px;
   padding: 0.3em;
   padding-right: 0.25em;
   max-height: 100%;
@@ -87,9 +88,15 @@
   background-color: #555555;
   overflow: hidden;
   color: black;
+  font-size: 0.85em;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.hieractivity #control-panel legend {
+  color: #555555;
   font-size: 0.95em;
 }
 .hieractivity #control-panel table {
+  width: 100%;
   font-size: 1em;
 }
 .hieractivity #control-panel h2,
@@ -99,33 +106,41 @@
   padding: 0;
   display: block;
   color: white;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  line-height: 1.1;
 }
 .hieractivity #control-panel .expandable-heading > button {
   border: none;
   border-radius: 0.2em;
-  padding: 0.25em 0.1em 0.1em;
-  background-color: #EFF2F5;
+  padding: 0.25em 0.5em 0.2em 1.5em;
+  background-color: #EBEBEB;
   opacity: 1;
   width: 100%;
   box-shadow: none;
-  color: black;
+  color: #202020;
   font-size: 0.95em;
 }
 .hieractivity #control-panel .expandable-heading > button[aria-expanded=true] {
   box-shadow: unset;
 }
+.hieractivity #control-panel .expandable-heading > button::before {
+  margin-left: -1em;
+}
 .hieractivity #control-panel h2.expandable-heading {
   margin-left: 0;
   margin-right: 0;
-  font-variant: small-caps;
-  text-transform: lowercase;
   text-align: center;
 }
 .hieractivity #control-panel h2.expandable-heading > button {
-  border-radius: 0;
+  border-radius: 1px;
   padding: 0.25em 0.5em;
   box-shadow: 0.1em 0.1em 0.2em black;
+  font-size: 0.9em;
   font-variant: inherit;
+}
+.hieractivity #control-panel h2.expandable-heading > button::before {
+  margin-left: 0;
 }
 .hieractivity #control-panel #controls-container {
   border: none;
@@ -144,7 +159,7 @@
   margin-top: 0.35em;
   border-radius: 0.4em;
   padding-bottom: 0.1em;
-  background-color: #808080;
+  background-color: #f9f9f9;
 }
 .hieractivity #control-panel #controls-container .control-widget:first-child {
   margin-top: 0;
@@ -173,7 +188,6 @@
 .hieractivity #control-panel #controls-container fieldset label .label-desc {
   padding-left: 0.2em;
   display: table-cell;
-  font-size: 0.95em;
 }
 .hieractivity #control-panel #controls-container fieldset label .label-desc .encoded {
   font-size: 0.93em;

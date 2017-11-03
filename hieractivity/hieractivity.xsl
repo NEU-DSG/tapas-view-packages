@@ -2043,7 +2043,7 @@
         </div>
         <!-- Clicked element properties -->
         <div class="control-widget">
-          <h3 class="expandable-heading">Clicked element</h3>
+          <h3 class="expandable-heading">Selected element</h3>
           <dl id="gi-properties" class="control-widget-component expandable"></dl>
         </div>
         <!-- Elements by frequency -->
