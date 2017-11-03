@@ -85,7 +85,7 @@
   z-index: 900;
   top: 0;
   right: 0;
-  background-color: #555555;
+  background-color: rgba(0, 0, 0, 0.5);
   overflow: hidden;
   color: black;
   font-size: 0.85em;
