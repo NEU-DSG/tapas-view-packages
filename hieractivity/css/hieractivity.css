@@ -1,0 +1,454 @@
+/*  MISC. VARIABLES  */
+/*  COLORS  */
+/*  FONTS  */
+/*  RULES  */
+/* Tooltips */
+.hieractive-tooltip {
+  border: thin solid #9eaec9;
+  padding: 1em;
+  max-width: 180px;
+  font-family: 'Times', 'Times New Roman', serif;
+}
+/* Hieractivity */
+.hieractivity {
+  background-color: #ffffff;
+  font-family: 'Times', 'Times New Roman', serif;
+  /* Control panel */
+  /* Expandable headings */
+  /* Containers for the <teiHeader> and <text> */
+  /* TEI header */
+  /* <text>-specific styles */
+}
+.hieractivity .encoded {
+  font-family: 'Courier', 'Courier New', monospace;
+}
+.hieractivity .encoded.encoded-att {
+  font-size: 0.95em;
+}
+.hieractivity h1,
+.hieractivity h2,
+.hieractivity h3,
+.hieractivity h4,
+.hieractivity h5,
+.hieractivity h6 {
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  font-weight: normal;
+  color: black;
+}
+.hieractivity dl dd {
+  margin-left: 1.2em;
+}
+.hieractivity dl dd + dt {
+  margin-top: 0.35em;
+}
+.hieractivity #control-panel {
+  border-radius: 0.4em;
+  padding: 0.5em;
+  width: 185px;
+  position: fixed;
+  z-index: 900;
+  top: 4px;
+  right: 4px;
+  background-color: #555555;
+  color: black;
+}
+.hieractivity #control-panel.ui-draggable:hover {
+  cursor: move;
+  cursor: grab;
+}
+.hieractivity #control-panel.ui-draggable-dragging {
+  cursor: move !important;
+  cursor: grabbing !important;
+}
+.hieractivity #control-panel h2,
+.hieractivity #control-panel h3,
+.hieractivity #control-panel h4 {
+  margin: 0 0 0.25em;
+  padding: 0;
+  display: block;
+  color: white;
+}
+.hieractivity #control-panel .expandable-heading > button {
+  border: none;
+  border-top: thin solid #8b1122;
+  border-radius: 0;
+  padding: 0.25em;
+  background-color: #FFF8F3;
+  opacity: 1;
+  width: 100%;
+  box-shadow: none;
+  color: black;
+}
+.hieractivity #control-panel .expandable-heading > button[aria-expanded=true] {
+  box-shadow: unset;
+}
+.hieractivity #control-panel h2.expandable-heading {
+  margin-left: 0;
+  margin-right: 0;
+  font-variant: small-caps;
+  text-align: center;
+}
+.hieractivity #control-panel h2.expandable-heading > button {
+  border: medium solid #8b1122;
+  border-radius: 0.4em;
+  padding: 0.25em 0.5em;
+  box-shadow: 0.1em 0.1em 0.2em black;
+  font-variant: inherit;
+}
+.hieractivity #control-panel #controls-container {
+  border: none;
+  padding: 0;
+  overflow: auto;
+  cursor: default;
+  /* Widget customizations */
+}
+.hieractivity #control-panel #controls-container .control-widget {
+  margin-top: 0.5em;
+  border-radius: 0.4em;
+  padding-bottom: 0.1em;
+  background-color: #8b1122;
+}
+.hieractivity #control-panel #controls-container .control-widget:first-child {
+  margin-top: 0;
+}
+.hieractivity #control-panel #controls-container .control-widget .control-widget-component {
+  margin: 0.5em;
+  border: thin solid #dddddd;
+  height: 120px;
+  background-color: white;
+  overflow-y: auto;
+  padding: 0.25em;
+  display: block;
+}
+.hieractivity #control-panel #controls-container fieldset {
+  border: thin solid #dddddd;
+  padding: 0.15em 0;
+  text-align: left;
+}
+.hieractivity #control-panel #controls-container fieldset label {
+  display: table-row;
+}
+.hieractivity #control-panel #controls-container fieldset label .label-desc {
+  margin: 0 0.35em;
+  font-size: 0.85em;
+}
+.hieractivity #control-panel #controls-container #zoom-container {
+  padding: 0.4em;
+  display: flex;
+  height: initial;
+}
+.hieractivity #control-panel #controls-container #zoom-container #zoom-slide {
+  width: 140px;
+}
+.hieractivity #control-panel #controls-container #text-contrasts {
+  height: unset;
+}
+.hieractivity #control-panel #controls-container #gi-option-selector .gi-count {
+  margin-top: 0.2em;
+  float: right;
+}
+.hieractivity #control-panel #controls-container #gi-option-selector .legend {
+  float: right;
+}
+.hieractivity #control-panel #controls-container #gi-option-selector .legend .legend-key {
+  stroke-width: 1px;
+  stroke: #555555;
+}
+.hieractivity #control-panel #controls-container #gi-properties {
+  margin: 0.5em;
+  border: thin solid #dddddd;
+  height: 120px;
+  background-color: white;
+  overflow-y: auto;
+  text-align: left;
+}
+.hieractivity .expandable-heading {
+  margin: 0.5em 0 0;
+  padding: 0.2em;
+}
+.hieractivity .expandable-heading > button {
+  border: thin solid #555555;
+  border-radius: 0.4em;
+  padding-top: 0.2em;
+  box-shadow: 0.1em 0.1em 0.2em #555555;
+  background-color: #ffffff;
+  opacity: 0.9;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: unset;
+  text-align: left;
+}
+.hieractivity .expandable-heading > button[aria-expanded=true] {
+  box-shadow: unset;
+}
+.hieractivity .expandable-heading > button[aria-expanded=true]::before {
+  content: '▾';
+  margin: 0 0.4em;
+  display: inline-block;
+  line-height: 1.2em;
+  margin-left: 0.2em;
+  float: left;
+}
+.hieractivity .expandable-heading > button[aria-expanded=false]::before {
+  content: '▸';
+  margin: 0 0.4em;
+  display: inline-block;
+  line-height: 1.2em;
+  margin-left: 0.2em;
+  float: left;
+}
+.hieractivity .expandable-heading > button > code {
+  padding-top: 0.15em;
+  display: inline-block;
+}
+.hieractivity .expandable {
+  border: thin solid #808080;
+  border-top: none;
+  padding: 0.15em 0.75em 0.4em;
+}
+.hieractivity .expandable-heading + .expandable[aria-hidden=true] {
+  display: none !important;
+}
+.hieractivity #tei-header,
+.hieractivity #tei-container {
+  width: 90%;
+}
+.hieractivity #tei-header {
+  margin: 1em 0;
+  color: black;
+}
+.hieractivity #tei-header .expandable-heading {
+  border: thin solid #808080;
+}
+.hieractivity #tei-header .expandable-heading > button[aria-expanded=false]::before {
+  content: '▸';
+  margin: 0 0.4em;
+  display: inline-block;
+  line-height: 1.2em;
+  margin-left: 0;
+}
+.hieractivity #tei-header .expandable-heading > button[aria-expanded=true]::before {
+  content: '▾';
+  margin: 0 0.4em;
+  display: inline-block;
+  line-height: 1.2em;
+  margin-left: 0;
+}
+.hieractivity #tei-container {
+  overflow: hidden;
+  color: black;
+  /*&.text-contrast-high {
+    }*/
+}
+.hieractivity #tei-container.text-contrast-none {
+  color: rgba(255, 255, 255, 0);
+}
+.hieractivity #tei-container.text-contrast-low {
+  color: #808080;
+}
+.hieractivity #tei-container.text-contrast-mid {
+  color: #555555;
+}
+.hieractivity #tei-container #tei-resources-box {
+  display: block;
+}
+.hieractivity .selected-gi {
+  background-color: #8b1122;
+  color: #f0f0f0;
+}
+.hieractivity [data-tapas-gi].boxed {
+  margin: 2em 1em;
+  padding: 0.85em;
+  display: block;
+}
+.hieractivity [data-tapas-gi].boxed[data-tapas-gi=text] {
+  margin: 0 0 2em;
+}
+.hieractivity [data-tapas-gi].boxed.selected-gi {
+  border-left: 1em solid #8b1122;
+  color: black;
+}
+.hieractivity [data-tapas-gi].boxed.box-tabularasa {
+  box-shadow: 0em 0em 1em #555555;
+}
+.hieractivity [data-tapas-gi].boxed.box-tabularasa > .box-outermost {
+  margin: 1.2em 1em;
+}
+.hieractivity [data-tapas-gi].boxed.box-p {
+  margin: 1em 0;
+  padding: 0.5em 0.5em 0.5em 1em;
+  display: block;
+}
+.hieractivity [data-tapas-gi].boxed.box-p.selected-gi {
+  border-left: 0.5em solid #8b1122;
+  padding-left: 0.5em;
+  color: #808080;
+}
+.hieractivity .box-tabularasa {
+  background-color: #ffffff;
+  fill: #ffffff;
+}
+.hieractivity .box-outermost {
+  background-color: rgba(50, 116, 184, 0.8);
+  fill: rgba(50, 116, 184, 0.8);
+}
+.hieractivity .box-outer {
+  background-color: rgba(124, 186, 176, 0.8);
+  fill: rgba(124, 186, 176, 0.8);
+}
+.hieractivity .box-p {
+  background-color: #ffffee;
+  fill: #ffffee;
+}
+.hieractivity .box-gen0 {
+  background-color: black;
+  fill: black;
+}
+.hieractivity .box-gen1 {
+  background-color: rgba(255, 255, 179, 0.8);
+  fill: rgba(255, 255, 179, 0.8);
+}
+.hieractivity .box-gen2 {
+  background-color: rgba(190, 186, 218, 0.8);
+  fill: rgba(190, 186, 218, 0.8);
+}
+.hieractivity .box-gen3 {
+  background-color: rgba(251, 128, 114, 0.8);
+  fill: rgba(251, 128, 114, 0.8);
+}
+.hieractivity .box-gen4 {
+  background-color: rgba(253, 180, 98, 0.8);
+  fill: rgba(253, 180, 98, 0.8);
+}
+.hieractivity .box-gen5 {
+  background-color: rgba(128, 177, 211, 0.8);
+  fill: rgba(128, 177, 211, 0.8);
+}
+.hieractivity .box-gen6 {
+  background-color: rgba(179, 222, 105, 0.8);
+  fill: rgba(179, 222, 105, 0.8);
+}
+.hieractivity .box-gen7 {
+  background-color: rgba(252, 205, 229, 0.8);
+  fill: rgba(252, 205, 229, 0.8);
+}
+.hieractivity .box-gen8 {
+  background-color: rgba(188, 128, 189, 0.8);
+  fill: rgba(188, 128, 189, 0.8);
+}
+.hieractivity .box-gen9 {
+  background-color: rgba(204, 235, 197, 0.8);
+  fill: rgba(204, 235, 197, 0.8);
+}
+.hieractivity .box-gen10 {
+  background-color: rgba(255, 237, 111, 0.8);
+  fill: rgba(255, 237, 111, 0.8);
+}
+.hieractivity .block {
+  display: block;
+}
+.hieractivity .block[data-tapas-gi=pb],
+.hieractivity .block[data-tapas-gi=cb] {
+  margin: 0.4em 0;
+}
+.hieractivity .block-after::after {
+  content: '';
+  display: block;
+}
+.hieractivity .label-explanatory {
+  opacity: 0.95;
+  font-size: 0.85em;
+}
+.hieractivity .label-explanatory code {
+  font-size: 1em;
+}
+.hieractivity .label-explanatory [data-tapas-gi] {
+  opacity: unset;
+  font-size: initial;
+}
+.hieractivity *[data-tapas-gi] {
+  padding: 0 0.1em;
+}
+.hieractivity [data-tapas-gi=lb]::before {
+  content: '↵';
+  opacity: 0.6;
+  font-size: 0.7em;
+}
+.hieractivity .media-obj {
+  display: inline-block;
+}
+.hieractivity .media-obj .thumbnail {
+  max-height: 50px;
+  opacity: 0.95;
+  font-size: 0.85em;
+}
+.hieractivity .media-obj .thumbnail code {
+  font-size: 1em;
+}
+.hieractivity .media-obj .thumbnail [data-tapas-gi] {
+  opacity: unset;
+  font-size: initial;
+}
+.hieractivity [data-tapas-gi=figure] > .media-obj {
+  margin: 0.2em;
+  padding: 0.2em 0;
+  display: block;
+  text-align: center;
+}
+.hieractivity ul,
+.hieractivity .list-ul,
+.hieractivity ol,
+.hieractivity .list-ol {
+  margin: 0.8em 0;
+  padding-left: 1em;
+  display: block;
+}
+.hieractivity ul li,
+.hieractivity .list-ul li,
+.hieractivity ol li,
+.hieractivity .list-ol li,
+.hieractivity ul .list-item-li,
+.hieractivity .list-ul .list-item-li,
+.hieractivity ol .list-item-li,
+.hieractivity .list-ol .list-item-li {
+  display: list-item;
+}
+.hieractivity table,
+.hieractivity .table {
+  width: 100%;
+  display: table;
+  color: inherit;
+}
+.hieractivity table > span[data-tapas-gi=head],
+.hieractivity .table > span[data-tapas-gi=head] {
+  display: table-caption;
+}
+.hieractivity table span[data-tapas-gi=row],
+.hieractivity .table span[data-tapas-gi=row] {
+  display: table-row;
+}
+.hieractivity table span[data-tapas-gi=row] span[data-tapas-gi=cell],
+.hieractivity .table span[data-tapas-gi=row] span[data-tapas-gi=cell],
+.hieractivity table span[data-tapas-gi=row] .colspanned,
+.hieractivity .table span[data-tapas-gi=row] .colspanned {
+  border-top: thin solid #555555;
+  padding: 0.15em 0.2em;
+  display: table-cell;
+}
+.hieractivity table span[data-tapas-gi=row]:first-child span[data-tapas-gi=cell],
+.hieractivity .table span[data-tapas-gi=row]:first-child span[data-tapas-gi=cell],
+.hieractivity table span[data-tapas-gi=row]:first-child .colspanned,
+.hieractivity .table span[data-tapas-gi=row]:first-child .colspanned {
+  border-top: none;
+  display: table-cell;
+}
+.hieractivity [data-tapas-gi=titlePage] {
+  text-align: center;
+}
+.hieractivity [data-tapas-gi=head],
+.hieractivity [data-tapas-gi=docTitle],
+.hieractivity [data-tapas-gi=titlePart] {
+  text-align: center;
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  font-weight: normal;
+}

@@ -1,0 +1,602 @@
+// hieractivity.less
+
+/*  MISC. VARIABLES  */
+
+@box-opacity: 0.8;
+@button-shadow: 0.1em 0.1em 0.2em;
+
+/*  COLORS  */
+
+@cream:             #FFE;
+@gray-darker:       #202020;
+@gray-dark:         #555555;
+@gray:              #808080;
+@gray-light:        #DDDDDD;
+@gray-lighter:      #F0F0F0;
+@raspberry-darker:  #8B1122;
+@raspberry-dark:    #B02B3D;
+@raspberry:         #CC4D5E;
+@raspberry-light:   #EF7C8C;
+@raspberry-lighter: #F7AAB5;
+@slate:             #9EAEC9;
+@white:             #FFFFFF;
+// Color palette used for boxes at varying depths. This is a slightly modified
+  // version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
+  // http://colorbrewer2.org/?type=qualitative&scheme=Set3&n=12
+@box01:         rgba(50,  116, 184, @box-opacity);
+@box02:         rgba(124, 186, 176, @box-opacity);
+@box03:         rgba(255, 255, 179, @box-opacity);
+@box04:         rgba(190, 186, 218, @box-opacity);
+@box05:         rgba(251, 128, 114, @box-opacity);
+@box06:         rgba(253, 180, 98,  @box-opacity);
+@box07:         rgba(128, 177, 211, @box-opacity);
+@box08:         rgba(179, 222, 105, @box-opacity);
+@box09:         rgba(252, 205, 229, @box-opacity);
+@box10:         rgba(188, 128, 189, @box-opacity);
+@box11:         rgba(204, 235, 197, @box-opacity);
+@box12:         rgba(255, 237, 111, @box-opacity);
+
+/*  FONTS  */
+
+@code: 'Courier', 'Courier New', monospace;
+@heading: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+@plain: 'Times', 'Times New Roman', serif;
+
+
+/*  RULES  */
+
+/* Tooltips */
+
+.hieractive-tooltip {
+  border: thin solid @slate;
+  padding: 1em;
+  max-width: 180px;
+  font-family: @plain;
+}
+
+/* Hieractivity */
+
+.hieractivity {
+  background-color: @white;
+  font-family: @plain;
+  
+  .encoded {
+    font-family: @code;
+    
+    &.encoded-att {
+      font-size: 0.95em;
+    }
+  } // .encoded
+  
+  .html-heading() {
+    font-family: @heading;
+    font-weight: normal;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    .html-heading();
+    color: black;
+  }
+  
+  dl {
+    
+    dd {
+      margin-left: 1.2em;
+    }
+    
+    dd + dt {
+      margin-top: 0.35em;
+    }
+  } // dl
+  
+  
+  /* Control panel */
+
+  #control-panel {
+    border-radius: 0.4em;
+    padding: 0.5em;
+    width: 185px;
+    position: fixed;
+    z-index: 900;
+    top: 4px;
+    right: 4px;
+    background-color: @gray-dark;
+    color: black;
+    
+    &.ui-draggable:hover {
+      cursor: move;
+      cursor: grab;
+    }
+    
+    &.ui-draggable-dragging {
+      cursor: move !important;
+      cursor: grabbing !important;
+    }
+    
+    h2, h3, h4 {
+      margin: 0 0 0.25em;
+      padding: 0;
+      display: block;
+      color: white;
+    }
+    
+    .expandable-heading {
+      
+      > button {
+        border: none;
+        border-top: thin solid @raspberry-darker;
+        border-radius: 0;
+        padding: 0.25em;
+        background-color: #FFF8F3;
+        opacity: 1;
+        width: 100%;
+        box-shadow: none;
+        color: black;
+        
+        &[aria-expanded=true] {
+          box-shadow: unset;
+        }
+      } // .expandable-heading > button
+    } // .expandable-heading
+    
+    h2.expandable-heading {
+      margin-left: 0;
+      margin-right: 0;
+      font-variant: small-caps;
+      text-align: center;
+      
+      > button {
+        border: medium solid @raspberry-darker;
+        border-radius: 0.4em;
+        padding: 0.25em 0.5em;
+        box-shadow: @button-shadow black;
+        font-variant: inherit;
+      } // h2 > button
+    } // h2
+    
+    #controls-container {
+      border: none;
+      padding: 0;
+      overflow: auto;
+      cursor: default;
+      
+      .component-inner() {
+        margin: 0.5em;
+        border: thin solid @gray-light;
+        height: 120px;
+        background-color: white;
+        overflow-y: auto;
+      }
+      
+      .control-widget {
+        margin-top: 0.5em;
+        border-radius: 0.4em;
+        padding-bottom: 0.1em;
+        background-color: @raspberry-darker;
+        
+        &:first-child {
+          margin-top: 0;
+        }
+        
+        .control-widget-component {
+          .component-inner();
+          padding: 0.25em;
+          display: block;
+        }
+      } // .control-widget
+      
+      fieldset {
+        border: thin solid @gray-light;
+        padding: 0.15em 0;
+        text-align: left;
+        
+        label {
+          display: table-row;
+          
+          .label-desc {
+            margin: 0 0.35em;
+            font-size: 0.85em;
+          }
+        } // label
+      } // fieldset
+      
+      /* Widget customizations */
+      
+      #zoom-container {
+        padding: 0.4em;
+        display: flex;
+        height: initial;
+      
+        #zoom-slide {
+          width: 140px;
+        }
+      } // #zoom-container
+      
+      #text-contrasts {
+        height: unset;
+      }
+      
+      #gi-option-selector {
+        
+        .gi-count {
+          margin-top: 0.2em;
+          float: right;
+        }
+        
+        .legend {
+          float: right;
+          
+          .legend-key {
+            stroke-width: 1px;
+            stroke: @gray-dark;
+          }
+        } // .legend
+      } // #gi-option-selector
+      
+      #gi-properties {
+        .component-inner();
+        //padding: 0 1em;
+        text-align: left;
+      } // #gi-properties
+      
+    } // #controls-container
+  } // .control-panel
+  
+  
+  /* Expandable headings */
+  
+  .expandable-caret() {
+    margin: 0 0.4em;
+    display: inline-block;
+    line-height: 1.2em;
+  }
+  
+  .expandable-caret-down() {
+    content: '▾';
+    .expandable-caret();
+  }
+  
+  .expandable-caret-right() {
+    content: '▸';
+    .expandable-caret();
+  }
+  
+  .expandable-heading {
+    margin: 0.5em 0 0;
+    padding: 0.2em;
+    
+    > button {
+      border: thin solid @gray-dark;
+      border-radius: 0.4em;
+      padding-top: 0.2em;
+      box-shadow: @button-shadow @gray-dark;
+      background-color: @white;
+      opacity: 0.9;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: unset;
+      text-align: left;
+      
+      &[aria-expanded=true] {
+        box-shadow: unset;
+        
+        &::before {
+          .expandable-caret-down();
+          margin-left: 0.2em;
+          float: left;
+        }
+      }
+      
+      &[aria-expanded=false]::before {
+        .expandable-caret-right();
+        margin-left: 0.2em;
+        float: left;
+      }
+      
+      > code {
+        padding-top: 0.15em;
+        display: inline-block;
+      }
+    } // .expandable-heading > button
+  } // .expandable-heading
+  
+  .expandable {
+    border: thin solid @gray;
+    border-top: none;
+    padding: 0.15em 0.75em 0.4em;
+  } // .expandable
+  
+  .expandable-heading + .expandable[aria-hidden=true] {
+    display: none !important;
+  }
+  
+  
+  /* Containers for the <teiHeader> and <text> */
+  
+  #tei-header,
+  #tei-container {
+    width: 90%;
+  }
+  
+  /* TEI header */
+  
+  #tei-header {
+    margin: 1em 0;
+    color: black;
+    
+    .expandable-heading {
+      border: thin solid @gray;
+      
+      > button {
+        
+        &[aria-expanded=false]::before {
+          .expandable-caret-right();
+          margin-left: 0;
+        }
+      
+        &[aria-expanded=true] {
+        
+          &::before {
+            .expandable-caret-down();
+            margin-left: 0;
+          }
+        }
+      } // .expandable-heading > button
+    } // .expandable-heading
+  } // #tei-header
+  
+  
+  /* <text>-specific styles */
+  
+  #tei-container {
+    overflow: hidden;
+    color: black; // This would be '.text-contrast-high'.
+    
+    &.text-contrast-none {
+      color: rgba(255, 255, 255, 0);
+    }
+    
+    &.text-contrast-low {
+      color: @gray;
+    }
+    
+    &.text-contrast-mid {
+      color: @gray-dark;
+    }
+    
+    /*&.text-contrast-high {
+    }*/
+    
+    #tei-resources-box {
+      display: block;
+    }
+  } // #tei-container
+  
+  .centered() {
+    text-align: center;
+  }
+  
+  // This style is applied to any element that is selected by the user.
+  .selected-gi {
+    background-color: @raspberry-darker;
+    color: @gray-lighter;
+  }
+  
+  // Use the same class for HTML 'boxes' and SVG rectangles.
+  .box-of-color(@color) {
+    background-color: @color;
+    fill: @color;
+  }
+  
+  [data-tapas-gi].boxed {
+    margin: 2em 1em;
+    padding: 0.85em;
+    display: block;
+    
+    &[data-tapas-gi=text] {
+      margin: 0 0 2em;
+    }
+    
+    &.selected-gi {
+      border-left: 1em solid @raspberry-darker;
+      color: black;
+    }
+    
+    &.box-tabularasa {
+      box-shadow: 0em 0em 1em @gray-dark;
+      
+      > .box-outermost {
+        margin: 1.2em 1em;
+      }
+    } // [data-tapas-gi].boxed.box-tabularasa
+    
+    &.box-p {
+      margin: 1em 0;
+      padding: 0.5em 0.5em 0.5em 1em;
+      display: block;
+    
+      &.selected-gi {
+        border-left: 0.5em solid @raspberry-darker;
+        padding-left: 0.5em;
+        color: @gray;
+      }
+    } // [data-tapas-gi].boxed.box-p
+  } // [data-tapas-gi].boxed
+  
+  .box-tabularasa {
+    .box-of-color(@white);
+  }
+  
+  .box-outermost {
+    .box-of-color(@box01);
+  }
+  
+  .box-outer {
+    .box-of-color(@box02);
+  }
+  
+  .box-p {
+    .box-of-color(@cream);
+  }
+  
+  // .box-gen0 should only occur when a box-like element (not <body>, <front> or
+    // <back>) occurs as a child of <text>. Which is invalid TEI, so using a sharp
+    // black instead of our usual palette should be fine.
+  .box-gen0 {
+    .box-of-color(black);
+  }
+  
+  .box-gen1 {
+    .box-of-color(@box03);
+  }
+  
+  .box-gen2 {
+    .box-of-color(@box04);
+  }
+  
+  .box-gen3 {
+    .box-of-color(@box05);
+  }
+  
+  .box-gen4 {
+    .box-of-color(@box06);
+  }
+  
+  .box-gen5 {
+    .box-of-color(@box07);
+  }
+  
+  .box-gen6 {
+    .box-of-color(@box08);
+  }
+  
+  .box-gen7 {
+    .box-of-color(@box09);
+  }
+  
+  .box-gen8 {
+    .box-of-color(@box10);
+  }
+  
+  .box-gen9 {
+    .box-of-color(@box11);
+  }
+  
+  .box-gen10 {
+    .box-of-color(@box12);
+  }
+  
+  .block {
+    display: block;
+    
+    &[data-tapas-gi=pb],
+    &[data-tapas-gi=cb] {
+      margin: 0.4em 0;
+    }
+  }
+  
+  .block-after::after {
+    content: '';
+    display: block;
+  }
+  
+  .label-explanatory {
+    opacity: 0.95;
+    font-size: 0.85em;
+    
+    code {
+      font-size: 1em;
+    }
+    
+    [data-tapas-gi] {
+      opacity: unset;
+      font-size: initial;
+    }
+  }
+  
+  *[data-tapas-gi] {
+    padding: 0 0.1em;
+  }
+  
+  [data-tapas-gi=lb] {
+    
+    &::before {
+      content: '↵';
+      opacity: 0.6;
+      font-size: 0.7em;
+    }
+  } // [data-tapas-gi=lb]
+  
+  .media-obj {
+    display: inline-block;
+    
+    .thumbnail {
+      max-height: 50px;
+      // Use the .label-explanatory rules for text, because if the image doesn't
+        // show, the alt text will.
+      .label-explanatory();
+    }
+  } // .media-obj
+  
+  [data-tapas-gi=figure] > .media-obj {
+    margin: 0.2em;
+    padding: 0.2em 0;
+    display: block;
+    text-align: center;
+  }
+  
+  ul, .list-ul,
+  ol, .list-ol {
+    margin: 0.8em 0;
+    padding-left: 1em;
+    display: block;
+    
+    li, .list-item-li {
+      display: list-item;
+    }
+  } // ul, .list-type-ul, ol, .list-type-ol
+  
+  dl, .list-dl {
+    
+  }
+  
+  table, .table {
+    width: 100%;
+    display: table;
+    color: inherit;
+    
+    > span[data-tapas-gi=head] {
+      display: table-caption;
+    }
+    
+    span[data-tapas-gi=row] {
+      display: table-row;
+      
+      span[data-tapas-gi=cell], .colspanned {
+        border-top: thin solid @gray-dark;
+        padding: 0.15em 0.2em;
+        display: table-cell;
+      }
+      
+      &:first-child {
+        
+        span[data-tapas-gi=cell], .colspanned {
+          border-top: none;
+          display: table-cell;
+        }
+      }
+    }
+  } // span[data-tapas-gi=table]
+  
+  [data-tapas-gi=titlePage] {
+    .centered();
+  }
+  
+  [data-tapas-gi=head],
+  [data-tapas-gi=docTitle],
+  [data-tapas-gi=titlePart] {
+    .centered();
+    .html-heading();
+  }
+
+} // .hieractivity
