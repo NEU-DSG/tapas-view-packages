@@ -56,19 +56,35 @@ $(document).ready(function() {
     // to the chosen TEI element.
   $('input[name=element]').change(function(e) {
     e.preventDefault();
-    // Remove the previous selection.
-    d3.selectAll('.selected-gi[data-tapas-gi]').classed('selected-gi', false);
-    // Select the new element type.
-    var checked = $('input[name=element]:checked');
-    checked.each(function() {
-      var gi = $( this ).val();
+    var inputEl = $(e.target),
+        gi = inputEl.val(),
+        isChecked = inputEl.prop('checked');
+    // When the option chosen is "defaults only", de-select all elements.
+    if ( gi === 'none' ) {
+      d3.selectAll('.selected-gi[data-tapas-gi]').classed('selected-gi', false);
+      // If using checkboxes for the other values, clear them.
+    // When the option has been unchecked, de-select elements of that type. (This 
+      // will only fire on checkboxes, not radio buttons.)
+    } else if ( !isChecked ) {
+      d3.selectAll('.selected-gi[data-tapas-gi='+ gi +']').classed('selected-gi', false);
+    // When the option has been checked, select all elements of that type, and 
+      // scroll to the first occurrence.
+    } else {
+      // If using radio buttons, remove the previous selection.
+      d3.selectAll('.selected-gi[data-tapas-gi]').classed('selected-gi', false);
       d3.selectAll('[data-tapas-gi='+ gi +']').classed('selected-gi', true);
-    });
-    // Get the first newly-selected element and scroll to it.
-    /*var instance1 = d3.select('.selected-gi[data-tapas-gi]').node();
-    if ( instance1 !== null && instance1 !== undefined ) {
-      instance1.scrollIntoView();
-    }*/
+      var instance1 = d3.select('.selected-gi[data-tapas-gi='+ gi +']').node();
+      if ( instance1 !== null && instance1 !== undefined ) {
+        $.scrollTo( $(instance1), {
+          axis: 'y',            // Only animate the y axis (vertical scroll).
+          duration: 300,        // Duration of animation.
+          interrupt: true,      // Cancel the animation if the user scrolls.
+          offset: { top: -30 }  // Create a 30px buffer above the target.
+        } );
+      } else {
+        console.log("Could not scroll to first-occurring element of type "+gi);
+      }
+    }
   });
   
   /* Use the text-to-background visibility setting selected by the user. */
