@@ -1,3 +1,6 @@
 [submodule "tapas-generic"]
 	path = tapas-generic
 	url = https://github.com/NEU-DSG/tapas-generic.git
+[submodule "common/jquery.scrollTo"]
+	path = common/jquery.scrollTo
+	url = https://github.com/flesler/jquery.scrollTo.git
