@@ -3,10 +3,8 @@
 	      xmlns:tapas="http://www.wheatoncollege.edu/TAPAS/1.0"
 	      dynamic="0" scope="file" version="0.0.1" xml:id="validate_tei_all">
   <!-- Initially written 2017-11-02 by Syd -->
-  <!-- Note: although intended to run RNG and Schematron, at the moment -->
-  <!-- only uses RNG. -->
   <human_name>Valid TEI?</human_name>
-  <description>Test the input TEI file against tei_all (both RELAXNG
+  <description>Test the input TEI file against tei_all (both RELAX NG
   and Schematron)</description>
   <file_types>
     <file_type>tei</file_type>
@@ -15,9 +13,11 @@
   <css_files/>
   <js_files/>
   <parameters/>
-  <run type="xproc" pgm="xproc_return_RELAXNG_errors.xpl">
-    <step qname="tapas:relaxng-errors">
+  <run type="xproc" pgm="validate.xpl">
+    <step qname="tapas:validity-report">
       <port primary="true" put="in">source</port>
+      <port primary="false" put="in">grammar</port>
+      <port primary="false" put="in">rules</port>
       <port primary="true" put="out">result</port>
     </step>
   </run>
