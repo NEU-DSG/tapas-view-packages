@@ -6,13 +6,19 @@
   xpath-default-namespace="http://www.w3.org/ns/xproc-step"
   xmlns="http://www.w3.org/1999/xhtml"
   exclude-result-prefixes="#all"
-  version="3.0">
+  version="2.0">
 
   <!-- Read in a document of error messages, write out readable HTML thereof -->
+  <!-- Input: 
+  element tapas:errors { RNG?, SCH }
+  RNG = element c:errors { c:error+ }
+  SCH = element svrl:schematron-output { [SVRL] }
+-->
   
   <xsl:param name="fullHTML" select="'false'"/> <!-- set to 'true' to get browsable output for debugging -->
   <xsl:param name="css" select="'styles.css'"/>
   <xsl:variable name="root" select="/" as="node()"/>
+  <xsl:variable name="apos" select='"&apos;"'/>
   
   <xsl:output method="xhtml"/>
 
@@ -38,8 +44,10 @@
   <xsl:template name="htmlHead">
     <head>
       <title>TAPAS TEI error msgs</title>
-      <meta charset="UTF-8"></meta>
-      <link rel="stylesheet" type="text/css" href="{$css}"></link>
+      <meta charset="UTF-8"/>
+      <meta name="created-by" content="process_messages.xslt"/>
+      <meta name="creation-timestamp" content="{current-dateTime()}"/>
+      <link rel="stylesheet" type="text/css" href="{$css}"/>
     </head>
   </xsl:template>
   
@@ -85,7 +93,22 @@
   </xsl:template>
 
   <xsl:template match="svrl:*">
-    <p>Schematron warning temporarily ignored here.</p>
+    <p>
+      <xsl:variable name="loc" select="../@location">
+<!--   this commented bit does not work yet ===============
+        <xsl:variable name="ns_predicate" select="concat('\[namespace-uri\(\)=',$apos,'http://www.tei-c.org/ns/1.0',$apos,'\]')"/>
+        <xsl:message>DEBUG: |<xsl:value-of select="$ns_predicate"/>|</xsl:message>
+        <xsl:variable name="loc-sans-ns" select="replace( normalize-space(../@location),$ns_predicate,'')"/>
+        <xsl:variable name="loc-sans-useless-ns-prefix" select="replace( $loc-sans-ns,'*:','')"/>
+        <xsl:value-of select="replace( $loc-sans-useless-ns-prefix, '(\c)\[1\]','$1')"/>
+        THis commented bit does not work yet =============
+-->      </xsl:variable>
+      <span class="context"><xsl:value-of select="../preceding-sibling::svrl:fired-rule[1]/@context"/></span>
+      <span class="test"><xsl:value-of select="../@test"/></span>
+      <a class="loc" title="{$loc}">(show XPath)</a>
+      <br/>
+      <span class="msg"><xsl:value-of select="normalize-space(.)"/></span>
+    </p>
   </xsl:template>
   
 </xsl:stylesheet>
