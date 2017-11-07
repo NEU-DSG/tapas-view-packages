@@ -94,15 +94,12 @@
 
   <xsl:template match="svrl:*">
     <p>
-      <xsl:variable name="loc" select="../@location">
-<!--   this commented bit does not work yet ===============
+      <xsl:variable name="loc">
         <xsl:variable name="ns_predicate" select="concat('\[namespace-uri\(\)=',$apos,'http://www.tei-c.org/ns/1.0',$apos,'\]')"/>
-        <xsl:message>DEBUG: |<xsl:value-of select="$ns_predicate"/>|</xsl:message>
         <xsl:variable name="loc-sans-ns" select="replace( normalize-space(../@location),$ns_predicate,'')"/>
-        <xsl:variable name="loc-sans-useless-ns-prefix" select="replace( $loc-sans-ns,'*:','')"/>
+        <xsl:variable name="loc-sans-useless-ns-prefix" select="replace( $loc-sans-ns,'\*:','')"/>
         <xsl:value-of select="replace( $loc-sans-useless-ns-prefix, '(\c)\[1\]','$1')"/>
-        THis commented bit does not work yet =============
--->      </xsl:variable>
+      </xsl:variable>
       <span class="context"><xsl:value-of select="../preceding-sibling::svrl:fired-rule[1]/@context"/></span>
       <span class="test"><xsl:value-of select="../@test"/></span>
       <a class="loc" title="{$loc}">(show XPath)</a>
