@@ -142,29 +142,29 @@
 .hieractivity #control-panel h2.expandable-heading > button::before {
   margin-left: 0;
 }
-.hieractivity #control-panel #controls-container {
+.hieractivity #control-panel #controls-viewport {
   border: none;
   padding: 0 0.4em 0.2em;
   padding-right: 0.25em;
-  height: 92%;
+  max-height: 92%;
   overflow: auto;
   cursor: default;
   /* Widget customizations */
 }
-.hieractivity #control-panel #controls-container .expandable {
+.hieractivity #control-panel #controls-viewport .expandable {
   border: none;
   padding: unset;
 }
-.hieractivity #control-panel #controls-container .control-widget {
+.hieractivity #control-panel #controls-viewport .control-widget {
   margin-top: 0.35em;
   border-radius: 0.4em;
   padding-bottom: 0.1em;
   background-color: #f9f9f9;
 }
-.hieractivity #control-panel #controls-container .control-widget:first-child {
+.hieractivity #control-panel #controls-viewport .control-widget:first-child {
   margin-top: 0;
 }
-.hieractivity #control-panel #controls-container .control-widget .control-widget-component {
+.hieractivity #control-panel #controls-viewport .control-widget .control-widget-component {
   margin: 0.25em;
   border: thin solid #dddddd;
   height: 100px;
@@ -173,98 +173,98 @@
   padding: 0.15em;
   display: block;
 }
-.hieractivity #control-panel #controls-container fieldset {
+.hieractivity #control-panel #controls-viewport fieldset {
   border: thin solid #dddddd;
   padding: 0.15em 0.1em;
   text-align: left;
 }
-.hieractivity #control-panel #controls-container fieldset label {
+.hieractivity #control-panel #controls-viewport fieldset label {
   display: table-row;
 }
-.hieractivity #control-panel #controls-container fieldset label input[type=radio] {
+.hieractivity #control-panel #controls-viewport fieldset label input[type=radio] {
   margin: 0.2em 0.25em;
   display: table-cell;
 }
-.hieractivity #control-panel #controls-container fieldset label .label-desc {
+.hieractivity #control-panel #controls-viewport fieldset label .label-desc {
   padding-left: 0.2em;
   display: table-cell;
 }
-.hieractivity #control-panel #controls-container fieldset label .label-desc .encoded {
+.hieractivity #control-panel #controls-viewport fieldset label .label-desc .encoded {
   font-size: 0.93em;
 }
-.hieractivity #control-panel #controls-container table {
+.hieractivity #control-panel #controls-viewport table {
   margin-bottom: 0.2em;
 }
-.hieractivity #control-panel #controls-container table tbody {
+.hieractivity #control-panel #controls-viewport table tbody {
   border: none;
 }
-.hieractivity #control-panel #controls-container table tr {
+.hieractivity #control-panel #controls-viewport table tr {
   border-top: thin solid #dddddd;
 }
-.hieractivity #control-panel #controls-container table tr:first-child {
+.hieractivity #control-panel #controls-viewport table tr:first-child {
   border-top: none;
 }
-.hieractivity #control-panel #controls-container table td {
+.hieractivity #control-panel #controls-viewport table td {
   padding-left: 0.2em;
   vertical-align: top;
 }
-.hieractivity #control-panel #controls-container table td:first-child {
+.hieractivity #control-panel #controls-viewport table td:first-child {
   padding-left: 0;
 }
-.hieractivity #control-panel #controls-container #zoom-container {
+.hieractivity #control-panel #controls-viewport #zoom-container {
   padding: 0.4em;
   height: initial;
 }
-.hieractivity #control-panel #controls-container #zoom-container .slidebar {
+.hieractivity #control-panel #controls-viewport #zoom-container .slidebar {
   display: table-row;
 }
-.hieractivity #control-panel #controls-container #zoom-container .slidebar > * {
+.hieractivity #control-panel #controls-viewport #zoom-container .slidebar > * {
   display: table-cell;
   min-width: 10px;
   vertical-align: middle;
   text-align: center;
 }
-.hieractivity #control-panel #controls-container #zoom-container .slidebar #zoom-slide {
+.hieractivity #control-panel #controls-viewport #zoom-container .slidebar #zoom-slide {
   width: 110px;
 }
-.hieractivity #control-panel #controls-container #text-contrasts {
+.hieractivity #control-panel #controls-viewport #text-contrasts {
   height: unset;
 }
-.hieractivity #control-panel #controls-container #gi-option-selector .gi-count {
+.hieractivity #control-panel #controls-viewport #gi-option-selector .gi-count {
   float: right;
 }
-.hieractivity #control-panel #controls-container #color-scheme-selector-container {
+.hieractivity #control-panel #controls-viewport #color-scheme-selector-container {
   height: initial;
 }
-.hieractivity #control-panel #controls-container #color-scheme-legend #legend-constants,
-.hieractivity #control-panel #controls-container #color-scheme-legend #legend-depthwise,
-.hieractivity #control-panel #controls-container #color-scheme-legend #legend-familial {
+.hieractivity #control-panel #controls-viewport #color-scheme-legend #legend-constants,
+.hieractivity #control-panel #controls-viewport #color-scheme-legend #legend-depthwise,
+.hieractivity #control-panel #controls-viewport #color-scheme-legend #legend-familial {
   width: 100%;
 }
-.hieractivity #control-panel #controls-container #color-scheme-legend #legend-constants {
+.hieractivity #control-panel #controls-viewport #color-scheme-legend #legend-constants {
   border-top: medium double #808080;
 }
-.hieractivity #control-panel #controls-container #color-scheme-legend .legend {
+.hieractivity #control-panel #controls-viewport #color-scheme-legend .legend {
   padding: 0.2em 0 0;
   display: block;
 }
-.hieractivity #control-panel #controls-container #color-scheme-legend .legend svg {
+.hieractivity #control-panel #controls-viewport #color-scheme-legend .legend svg {
   margin-top: 0.15em;
 }
-.hieractivity #control-panel #controls-container #color-scheme-legend .legend svg .legend-key {
+.hieractivity #control-panel #controls-viewport #color-scheme-legend .legend svg .legend-key {
   stroke-width: 1px;
   stroke: #555555;
 }
-.hieractivity #control-panel #controls-container #color-scheme-legend .legend .legend-desc {
+.hieractivity #control-panel #controls-viewport #color-scheme-legend .legend .legend-desc {
   margin: 0.2em 0;
 }
-.hieractivity #control-panel #controls-container #color-scheme-legend .legend .legend-desc ul {
+.hieractivity #control-panel #controls-viewport #color-scheme-legend .legend .legend-desc ul {
   margin: 0;
 }
-.hieractivity #control-panel #controls-container #color-scheme-legend .legend .encoded {
+.hieractivity #control-panel #controls-viewport #color-scheme-legend .legend .encoded {
   font-size: 0.9em;
 }
-.hieractivity #control-panel #controls-container #gi-properties {
+.hieractivity #control-panel #controls-viewport #gi-properties {
   margin: 0.25em;
   border: thin solid #dddddd;
   height: 100px;

@@ -2013,86 +2013,88 @@
   <xsl:template name="control-box">
     <div id="control-panel" lang="en">
       <h2 class="expandable-heading">Controls</h2>
-      <div id="controls-container" class="expandable">
-        <!-- Legend and color view selector -->
-        <div class="control-widget">
-          <h3 class="expandable-heading">Legend</h3>
-          <div id="color-scheme" class="expandable">
-            <div id="color-scheme-selector-container" class="control-widget-component">
-              <fieldset id="color-scheme-selector" disabled="disabled">
-                <legend>Color scheme</legend>
-                <xsl:call-template name="make-radio-button">
-                  <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
-                  <xsl:with-param name="value" select="'depthwise'"/>
-                  <xsl:with-param name="label" select="'Depth-wise hierarchy'"/>
-                  <xsl:with-param name="is-checked" select="true()"/>
-                </xsl:call-template>
-                <xsl:call-template name="make-radio-button">
-                  <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
-                  <xsl:with-param name="value" select="'familial'"/>
-                  <xsl:with-param name="label" select="'Familial elements'"/>
-                  <xsl:with-param name="is-checked" select="false()"/>
+      <div id="controls-viewport" class="expandable">
+        <div id="controls-container">
+          <!-- Legend and color view selector -->
+          <div class="control-widget">
+            <h3 class="expandable-heading">Legend</h3>
+            <div id="color-scheme" class="expandable">
+              <div id="color-scheme-selector-container" class="control-widget-component">
+                <fieldset id="color-scheme-selector" disabled="disabled">
+                  <legend>Color scheme</legend>
+                  <xsl:call-template name="make-radio-button">
+                    <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
+                    <xsl:with-param name="value" select="'depthwise'"/>
+                    <xsl:with-param name="label" select="'Depth-wise hierarchy'"/>
+                    <xsl:with-param name="is-checked" select="true()"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="make-radio-button">
+                    <xsl:with-param name="fieldset-name" select="'color-scheme'"/>
+                    <xsl:with-param name="value" select="'familial'"/>
+                    <xsl:with-param name="label" select="'Familial elements'"/>
+                    <xsl:with-param name="is-checked" select="false()"/>
+                  </xsl:call-template>
+                </fieldset>
+              </div>
+              <div id="color-scheme-legend" class="control-widget-component">
+                <div id="legend-depthwise"></div>
+                <div id="legend-familial"></div>
+                <div id="legend-constants"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Clicked element properties -->
+          <div class="control-widget">
+            <h3 class="expandable-heading">Selected element</h3>
+            <dl id="gi-properties" class="control-widget-component expandable"></dl>
+          </div>
+          <!-- Elements by frequency -->
+          <div class="control-widget">
+            <h3 class="expandable-heading">Elements by frequency</h3>
+            <div id="gi-frequencies" class="control-widget-component expandable">
+              <fieldset id="gi-option-selector" disabled="disabled">
+                <legend>Mark</legend>
+                <xsl:call-template name="gi-counting-robot">
+                  <xsl:with-param name="start" select="text"/>
                 </xsl:call-template>
               </fieldset>
             </div>
-            <div id="color-scheme-legend" class="control-widget-component">
-              <div id="legend-depthwise"></div>
-              <div id="legend-familial"></div>
-              <div id="legend-constants"></div>
+          </div>
+          <!-- Zoom -->
+          <div class="control-widget">
+            <h3 class="expandable-heading">Zoom</h3>
+            <div id="zoom-container" class="control-widget-component expandable expandable-hidden">
+              <div class="slidebar">
+                <span class="slidebar-label">-</span>
+                <input id="zoom-slide" title="Zoom control slider"
+                  type="range" min="20" max="100" step="1" value="100" 
+                  disabled="disabled"/>
+                <span class="slidebar-label">+</span>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Clicked element properties -->
-        <div class="control-widget">
-          <h3 class="expandable-heading">Selected element</h3>
-          <dl id="gi-properties" class="control-widget-component expandable"></dl>
-        </div>
-        <!-- Elements by frequency -->
-        <div class="control-widget">
-          <h3 class="expandable-heading">Elements by frequency</h3>
-          <div id="gi-frequencies" class="control-widget-component expandable">
-            <fieldset id="gi-option-selector" disabled="disabled">
-              <legend>Mark</legend>
-              <xsl:call-template name="gi-counting-robot">
-                <xsl:with-param name="start" select="text"/>
-              </xsl:call-template>
-            </fieldset>
-          </div>
-        </div>
-        <!-- Zoom -->
-        <div class="control-widget">
-          <h3 class="expandable-heading">Zoom</h3>
-          <div id="zoom-container" class="control-widget-component expandable expandable-hidden">
-            <div class="slidebar">
-              <span class="slidebar-label">-</span>
-              <input id="zoom-slide" title="Zoom control slider"
-                type="range" min="20" max="100" step="1" value="100" 
-                disabled="disabled"/>
-              <span class="slidebar-label">+</span>
+          <!-- Text contrast -->
+          <div class="control-widget">
+            <h3 class="expandable-heading">Text contrast</h3>
+            <div id="text-contrasts" class="control-widget-component expandable expandable-hidden">
+              <xsl:variable name="tab-index" select="2"/>
+              <fieldset id="text-contrast-selector" disabled="disabled">
+                <legend>Visibility</legend>
+                <xsl:for-each select="( 'high', 'mid', 'low', 'none' )">
+                  <xsl:variable name="value" select="."/>
+                  <xsl:call-template name="make-radio-button">
+                    <xsl:with-param name="fieldset-name" select="'contrast-type'"/>
+                    <xsl:with-param name="value" select="$value"/>
+                    <xsl:with-param name="is-checked" 
+                      select="if ( $contrast-default eq $value ) then true() else false()"/>
+                    <xsl:with-param name="tab-index" 
+                      select="if ( $contrast-default eq $value ) then $tab-index else 9999"/>
+                    <xsl:with-param name="label"
+                      select="if ( $value eq 'none' ) then 'none (invisible text)' else $value"/>
+                  </xsl:call-template>
+                </xsl:for-each>
+              </fieldset>
             </div>
-          </div>
-        </div>
-        <!-- Text contrast -->
-        <div class="control-widget">
-          <h3 class="expandable-heading">Text contrast</h3>
-          <div id="text-contrasts" class="control-widget-component expandable expandable-hidden">
-            <xsl:variable name="tab-index" select="2"/>
-            <fieldset id="text-contrast-selector" disabled="disabled">
-              <legend>Visibility</legend>
-              <xsl:for-each select="( 'high', 'mid', 'low', 'none' )">
-                <xsl:variable name="value" select="."/>
-                <xsl:call-template name="make-radio-button">
-                  <xsl:with-param name="fieldset-name" select="'contrast-type'"/>
-                  <xsl:with-param name="value" select="$value"/>
-                  <xsl:with-param name="is-checked" 
-                    select="if ( $contrast-default eq $value ) then true() else false()"/>
-                  <xsl:with-param name="tab-index" 
-                    select="if ( $contrast-default eq $value ) then $tab-index else 9999"/>
-                  <xsl:with-param name="label"
-                    select="if ( $value eq 'none' ) then 'none (invisible text)' else $value"/>
-                </xsl:call-template>
-              </xsl:for-each>
-            </fieldset>
           </div>
         </div>
       </div>

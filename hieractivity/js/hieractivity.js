@@ -24,26 +24,23 @@ $(document).ready(function() {
     nextDiv.attr('aria-hidden', isAutoCollapsed);
     var button = heading.children('button');
     // Show or hide the expandable <div> when the associated button is pressed.
-    button.on('click', function() {
-      var isExpanding = $(this).attr('aria-expanded') === 'false' ? true : false;
-      nextDiv.slideToggle();
-      nextDiv.toggleClass('expandable-hidden');
-      nextDiv.attr('aria-hidden', !isExpanding);
-      $(this).attr('aria-expanded', isExpanding);
-    });
+    button.on('click', toggleContainerVisibility);
   });
   
   // Set up variables with relevant d3 selections.
-  var controlPanel = d3.select('#control-panel');
-  var teiContainer = d3.select('#tei-container');
-  var scrollElement = d3.select('#tei-resources-box');
-  var scrollElementNode = scrollElement.node();
+  var controlPanel = d3.select('#control-panel'),
+      controlPanelNode = controlPanel.node(),
+      controlsViewport = d3.select('#controls-viewport'),
+      controlsViewportNode = controlsViewport.node(),
+      teiContainer = d3.select('#tei-container'),
+      scrollElement = d3.select('#tei-resources-box'),
+      scrollElementNode = scrollElement.node(),
+      giPropList = d3.select('#gi-properties'),
+      colorSchemeList = d3.select('#color-scheme');
   var zoomSlider = d3.select('#zoom-slide')
       .on('input', slid)
       .on('mouseout', workedHeight)
       .property('disabled', false);
-  var giPropList = d3.select('#gi-properties');
-  var colorSchemeList = d3.select('#color-scheme');
   // All representations of TEI elements have their properties shown on click.
   var teiElements = d3.selectAll('[data-tapas-gi]')
       .on('click', inspectElement);
@@ -121,9 +118,6 @@ $(document).ready(function() {
     cancel: 'h2, #controls-container',
     containment: 'window'
   });
-  /*controlPanel.selectAll('.expandable-heading button').on('click', function(e) {
-    assignHeightBack(controlPanel.node());
-  });*/
 
 
 /*  FUNCTIONS  */
@@ -151,17 +145,26 @@ $(document).ready(function() {
   }
   
   function assignAllHeights() {
-    assignHeightBack(controlPanel.node());
+    var windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight(),
+        panelMaxHeight = windowHeight - 8,
+        viewportMaxHeight = panelMaxHeight - $('#control-panel > h2').outerHeight();
+    controlPanel.style('max-height', panelMaxHeight);
+    controlsViewport.style('max-height', viewportMaxHeight);
+    assignHeightBack(controlsViewportNode);
     assignTextHeights();
   }
   
   // Assign the height of an element back to it.
   function assignHeightBack(element) {
     var el = d3.select(element);
-    // Remove previous height calculation.
-    el.style('height', null);
+    unassignHeight(element);
     // Assign the browser-calculated height to the element.
-    el.style('height', $(element).height()+'px');
+    el.style('height', $(element).outerHeight()+'px');
+  }
+
+  // Remove a previous height calculation.
+  function unassignHeight(element) {
+    d3.select(element).style('height', null);
   }
   
   // Get the data attributes associated with an HTML element, and display information
@@ -244,6 +247,29 @@ $(document).ready(function() {
     var k = d3.select(this).property('value') / 100;
     //console.log(k);
     transformed(k);
+  }
+  
+  // Slide a container open or closed, and ensure ARIA labels are set.
+  function toggleContainerVisibility(e) {
+    var button = $(e.target),
+        isExpanding = button.attr('aria-expanded') === 'false' ? true : false,
+        parentElement = button.parent(),
+        container = parentElement.next(),
+        grandparent = parentElement.parent(),
+        isInControls = grandparent.hasClass('control-widget') || grandparent.is('#control-panel');
+    // If this event is occurring in the control panel, unassign the height of the 
+      // panel before proceeding, and re-assign it when the sliding animation is 
+      // complete.
+    container.slideToggle({
+      done: function() {
+        container.toggleClass('expandable-hidden');
+        container.attr('aria-hidden', !isExpanding);
+        button.attr('aria-expanded', isExpanding);
+        if ( isInControls ) {
+          assignHeightBack(controlsViewportNode);
+        }
+      }
+    });
   }
   
   // Translate and scale the first element with @data-tapas-gi.
