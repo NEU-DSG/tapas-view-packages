@@ -1,0 +1,8 @@
+body { margin: 2em; }
+span.context { font-weight: bold; }
+span.context:after { content: " "; }
+span.test { font-family: monospace; }
+span.test:after { content: " "; }
+a.loc { font-style: italic; }
+span.msg:before { content: "\A0\A0\201C"; }
+span.msg:after { content: "\201D"; }

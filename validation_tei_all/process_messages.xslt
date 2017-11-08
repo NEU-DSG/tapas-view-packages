@@ -9,12 +9,14 @@
   version="2.0">
 
   <!-- Read in a document of error messages, write out readable HTML thereof -->
-  <!-- Input: 
-  element tapas:errors { RNG?, SCH }
-  RNG = element c:errors { c:error+ }
-  SCH = element svrl:schematron-output { [SVRL] }
--->
+  <!-- Input document format: 
+    element tapas:errors { RNG?, SCH }
+    RNG = element c:errors { c:error+ }
+    SCH = element svrl:schematron-output { [SVRL] }
+  -->
   
+  <!-- saxon -xsl:validation_tei_all/process_messages.xslt -s:/tmp/errs.xml -o:/tmp/errs.html fullHTML=true css=/home/syd/Documents/tapas-view-packages/validation_tei_all/styles.css -->
+
   <xsl:param name="fullHTML" select="'false'"/> <!-- set to 'true' to get browsable output for debugging -->
   <xsl:param name="css" select="'styles.css'"/>
   <xsl:variable name="root" select="/" as="node()"/>
@@ -83,12 +85,14 @@
   <xsl:template match="c:error">
     <p>
       <xsl:text>Error flagged on line </xsl:text>
-      <xsl:value-of select="@line"/>
+      <span class="line"><xsl:value-of select="@line"/></span>
       <xsl:text> at column </xsl:text>
-      <xsl:value-of select="@column"/>
+      <span class="col"><xsl:value-of select="@column"/></span>
       <xsl:text>:</xsl:text>
       <br/>
-      <xsl:value-of select="substring-after( normalize-space(.),'org.xml.sax.SAXParseException: ')"/>
+      <xsl:variable name="sans-java-class" select="substring-after( normalize-space(.),'org.xml.sax.SAXParseException: ')"/>
+      <xsl:variable name="pre-expectations" select="if (contains($sans-java-class,'expected')) then substring-before( $sans-java-class, '; expected') else $sans-java-class"/>      
+      <span class="msg"><xsl:value-of select="$pre-expectations"/></span>
     </p>
   </xsl:template>
 
@@ -109,3 +113,68 @@
   </xsl:template>
   
 </xsl:stylesheet>
+
+<!-- 
+  
+  1. value of attribute "foo" is invalid; must be equal to "bar" or "blort"
+
+Short version: The value for the [foo] attribute doesn't match the list of permitted values. It should be one of the following: [bar] or [blort].
+
+Long version: The value for the [foo] attribute doesn't match the list of permitted values. It should be one of the following: [bar] or [blort]. In this schema, this attribute does not permit you to enter your own values.
+
+
+2. value of attribute "ana" is invalid; token "X" invalid; must be a URI
+
+Short version: The value for the [foo] attribute is not the right data type. It should be a [URI].
+
+Long version: The value for the "[foo]" attribute is not the right data type. The [foo] attribute is defined as a [URI], which means [gloss of required properties].
+
+
+3. attribute "blort" not allowed here; expected attribute "ana", "cert", "change", "copyOf", "corresp", "exclude", "facs", "hand", "n", "next", "place", "prev", "rend", "rendition", "resp", "sameAs", "select", "source", "style", "subtype", "synch", "type", "xml:base", "xml:id", "xml:lang" or "xml:space"
+
+Short version: The [blort] attribute is not allowed on the [foo] element. Try checking the attribute name for capitalization errors and typos.
+
+Long version: The "[blort]" attribute is not allowed on the "[foo]" element. Try checking the attribute name for capitalization errors and typos. Here's the list of permitted attributes: [list]
+
+
+4. element "songline" not allowed anywhere; expected element "addSpan", "alt", "altGrp", "anchor", "app", "argument", "byline", "camera", "caption", "cb", "certainty", "damageSpan", "dateline", "delSpan", "desc", "docAuthor", "docDate", "epigraph", "fLib", "figure", "fs", "fvLib", "fw", "gap", "gb", "head", "incident", "index", "interp", "interpGrp", "join", "joinGrp", "kinesic", "l", "label", "lb", "lg", "link", "linkGrp", "listTranspose", "meeting", "metamark", "milestone", "move", "notatedMusic", "note", "opener", "pause", "pb", "precision", "respons", "salute", "shift", "signed", "sound", "space", "span", "spanGrp", "stage", "substJoin", "tech", "timeline", "view", "vocal", "witDetail" or "writing"
+
+Short version: The [songline] element doesn't exist in this markup language. Try checking the element name for capitalization errors and typos.
+
+Long version: The [songline] element doesn't exist in this markup language. Try checking the element name for capitalization errors and typos. Here's a list of elements that are allowed here: [list].
+
+
+5. element "person" not allowed here; expected element "addSpan", "alt", "altGrp", "anchor", "app", "argument", "byline", "camera", "caption", "cb", "certainty", "damageSpan", "dateline", "delSpan", "desc", "docAuthor", "docDate", "epigraph", "fLib", "figure", "fs", "fvLib", "fw", "gap", "gb", "head", "incident", "index", "interp", "interpGrp", "join", "joinGrp", "kinesic", "l", "label", "lb", "lg", "link", "linkGrp", "listTranspose", "meeting", "metamark", "milestone", "move", "notatedMusic", "note", "opener", "pause", "pb", "precision", "respons", "salute", "shift", "signed", "sound", "space", "span", "spanGrp", "stage", "substJoin", "tech", "timeline", "view", "vocal", "witDetail" or "writing"
+
+Short version: The [person] element isn't allowed at this point in the encoding (although it is valid elsewhere).
+
+Long version: The [person] element isn't allowed at this point in the encoding (although it is valid elsewhere). Check to see whether you might be missing a parent element. Here's a list of elements that are valid here: [list].
+
+
+6. text not allowed here; expected element "addSpan", "alt", "altGrp", "anchor", "app", "argument", "byline", "camera", "caption", "cb", "certainty", "damageSpan", "dateline", "delSpan", "desc", "docAuthor", "docDate", "epigraph", "fLib", "figure", "fs", "fvLib", "fw", "gap", "gb", "head", "incident", "index", "interp", "interpGrp", "join", "joinGrp", "kinesic", "l", "label", "lb", "lg", "link", "linkGrp", "listTranspose", "meeting", "metamark", "milestone", "move", "notatedMusic", "note", "opener", "pause", "pb", "precision", "respons", "salute", "shift", "signed", "sound", "space", "span", "spanGrp", "stage", "substJoin", "tech", "timeline", "view", "vocal", "witDetail" or "writing"
+
+Short version: At this place in the encoding, text is not allowed; the [parent] element may only contain other elements.
+
+Long version: At this place in the encoding, text is not allowed; the [parent] element may only contain other elements. Check to see whether you might be missing a parent element. Here's a list of elements that are valid here: [list].
+
+
+7. text not allowed here; expected the element end-tag
+[I think I need to understand the difference between this error message and the previous one more fully]
+
+Short version: At this place in the encoding, text is not allowed, only element content.
+
+Long version: At this place in the encoding, text is not allowed, only element content. It's possible that you've accidentally added a stray text character in between elements; take a close look.
+
+8. element "lg" incomplete; expected element "addSpan", "alt", "altGrp", "anchor", "app", "argument", "byline", "camera", "caption", "cb", "certainty", "damageSpan", "dateline", "delSpan", "desc", "docAuthor", "docDate", "epigraph", "fLib", "figure", "fs", "fvLib", "fw", "gap", "gb", "head", "incident", "index", "interp", "interpGrp", "join", "joinGrp", "kinesic", "l", "label", "lb", "lg", "link", "linkGrp", "listTranspose", "meeting", "metamark", "milestone", "move", "notatedMusic", "note", "opener", "pause", "pb", "precision", "respons", "salute", "shift", "signed", "sound", "space", "span", "spanGrp", "stage", "substJoin", "tech", "timeline", "view", "vocal", "witDetail" or "writing"
+
+Short version: The [lg] element is incomplete; it is missing a required child element.
+
+Long version: The [lg] element is incomplete; it is missing a required child element. Here is a list of the elements that are required at this point: [list].
+
+9. element "index" not allowed yet; expected the element end-tag or element "term"
+
+Short version: The [index] element is valid here, but another element ([term]) is required first.
+
+Long version: The [index] element is valid here, but another element ([term]) is required first. Here's a full list of elements that are allowed before [index].
+
+-->
