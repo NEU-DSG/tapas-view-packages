@@ -101,9 +101,7 @@
     <p:input port="stylesheet">
       <p:document href="process_messages.xslt"/>
     </p:input>
-    <p:input port="parameters">
-      <p:empty/>
-    </p:input>
+    <p:with-param name="fullHTML" select="'true'"/>
   </p:xslt>
 
 </p:declare-step>
