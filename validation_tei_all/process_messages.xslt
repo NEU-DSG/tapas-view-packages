@@ -129,7 +129,13 @@
     					<xsl:text> attribute doesn’t match the </xsl:text>
     					<a title="{regex-group(2)}">list of permitted values</a>
     				</xsl:when>
-    				<xsl:when test=""></xsl:when>
+    			  <xsl:when test="matches( $msg_sjc, '^value of attribute &quot;([^&quot;]*)&quot; is invalid; token &quot;([^&quot;]*)&quot; invalid; must be a')">
+    			    <xsl:text>The value for the </xsl:text>
+    			    <tei:att><xsl:value-of select="regex-group(1)"/></tei:att>
+    			    <xsl:text> attribute is not the right data type. It should be a </xsl:text>
+    			    <xsl:value-of select="regex-group(2)"/>
+    			    <xsl:text>.</xsl:text>
+    			  </xsl:when>
     				<xsl:otherwise>
     					<xsl:if test="$fullHTML eq 'true'">
     						<xsl:message select="concat('unmatched msg 2 ',@line,':',@col,$msg_sjc)"/>
@@ -141,6 +147,8 @@
     	</xsl:variable>
       <xsl:variable name="pre-expectations" select="if (contains($msg_sjc,'expected')) then substring-before( $msg_sjc, '; expected') else $msg_sjc"/>      
       <span class="msg"><xsl:value-of select="$pre-expectations"/></span>
+      <br/><xsl:text>JFs: </xsl:text>
+      <xsl:value-of select="$msg_seq[2]"/>
     </p>
   </xsl:template>
 
