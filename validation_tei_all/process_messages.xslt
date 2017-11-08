@@ -3,6 +3,7 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:c="http://www.w3.org/ns/xproc-step"
   xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+  xmlns:tapas="http://www.wheatoncollege.edu/TAPAS/1.0"
   xpath-default-namespace="http://www.w3.org/ns/xproc-step"
   xmlns="http://www.w3.org/1999/xhtml"
   exclude-result-prefixes="#all"
@@ -90,8 +91,33 @@
       <span class="col"><xsl:value-of select="@column"/></span>
       <xsl:text>:</xsl:text>
       <br/>
-      <xsl:variable name="sans-java-class" select="substring-after( normalize-space(.),'org.xml.sax.SAXParseException: ')"/>
-      <xsl:variable name="pre-expectations" select="if (contains($sans-java-class,'expected')) then substring-before( $sans-java-class, '; expected') else $sans-java-class"/>      
+      <xsl:variable name="msg_sjc" select="substring-after( normalize-space(.),'org.xml.sax.SAXParseException: ')"/>
+    	<xsl:variable name="msg_seq">
+    		<!--
+    			* [1] = original msg w/o java class preface bit
+    			* [2] = [1] w/o everything after "; expected" or 1st "; invalid"
+    			* [3] = Julia's short msg
+    			* [4] = Julia's long msg
+    			* [5] = list of valid or expected things as <tei:gi>+, <tei:att>+, or <tei:val>+
+    		-->
+    		<tapas:msg><xsl:value-of select="$msg_sjc"/></tapas:msg>
+    		<xsl:choose>
+    			<!-- 2 = strip off expected or allowed list -->
+    			<xsl:when test="contains($msg_sjc,'; expected ')">
+    				<tapas:msg><xsl:value-of select="substring-before( $msg_sjc, '; expected')"/></tapas:msg>
+    			</xsl:when>
+    			<xsl:when test=" contains($msg_sjc,' is invalid; ')">
+    				<tapas:msg><xsl:value-of select="concat( substring-before( $msg_sjc,' is invalid; '),' is invalid')"/></tapas:msg>
+    			</xsl:when>
+    			<xsl:otherwise>
+    				<tapas:msg><xsl:value-of select="$msg_sjc"/></tapas:msg>
+    			</xsl:otherwise>
+    		</xsl:choose>
+    		<xsl:choose>
+    			<xsl:when test="matches( $msg_sjc, '^value of attribute &quot;([^&quot;]*)&quot; is invalid; must be equal to (.*)')"></xsl:when>
+    		</xsl:choose>
+    	</xsl:variable>
+      <xsl:variable name="pre-expectations" select="if (contains($msg_sjc,'expected')) then substring-before( $msg_sjc, '; expected') else $msg_sjc"/>      
       <span class="msg"><xsl:value-of select="$pre-expectations"/></span>
     </p>
   </xsl:template>
