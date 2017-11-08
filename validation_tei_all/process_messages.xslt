@@ -4,6 +4,7 @@
   xmlns:c="http://www.w3.org/ns/xproc-step"
   xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
   xmlns:tapas="http://www.wheatoncollege.edu/TAPAS/1.0"
+  xmlns:tei="http://www.tei-c.org/ns/1.0"
   xpath-default-namespace="http://www.w3.org/ns/xproc-step"
   xmlns="http://www.w3.org/1999/xhtml"
   exclude-result-prefixes="#all"
@@ -72,6 +73,7 @@
         </xsl:when>
         <xsl:otherwise>
           <h1>Messages</h1>
+        	<p>[Julia to send Syd prose for here.]</p>
           <h2>Errors</h2>
           <xsl:apply-templates select="$errors"/>
           <xsl:if test="$warnings">
@@ -101,21 +103,41 @@
     			* [5] = list of valid or expected things as <tei:gi>+, <tei:att>+, or <tei:val>+
     		-->
     		<tapas:msg><xsl:value-of select="$msg_sjc"/></tapas:msg>
-    		<xsl:choose>
+    		<tapas:msg>
     			<!-- 2 = strip off expected or allowed list -->
-    			<xsl:when test="contains($msg_sjc,'; expected ')">
-    				<tapas:msg><xsl:value-of select="substring-before( $msg_sjc, '; expected')"/></tapas:msg>
-    			</xsl:when>
-    			<xsl:when test=" contains($msg_sjc,' is invalid; ')">
-    				<tapas:msg><xsl:value-of select="concat( substring-before( $msg_sjc,' is invalid; '),' is invalid')"/></tapas:msg>
-    			</xsl:when>
-    			<xsl:otherwise>
-    				<tapas:msg><xsl:value-of select="$msg_sjc"/></tapas:msg>
-    			</xsl:otherwise>
-    		</xsl:choose>
-    		<xsl:choose>
-    			<xsl:when test="matches( $msg_sjc, '^value of attribute &quot;([^&quot;]*)&quot; is invalid; must be equal to (.*)')"></xsl:when>
-    		</xsl:choose>
+    			<xsl:choose>
+    				<xsl:when test="contains($msg_sjc,'; expected ')">
+    					<xsl:value-of select="substring-before( $msg_sjc, '; expected')"/>
+    				</xsl:when>
+    				<xsl:when test=" contains($msg_sjc,' is invalid; ')">
+    					<xsl:value-of select="concat( substring-before( $msg_sjc,' is invalid; '),' is invalid')"/>
+    				</xsl:when>
+    				<xsl:otherwise>
+    					<xsl:if test="$fullHTML eq 'true'">
+    						<xsl:message select="concat('unmatched msg 1 ',@line,':',@col,$msg_sjc)"/>
+    					</xsl:if>
+    					<xsl:value-of select="$msg_sjc"/>
+    				</xsl:otherwise>
+    			</xsl:choose>
+    		</tapas:msg>
+    		<tapas:msg>
+    			<!-- 3 = Julia's short msg -->
+    			<xsl:choose>
+    				<xsl:when test="matches( $msg_sjc, '^value of attribute &quot;([^&quot;]*)&quot; is invalid; must be equal to (.*)')">
+    					<xsl:text>The value of the </xsl:text>
+    					<tei:att><xsl:value-of select="regex-group(1)"/></tei:att>
+    					<xsl:text> attribute doesn’t match the </xsl:text>
+    					<a title="{regex-group(2)}">list of permitted values</a>
+    				</xsl:when>
+    				<xsl:when test=""></xsl:when>
+    				<xsl:otherwise>
+    					<xsl:if test="$fullHTML eq 'true'">
+    						<xsl:message select="concat('unmatched msg 2 ',@line,':',@col,$msg_sjc)"/>
+    					</xsl:if>
+    					<xsl:value-of select="$msg_sjc"/>
+    				</xsl:otherwise>
+    			</xsl:choose>
+    		</tapas:msg>
     	</xsl:variable>
       <xsl:variable name="pre-expectations" select="if (contains($msg_sjc,'expected')) then substring-before( $msg_sjc, '; expected') else $msg_sjc"/>      
       <span class="msg"><xsl:value-of select="$pre-expectations"/></span>
@@ -142,7 +164,7 @@
 
 <!-- 
   
-  1. value of attribute "foo" is invalid; must be equal to "bar" or "blort"
+1. value of attribute "foo" is invalid; must be equal to "bar" or "blort"
 
 Short version: The value for the [foo] attribute doesn't match the list of permitted values. It should be one of the following: [bar] or [blort].
 
