@@ -47,7 +47,7 @@
   
   <xsl:template name="htmlHead">
     <head>
-      <title>TAPAS TEI error msgs</title>
+      <title>TAPAS: TEI errors</title>
       <meta charset="UTF-8"/>
       <meta name="created-by" content="process_messages.xslt"/>
       <meta name="creation-timestamp" content="{current-dateTime()}"/>
@@ -59,6 +59,11 @@
     <!-- The only 2 values TEI P5 uses for sch:*/@role are 'warning' and 'nonfatal'. -->
     <xsl:variable name="errors" select="//c:error|//svrl:text[not( ../@role ) or ../@role eq 'nonfatal']"/>
     <xsl:variable name="warnings" select="//svrl:text[../@role eq 'warning']"/>
+    <!-- For right now, TAPAS is going to treat errors as warnings. Probably will change -->
+    <!-- that in the future, but given that the schema we are currently validating against -->
+    <!-- (tei_all) has only 2 warnings, and they are both pretty severe, as it were, there -->
+    <!-- seems to be no reason to put in a lot of effort to treat these differently. -->
+    <xsl:variable name="originals" select="( $warnings, $errors )"/>
     <div class="validation-tei_all-pkg">
       <xsl:choose>
         <xsl:when test="not( $errors ) and not( $warnings )">
