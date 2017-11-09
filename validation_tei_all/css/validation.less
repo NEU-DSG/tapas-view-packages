@@ -11,10 +11,15 @@
 /* RULES */
 
 .validation-tei_all-pkg {
+  margin: 1em 2em;
   font-family: @tapasfont;
   
   .blocked {
     display: block;
+  }
+  
+  .label {
+    color: #777;
   }
   
   .att, .gi, .val {
@@ -28,25 +33,38 @@
   .gi {
     
     &:before {
+      padding-right: 1px;
       content: '<';
+      font-size: 0.9em;
     }
     
     &:after {
+      padding-left: 1px;
       content: '>';
+      font-size: 0.9em;
     }
   } // .gi
   
   ul {
+    list-style: none;
     
     li {
       margin: 0.5em;
+    }
+    
+    ul {
+      padding-left: 1.5em;
     }
   } // ul
   
   /* Collapsables */
   
   .collapsableHeading {
-    font-size: 1.1em;
+    font-size: 1.2em;
+    
+    > button {
+      all: inherit;
+    }
   } // .collapsableHeading
   
 } // .validation-tei_all

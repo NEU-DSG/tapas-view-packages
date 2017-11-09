@@ -4,11 +4,15 @@
 /* MIXINS */
 /* RULES */
 .validation-tei_all-pkg {
+  margin: 1em 2em;
   font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
   /* Collapsables */
 }
 .validation-tei_all-pkg .blocked {
   display: block;
+}
+.validation-tei_all-pkg .label {
+  color: #777;
 }
 .validation-tei_all-pkg .att,
 .validation-tei_all-pkg .gi,
@@ -19,14 +23,24 @@
   content: '@';
 }
 .validation-tei_all-pkg .gi:before {
+  padding-right: 1px;
   content: '<';
+  font-size: 0.9em;
 }
 .validation-tei_all-pkg .gi:after {
+  padding-left: 1px;
   content: '>';
+  font-size: 0.9em;
+}
+.validation-tei_all-pkg ul {
+  list-style: none;
 }
 .validation-tei_all-pkg ul li {
   margin: 0.5em;
 }
+.validation-tei_all-pkg ul ul {
+  padding-left: 1.5em;
+}
 .validation-tei_all-pkg .collapsableHeading {
-  font-size: 1.1em;
+  font-size: 1.2em;
 }
