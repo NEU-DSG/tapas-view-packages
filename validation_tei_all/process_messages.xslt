@@ -21,6 +21,7 @@
 
   <xsl:param name="fullHTML" select="'false'"/> <!-- set to 'true' to get browsable output for debugging -->
   <xsl:param name="css" select="'styles.css'"/>
+  <xsl:param name="rng_prefix" select="'org.xml.sax.SAXParseException: '"/>
   <xsl:variable name="root" select="/" as="node()"/>
   <xsl:variable name="apos" select='"&apos;"'/>
   
@@ -63,115 +64,38 @@
     <!-- that in the future, but given that the schema we are currently validating against -->
     <!-- (tei_all) has only 2 warnings, and they are both pretty severe, as it were, there -->
     <!-- seems to be no reason to put in a lot of effort to treat these differently. -->
-    <xsl:variable name="originals" select="( $warnings, $errors )"/>
+    <xsl:variable name="regularized">
+      <xsl:apply-templates select="( $warnings, $errors )" mode="regularize">
+        <xsl:sort/>
+      </xsl:apply-templates>
+    </xsl:variable>
+    
     <div class="validation-tei_all-pkg">
-      <xsl:choose>
-        <xsl:when test="not( $errors ) and not( $warnings )">
-          <h1>Whoo-hoo!</h1>
-          <h2>No errors, no warnings</h2>
-        </xsl:when>
-        <xsl:when test="not( $errors ) and $warnings">
-          <h1>Excellent</h1>
-          <h2>No errors</h2>
-          <h2>Warnings</h2>
-          <xsl:apply-templates select="$warnings"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Messages</h1>
-        	<p>[Julia to send Syd prose for here.]</p>
-          <h2>Errors</h2>
-          <xsl:apply-templates select="$errors"/>
-          <xsl:if test="$warnings">
-            <h2>Warnings</h2>
-            <xsl:apply-templates select="$warnings"/>
-          </xsl:if>
-        </xsl:otherwise>
-      </xsl:choose>
+      <h1>Messages</h1>
+      <p>[Julia to send Syd prose for here.]</p>
+      <h2>Messages</h2>
+      <xsl:copy-of select="$regularized"/>
     </div>
   </xsl:template>
 
-  <xsl:template match="c:error">
-    <p>
-      <xsl:text>Error flagged on line </xsl:text>
-      <span class="line"><xsl:value-of select="@line"/></span>
-      <xsl:text> at column </xsl:text>
-      <span class="col"><xsl:value-of select="@column"/></span>
-      <xsl:text>:</xsl:text>
-      <br/>
-      <xsl:variable name="msg_sjc" select="substring-after( normalize-space(.),'org.xml.sax.SAXParseException: ')"/>
-    	<xsl:variable name="msg_seq">
-    		<!--
-    			* [1] = original msg w/o java class preface bit
-    			* [2] = [1] w/o everything after "; expected" or 1st "; invalid"
-    			* [3] = Julia's short msg
-    			* [4] = Julia's long msg
-    			* [5] = list of valid or expected things as <tei:gi>+, <tei:att>+, or <tei:val>+
-    		-->
-    		<tapas:msg><xsl:value-of select="$msg_sjc"/></tapas:msg>
-    		<tapas:msg>
-    			<!-- 2 = strip off expected or allowed list -->
-    			<xsl:choose>
-    				<xsl:when test="contains($msg_sjc,'; expected ')">
-    					<xsl:value-of select="substring-before( $msg_sjc, '; expected')"/>
-    				</xsl:when>
-    				<xsl:when test=" contains($msg_sjc,' is invalid; ')">
-    					<xsl:value-of select="concat( substring-before( $msg_sjc,' is invalid; '),' is invalid')"/>
-    				</xsl:when>
-    				<xsl:otherwise>
-    					<xsl:if test="$fullHTML eq 'true'">
-    						<xsl:message select="concat('unmatched msg 1 ',@line,':',@col,$msg_sjc)"/>
-    					</xsl:if>
-    					<xsl:value-of select="$msg_sjc"/>
-    				</xsl:otherwise>
-    			</xsl:choose>
-    		</tapas:msg>
-    		<tapas:msg>
-    			<!-- 3 = Julia's short msg -->
-    			<xsl:choose>
-    				<xsl:when test="matches( $msg_sjc, '^value of attribute &quot;([^&quot;]*)&quot; is invalid; must be equal to (.*)')">
-    					<xsl:text>The value of the </xsl:text>
-    					<tei:att><xsl:value-of select="regex-group(1)"/></tei:att>
-    					<xsl:text> attribute doesn’t match the </xsl:text>
-    					<a title="{regex-group(2)}">list of permitted values</a>
-    				</xsl:when>
-    			  <xsl:when test="matches( $msg_sjc, '^value of attribute &quot;([^&quot;]*)&quot; is invalid; token &quot;([^&quot;]*)&quot; invalid; must be a')">
-    			    <xsl:text>The value for the </xsl:text>
-    			    <tei:att><xsl:value-of select="regex-group(1)"/></tei:att>
-    			    <xsl:text> attribute is not the right data type. It should be a </xsl:text>
-    			    <xsl:value-of select="regex-group(2)"/>
-    			    <xsl:text>.</xsl:text>
-    			  </xsl:when>
-    				<xsl:otherwise>
-    					<xsl:if test="$fullHTML eq 'true'">
-    						<xsl:message select="concat('unmatched msg 2 ',@line,':',@col,$msg_sjc)"/>
-    					</xsl:if>
-    					<xsl:value-of select="$msg_sjc"/>
-    				</xsl:otherwise>
-    			</xsl:choose>
-    		</tapas:msg>
-    	</xsl:variable>
-      <xsl:variable name="pre-expectations" select="if (contains($msg_sjc,'expected')) then substring-before( $msg_sjc, '; expected') else $msg_sjc"/>      
-      <span class="msg"><xsl:value-of select="$pre-expectations"/></span>
-      <br/><xsl:text>JFs: </xsl:text>
-      <xsl:value-of select="$msg_seq[2]"/>
-    </p>
+  <xsl:template match="c:error" mode="regularize">
+    <tapas:msg role="error" line="{@line}" col="{@column}">
+      <xsl:value-of select="substring-after( normalize-space(.), $rng_prefix )"/>
+    </tapas:msg>
   </xsl:template>
 
-  <xsl:template match="svrl:*">
-    <p>
-      <xsl:variable name="loc">
-        <xsl:variable name="ns_predicate" select="concat('\[namespace-uri\(\)=',$apos,'http://www.tei-c.org/ns/1.0',$apos,'\]')"/>
-        <xsl:variable name="loc-sans-ns" select="replace( normalize-space(../@location),$ns_predicate,'')"/>
-        <xsl:variable name="loc-sans-useless-ns-prefix" select="replace( $loc-sans-ns,'\*:','')"/>
-        <xsl:value-of select="replace( $loc-sans-useless-ns-prefix, '(\c)\[1\]','$1')"/>
-      </xsl:variable>
-      <span class="context"><xsl:value-of select="../preceding-sibling::svrl:fired-rule[1]/@context"/></span>
-      <span class="test"><xsl:value-of select="../@test"/></span>
-      <a class="loc" title="{$loc}">(show XPath)</a>
-      <br/>
-      <span class="msg"><xsl:value-of select="normalize-space(.)"/></span>
-    </p>
-  </xsl:template>
+  <xsl:template match="svrl:text" mode="regularize">
+    <xsl:variable name="loc">
+      <xsl:variable name="ns_predicate" select="concat('\[namespace-uri\(\)=',$apos,'http://www.tei-c.org/ns/1.0',$apos,'\]')"/>
+      <xsl:variable name="loc-sans-ns" select="replace( normalize-space(../@location),$ns_predicate,'')"/>
+      <xsl:variable name="loc-sans-useless-ns-prefix" select="replace( $loc-sans-ns,'\*:','')"/>
+      <xsl:value-of select="replace( $loc-sans-useless-ns-prefix, '(\c)\[1\]','$1')"/>
+    </xsl:variable>
+    <xsl:variable name="role" select="if (@role) then @role else 'error'"/>
+    <tapas:msg type="{local-name(..)}" role="{$role}" loc="{$loc}" context="{../preceding-sibling::svrl:fired-rule[1]/@context}" test="../@test">
+      <xsl:value-of select="normalize-space(.)"/>
+    </tapas:msg>
+  </xsl:template> 
   
 </xsl:stylesheet>
 
