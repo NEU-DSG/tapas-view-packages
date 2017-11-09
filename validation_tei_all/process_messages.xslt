@@ -71,10 +71,36 @@
     </xsl:variable>
     
     <div class="validation-tei_all-pkg">
-      <h1>Messages</h1>
-      <p>[Julia to send Syd prose for here.]</p>
-      <h2>Messages</h2>
-      <xsl:copy-of select="$regularized"/>
+      <h1>Encoding Information</h1>
+      <h2>Validity with respect to <tt>tei_all</tt></h2>
+      <p>This TEI file has been validated against the TEI’s most broadly
+        defined schema: <tt>tei_all</tt>. This schema defines TEI encoding practice at
+        a very general level. TAPAS currently uses this schema as a
+        way of defining the a minimum standard for encoding practices we can support in our
+        TAPAS-wide stylesheets and viewing options. There may be other restrictions,
+      but certainly a TEI file should meet the criteria expressed in <tt>tei_all</tt>.</p>
+     <xsl:choose>
+       <xsl:when test="$regularized">
+         <h3>Problems…</h3>
+         <p>The validation messages below describe where
+           the encoding in this file is invalid: that is, where it differs from
+           the rules expressed in the <tt>tei_all</tt> schema. In some cases this may be
+           because this file was encoded using a customized TEI schema for a
+           specific project. (Read more about <a href="http://www.tei-c.org/Guidelines/Customization/">TEI customization</a>.)
+           Other cases may simply be errors in the encoding,
+           or places where the encoding isn’t finished yet.</p>
+         <!-- WINITA: do stuff w/ <tapas:msg> elements here -->
+         <h2>Messages</h2>
+         <!-- DEBUG: for now just spit out our array: obviously not useful to end user in HTML context -->
+         <xsl:copy-of select="$regularized"/>
+       </xsl:when>
+       <xsl:otherwise>
+         <h3>Valid!</h3>
+         <p>This file is valid against the <tt>tei_all</tt> schema. You can read more
+           about validation in the <a href="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/SG.html#SG13">Genle
+             Introduction to XML</a></p>
+       </xsl:otherwise>
+     </xsl:choose>
     </div>
   </xsl:template>
 
