@@ -1,0 +1,53 @@
+// validation.less
+
+/* VARIABLES */
+
+/* Colors */
+/* Fonts */
+@code: 'Courier', 'Courier New', monospace;
+@tapasfont: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif; // the font used in the main TAPAS site
+
+/* MIXINS */
+/* RULES */
+
+.validation-tei_all-pkg {
+  font-family: @tapasfont;
+  
+  .blocked {
+    display: block;
+  }
+  
+  .att, .gi, .val {
+    font-family: @code;
+  }
+  
+  .att:before {
+    content: '@';
+  }
+  
+  .gi {
+    
+    &:before {
+      content: '<';
+    }
+    
+    &:after {
+      content: '>';
+    }
+  } // .gi
+  
+  ul {
+    
+    li {
+      margin: 0.5em;
+    }
+  } // ul
+  
+  /* Collapsables */
+  
+  .collapsableHeading {
+    font-size: 1.1em;
+  } // .collapsableHeading
+  
+} // .validation-tei_all
+

@@ -1,0 +1,32 @@
+/* VARIABLES */
+/* Colors */
+/* Fonts */
+/* MIXINS */
+/* RULES */
+.validation-tei_all-pkg {
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Collapsables */
+}
+.validation-tei_all-pkg .blocked {
+  display: block;
+}
+.validation-tei_all-pkg .att,
+.validation-tei_all-pkg .gi,
+.validation-tei_all-pkg .val {
+  font-family: 'Courier', 'Courier New', monospace;
+}
+.validation-tei_all-pkg .att:before {
+  content: '@';
+}
+.validation-tei_all-pkg .gi:before {
+  content: '<';
+}
+.validation-tei_all-pkg .gi:after {
+  content: '>';
+}
+.validation-tei_all-pkg ul li {
+  margin: 0.5em;
+}
+.validation-tei_all-pkg .collapsableHeading {
+  font-size: 1.1em;
+}
