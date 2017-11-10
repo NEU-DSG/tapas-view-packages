@@ -44,3 +44,24 @@
 .validation-tei_all-pkg .collapsableHeading {
   font-size: 1.2em;
 }
+.validation-tei_all-pkg .collapsableHeading > button {
+  all: inherit;
+}
+.validation-tei_all-pkg .collapsableHeading > button:before {
+  padding: 0 0.2em;
+  margin-right: 0.5em;
+  display: inline-block;
+  width: 0.75em;
+  text-align: center;
+  font-weight: bold;
+}
+.validation-tei_all-pkg .collapsableHeading > button:focus:before {
+  outline: 2px solid lightblue;
+  outline-color: invert;
+}
+.validation-tei_all-pkg .collapsableHeading > button[aria-expanded=true]:before {
+  content: '-';
+}
+.validation-tei_all-pkg .collapsableHeading > button[aria-expanded=false]:before {
+  content: '+';
+}
