@@ -69,6 +69,10 @@
         <xsl:sort/>
       </xsl:apply-templates>
     </xsl:variable>
+
+    <div class="debug" style="display:none;">
+      <xsl:copy-of select="/"/>
+    </div>
     
     <div class="validation-tei_all-pkg">
       <h1>Encoding Information</h1>
@@ -89,9 +93,7 @@
            specific project. (Read more about <a href="http://www.tei-c.org/Guidelines/Customization/">TEI customization</a>.)
            Other cases may simply be errors in the encoding,
            or places where the encoding isn’t finished yet.</p>
-         <!-- WINITA: do stuff w/ <tapas:msg> elements here -->
          <h2>Messages</h2>
-         <!-- DEBUG: for now just spit out our array: obviously not useful to end user in HTML context -->
          <xsl:variable name="ranked">
            <xsl:for-each-group select="$regularized/tapas:msg" group-adjacent="normalize-space(.)">
              <xsl:variable name="this_grp">
