@@ -30,7 +30,7 @@
   <xsl:template match="/">
     <xsl:choose>
       <xsl:when test="$fullHTML eq 'true'">
-        <html>
+        <html xmlns:tapas="http://www.wheatoncollege.edu/TAPAS/1.0">
           <xsl:call-template name="htmlHead"/>
           <body>
             <xsl:call-template name="contentDiv"/>
@@ -92,7 +92,19 @@
          <!-- WINITA: do stuff w/ <tapas:msg> elements here -->
          <h2>Messages</h2>
          <!-- DEBUG: for now just spit out our array: obviously not useful to end user in HTML context -->
-         <xsl:copy-of select="$regularized"/>
+         <xsl:variable name="ranked">
+           <xsl:for-each-group select="$regularized/tapas:msg" group-adjacent="normalize-space(.)">
+             <xsl:variable name="this_grp">
+               <xsl:for-each select="current-group()">
+                 <xsl:copy-of select="."/>
+               </xsl:for-each>
+             </xsl:variable>
+             <tapas:group n="{position()}" cnt="{count( $this_grp/tapas:msg )}">
+               <xsl:copy-of select="$this_grp"/>
+             </tapas:group>
+           </xsl:for-each-group>
+         </xsl:variable>
+         <xsl:copy-of select="$ranked"/>
        </xsl:when>
        <xsl:otherwise>
          <h3>Valid!</h3>
@@ -123,6 +135,21 @@
     </tapas:msg>
   </xsl:template> 
   
+  <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl">
+    <xd:desc>
+      <tapas:msg type="failed-assert" role="error" loc="/TEI/text/body/p/join" context="tei:join" test="../@test">You must supply at least two values for @target on join</tapas:msg>
+      <tapas:msg type="successful-report" role="error" loc="/TEI/text/body/opener/dateline/date" context="tei:*[@when]" test="../@test">The @when attribute cannot be used with any other att.datable.w3c attributes.</tapas:msg>
+      <tapas:msg role="error" line="54" col="11">element "WHAT" not allowed anywhere; expected the element end-tag, text or element "abbr", "add", "addName", "addSpan", "address", "affiliation", "alt", "altGrp", "am", "anchor", "app", "att", "binaryObject", "bloc", "c", "caesura", "catchwords", "cb", "certainty", "choice", "cl", "climate", "code", "corr", "country", "damage", "damageSpan", "date", "del", "delSpan", "depth", "dim", "dimensions", "distinct", "district", "docDate", "email", "emph", "ex", "expan", "fLib", "figure", "foreign", "forename", "formula", "fs", "fvLib", "fw", "g", "gap", "gb", "genName", "geo", "geogFeat", "geogName", "gi", "gloss", "graphic", "handShift", "height", "heraldry", "hi", "ident", "idno", "incident", "index", "interp", "interpGrp", "join", "joinGrp", "kinesic", "lang", "lb", "link", "linkGrp", "listTranspose", "location", "locus", "locusGrp", "m", "material", "measure", "measureGrp", "media", "mentioned", "metamark", "milestone", "mod", "name", "nameLink", "notatedMusic", "note", "num", "oRef", "oVar", "objectType", "offset", "orgName", "orig", "origDate", "origPlace", "pRef", "pVar", "pause", "pb", "pc", "persName", "phr", "placeName", "population", "precision", "ptr", "redo", "ref", "reg", "region", "respons", "restore", "retrace", "rhyme", "roleName", "rs", "s", "secFol", "secl", "seg", "settlement", "shift", "sic", "signatures", "soCalled", "space", "span", "spanGrp", "specDesc", "specList", "stamp", "state", "subst", "substJoin", "supplied", "surname", "surplus", "tag", "term", "terrain", "time", "timeline", "title", "trait", "unclear", "undo", "val", "vocal", "w", "watermark", "width", "witDetail" or "writing"</tapas:msg>
+      <tapas:msg role="error" line="23" col="12">element "address" incomplete; expected element "addName", "addSpan", "addrLine", "alt", "altGrp", "anchor", "app", "bloc", "cb", "certainty", "climate", "country", "damageSpan", "delSpan", "district", "fLib", "figure", "forename", "fs", "fvLib", "fw", "gap", "gb", "genName", "geogFeat", "geogName", "idno", "incident", "index", "interp", "interpGrp", "join", "joinGrp", "kinesic", "lang", "lb", "link", "linkGrp", "listTranspose", "location", "metamark", "milestone", "name", "nameLink", "notatedMusic", "note", "offset", "orgName", "pause", "pb", "persName", "placeName", "population", "postBox", "postCode", "precision", "region", "respons", "roleName", "rs", "settlement", "shift", "space", "span", "spanGrp", "state", "street", "substJoin", "surname", "terrain", "timeline", "trait", "vocal", "witDetail" or "writing"</tapas:msg>
+      <tapas:msg role="error" line="66" col="10">element "p" not allowed here; expected the element end-tag or element "addSpan", "alt", "altGrp", "anchor", "app", "argument", "byline", "cb", "certainty", "closer", "damageSpan", "dateline", "delSpan", "docAuthor", "docDate", "epigraph", "fLib", "figure", "fs", "fvLib", "fw", "gap", "gb", "incident", "index", "interp", "interpGrp", "join", "joinGrp", "kinesic", "lb", "link", "linkGrp", "listTranspose", "meeting", "metamark", "milestone", "notatedMusic", "note", "pause", "pb", "postscript", "precision", "respons", "salute", "shift", "signed", "space", "span", "spanGrp", "substJoin", "timeline", "trailer", "vocal", "witDetail" or "writing"</tapas:msg>
+      <tapas:msg role="error" line="6" col="32">element "teiHeader" incomplete; missing required element "fileDesc"</tapas:msg>
+      <tapas:msg role="error" line="6" col="32">element "teiHeader" not allowed here; expected the element end-tag, text or element "abbr", "add", "addName", "addSpan", "address", "affiliation", "alt", "altGrp", "am", "anchor", "app", "att", "bibl", "biblFull", "biblStruct", "binaryObject", "bloc", "c", "caesura", "camera", "caption", "castList", "catchwords", "cb", "certainty", "choice", "cit", "cl", "classSpec", "climate", "code", "constraintSpec", "corr", "country", "damage", "damageSpan", "dataSpec", "date", "del", "delSpan", "depth", "desc", "dim", "dimensions", "distinct", "district", "eg", "elementSpec", "email", "emph", "ex", "expan", "fLib", "figure", "floatingText", "foreign", "forename", "formula", "fs", "fvLib", "fw", "g", "gap", "gb", "genName", "geo", "geogFeat", "geogName", "gi", "gloss", "graphic", "handShift", "height", "heraldry", "hi", "ident", "idno", "incident", "index", "interp", "interpGrp", "join", "joinGrp", "kinesic", "l", "label", "lang", "lb", "lg", "link", "linkGrp", "list", "listApp", "listBibl", "listEvent", "listNym", "listOrg", "listPerson", "listPlace", "listRef", "listRelation", "listTranspose", "listWit", "location", "locus", "locusGrp", "m", "macroSpec", "material", "measure", "measureGrp", "media", "mentioned", "metamark", "milestone", "mod", "moduleSpec", "move", "msDesc", "name", "nameLink", "notatedMusic", "note", "ns:egXML", "num", "oRef", "oVar", "objectType", "offset", "orgName", "orig", "origDate", "origPlace", "outputRendition", "pRef", "pVar", "pause", "pb", "pc", "persName", "phr", "placeName", "population", "precision", "ptr", "q", "quote", "redo", "ref", "reg", "region", "respons", "restore", "retrace", "rhyme", "roleName", "rs", "s", "said", "secFol", "secl", "seg", "settlement", "shift", "sic", "signatures", "soCalled", "sound", "space", "span", "spanGrp", "specDesc", "specGrp", "specGrpRef", "specList", "stage", "stamp", "state", "subst", "substJoin", "supplied", "surname", "surplus", "table", "tag", "tech", "term", "terrain", "time", "timeline", "title", "trait", "unclear", "undo", "val", "view", "vocal", "w", "watermark", "width", "witDetail" or "writing" (with xmlns:ns="http://www.tei-c.org/ns/Examples")</tapas:msg>
+      <tapas:msg role="error" line="20" col="25">text not allowed here; expected element "addName", "addSpan", "addrLine", "alt", "altGrp", "anchor", "app", "bloc", "cb", "certainty", "climate", "country", "damageSpan", "delSpan", "district", "fLib", "figure", "forename", "fs", "fvLib", "fw", "gap", "gb", "genName", "geogFeat", "geogName", "idno", "incident", "index", "interp", "interpGrp", "join", "joinGrp", "kinesic", "lang", "lb", "link", "linkGrp", "listTranspose", "location", "metamark", "milestone", "name", "nameLink", "notatedMusic", "note", "offset", "orgName", "pause", "pb", "persName", "placeName", "population", "postBox", "postCode", "precision", "region", "respons", "roleName", "rs", "settlement", "shift", "space", "span", "spanGrp", "state", "street", "substJoin", "surname", "terrain", "timeline", "trait", "vocal", "witDetail" or "writing"</tapas:msg>
+      <tapas:msg role="error" line="21" col="32">text not allowed here; expected element "addName", "addSpan", "addrLine", "alt", "altGrp", "anchor", "app", "bloc", "cb", "certainty", "climate", "country", "damageSpan", "delSpan", "district", "fLib", "figure", "forename", "fs", "fvLib", "fw", "gap", "gb", "genName", "geogFeat", "geogName", "idno", "incident", "index", "interp", "interpGrp", "join", "joinGrp", "kinesic", "lang", "lb", "link", "linkGrp", "listTranspose", "location", "metamark", "milestone", "name", "nameLink", "notatedMusic", "note", "offset", "orgName", "pause", "pb", "persName", "placeName", "population", "postBox", "postCode", "precision", "region", "respons", "roleName", "rs", "settlement", "shift", "space", "span", "spanGrp", "state", "street", "substJoin", "surname", "terrain", "timeline", "trait", "vocal", "witDetail" or "writing"</tapas:msg>
+      <tapas:msg role="error" line="22" col="25">text not allowed here; expected element "addName", "addSpan", "addrLine", "alt", "altGrp", "anchor", "app", "bloc", "cb", "certainty", "climate", "country", "damageSpan", "delSpan", "district", "fLib", "figure", "forename", "fs", "fvLib", "fw", "gap", "gb", "genName", "geogFeat", "geogName", "idno", "incident", "index", "interp", "interpGrp", "join", "joinGrp", "kinesic", "lang", "lb", "link", "linkGrp", "listTranspose", "location", "metamark", "milestone", "name", "nameLink", "notatedMusic", "note", "offset", "orgName", "pause", "pb", "persName", "placeName", "population", "postBox", "postCode", "precision", "region", "respons", "roleName", "rs", "settlement", "shift", "space", "span", "spanGrp", "state", "street", "substJoin", "surname", "terrain", "timeline", "trait", "vocal", "witDetail" or "writing"</tapas:msg>
+      <tapas:msg role="error" line="60" col="403">text not allowed here; expected the element end-tag</tapas:msg>
+    </xd:desc>
+  </xd:doc>
 </xsl:stylesheet>
 
 <!-- 

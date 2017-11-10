@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- to generate test output from eXist use:
+curl -v -F file=@T.xml -u tapas http://localhost:8086/exist/apps/tapas-xq/derive-reader/validation_tei_all
+-->
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>TAPAS validation output template, take 1</title>
@@ -9,14 +12,14 @@
     <div class="validation-tei_all-pkg">
       <h1>fake</h1>
       <p>prose</p>
-      <ul class="collapsable">
+      <ul class="collapsable" id="ID1">
         <li>
           <span class="abstractMsg collapsableHeading">3 unknown element msg grps</span>
-          <ul class="collapsable">
+          <ul class="collapsable" id="ID2">
             <li><span class="msgType collapsableHeading">4 unknown element "hello"</span>
-              <ul class="collapsable">
+              <ul class="collapsable" id="ID3">
                 <li><span class="msg collapsableHeading">Unknown element &lt;hello></span>
-                  <span class="collapsable">
+                  <span class="collapsable" id="ID4">
                     <span class="lineNum blocked"><span class="label">Approximate line #:</span>
                       17</span>
                     <span class="colNum blocked"><span class="label">Estimated column #:</span>
