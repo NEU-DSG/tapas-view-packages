@@ -19,12 +19,14 @@
   
   <!-- saxon -xsl:validation_tei_all/process_messages.xslt -s:/tmp/errs.xml -o:/tmp/errs.html fullHTML=true css=/home/syd/Documents/tapas-view-packages/validation_tei_all/styles.css -->
 
-  <xsl:param name="fullHTML" select="'false'"/> <!-- set to 'true' to get browsable output for debugging -->
-  <xsl:param name="css" select="'styles.css'"/>
-  <xsl:param name="rng_prefix" select="'org.xml.sax.SAXParseException: '"/>
-  <xsl:variable name="root" select="/" as="node()"/>
-  <xsl:variable name="apos" select='"&apos;"'/>
-  
+   <xsl:param name="fullHTML" select="'false'"/> <!-- set to 'true' to get browsable output for debugging -->
+   <xsl:param name="css" select="'./css/validation.css'"/>
+   <xsl:param name="jquery" select="'../common/jquery/jquery-3.2.1.min.js'"/>
+   <xsl:param name="js" select="'js/validation.js'"/>
+   <xsl:param name="rng_prefix" select="'org.xml.sax.SAXParseException: '"/>
+   <xsl:variable name="root" select="/" as="node()"/>
+   <xsl:variable name="apos" select='"&apos;"'/>
+   
   <xsl:output method="xhtml"/>
 
   <xsl:template match="/">
@@ -47,12 +49,14 @@
   </xsl:template>
   
   <xsl:template name="htmlHead">
-    <head>
+     <head>
       <title>TAPAS: TEI errors</title>
       <meta charset="UTF-8"/>
       <meta name="created-by" content="process_messages.xslt"/>
       <meta name="creation-timestamp" content="{current-dateTime()}"/>
       <link rel="stylesheet" type="text/css" href="{$css}"/>
+        <script type="text/javascript" src="{$jquery}"></script>
+        <script type="text/javascript" src="{$js}"></script>
     </head>
   </xsl:template>
   
