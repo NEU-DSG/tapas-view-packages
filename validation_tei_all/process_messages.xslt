@@ -57,23 +57,50 @@
   </xsl:template>
   
   <xsl:template name="contentDiv">
-    <!-- The only 2 values TEI P5 uses for sch:*/@role are 'warning' and 'nonfatal'. -->
+     <div class="debug input" style="display:none;">
+        <xsl:copy-of select="/"/>
+     </div>
+     <!-- The only 2 values TEI P5 uses for sch:*/@role are 'warning' and 'nonfatal'. -->
     <xsl:variable name="errors" select="//c:error|//svrl:text[not( ../@role ) or ../@role eq 'nonfatal']"/>
     <xsl:variable name="warnings" select="//svrl:text[../@role eq 'warning']"/>
     <!-- For right now, TAPAS is going to treat errors as warnings. Probably will change -->
     <!-- that in the future, but given that the schema we are currently validating against -->
     <!-- (tei_all) has only 2 warnings, and they are both pretty severe, as it were, there -->
     <!-- seems to be no reason to put in a lot of effort to treat these differently. -->
+
+    <!--
+        Regularize all warnings and errors, whether from RNG or SCH
+        processing. Each error message (whether from c: or sch:
+        namespace) gets converted to a <tapas:msg> element:
+          element tapas:msg { 
+            attribute role {"information"|"warning"|"error"|"severe"|"fatal"},
+            # note that only "warning" and "error" are currently used
+            (
+              ( 
+                attribute line { xsd:nonNegativeInteger },
+                attribute col { xsd:nonNegativeInteger }?
+              )
+            | 
+              (
+                attribute type {"failed-assert"|"successful-report"},
+                attribute context { XPath },
+                attribute test { XPath },
+                attribute loc { XPath }
+              )
+            ),
+            anyXML # mostly text, which has $rng_prefix stripped off
+           }
+       Where XPath is just text that we know is an XPath, and
+       anyXML is typically text with TEI phrase-level elements. 
+    -->
+    <!-- The variable $regularized contains nothing but a sequence -->
+    <!-- of these <tapas:msg> elements, sorted by content. -->
     <xsl:variable name="regularized">
       <xsl:apply-templates select="( $warnings, $errors )" mode="regularize">
-        <xsl:sort/>
+         <xsl:sort select="replace( normalize-space(.), $rng_prefix, '')"/>
       </xsl:apply-templates>
     </xsl:variable>
 
-    <div class="debug" style="display:none;">
-      <xsl:copy-of select="/"/>
-    </div>
-    
     <div class="validation-tei_all-pkg">
       <h1>Encoding Information</h1>
       <h2>Validity with respect to <tt>tei_all</tt></h2>
@@ -101,12 +128,16 @@
                  <xsl:copy-of select="."/>
                </xsl:for-each>
              </xsl:variable>
-             <tapas:group n="{position()}" cnt="{count( $this_grp/tapas:msg )}">
+             <tapas:listMessage n="{position()}" cnt="{count( $this_grp/tapas:msg )}">
                <xsl:copy-of select="$this_grp"/>
-             </tapas:group>
+             </tapas:listMessage>
            </xsl:for-each-group>
          </xsl:variable>
-         <xsl:copy-of select="$ranked"/>
+         <ul class="collapsable" id="{generate-id()}">
+            <xsl:apply-templates select="$ranked/*" mode="ranked-msg-list">
+               <xsl:sort select="@cnt cast as xs:integer" order="descending"/>
+            </xsl:apply-templates>
+         </ul>
        </xsl:when>
        <xsl:otherwise>
          <h3>Valid!</h3>
@@ -135,8 +166,68 @@
     <tapas:msg type="{local-name(..)}" role="{$role}" loc="{$loc}" context="{../preceding-sibling::svrl:fired-rule[1]/@context}" test="../@test">
       <xsl:value-of select="normalize-space(.)"/>
     </tapas:msg>
-  </xsl:template> 
-  
+  </xsl:template>
+
+   <xsl:template match="tapas:listMessage" mode="ranked-msg-list">
+      <li>
+         <span class="msgType collapsableHeading">
+            <span class="cnt"><xsl:value-of select="@cnt"/></span>
+            <span class="msg"><xsl:apply-templates select="tapas:msg[1]" mode="msg"/></span>
+         </span>
+         <ul class="collapsable" id="{generate-id()}">
+            <xsl:apply-templates select="tapas:msg" mode="msg2li"/>
+         </ul>
+      </li>
+   </xsl:template>
+
+   <xsl:template match="tapas:msg" mode="msg">
+      <xsl:apply-templates mode="#current"/>
+   </xsl:template>
+   
+   <xsl:template match="tapas:msg" mode="msg2li">
+      <li>
+         <span class="msg collapsableHeading">
+            <xsl:apply-templates mode="#current"/>
+         </span>
+         <span class="collapsable" id="{generate-id()}">
+            <span class="lineNum blocked">
+               <span class="label">Approximate line #:</span>
+               <xsl:value-of select="@line"/>
+            </span>
+            <span class="colNum blocked">
+               <span class="label">Estimated column #:</span>
+               <xsl:value-of select="@col"/>         
+            </span>
+            <span class="allowed blocked">
+               <span class="label">expected or allowed:</span>
+               <span>!! watch this space !!</span>
+            </span>
+         </span>
+      </li>
+   </xsl:template>
+   
+   <xsl:template match="tei:att" mode="msg msg2li">
+      <span class="{local-name(.)}">
+         <xsl:text>@</xsl:text>
+         <xsl:apply-templates mode="#current"/>
+      </span>
+   </xsl:template>
+   <xsl:template match="tei:gi" mode="msg">
+      <span class="{local-name(.)}">
+         <xsl:text>&lt;</xsl:text>
+         <xsl:apply-templates mode="#current"/>
+         <xsl:text>></xsl:text>
+      </span>
+   </xsl:template>
+   <xsl:template match="tei:val" mode="msg">
+      <span class="{local-name(.)}">
+         <xsl:text>"</xsl:text>
+         <xsl:apply-templates mode="#current"/>
+         <xsl:text>"</xsl:text>
+      </span>
+   </xsl:template>
+
+      
   <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl">
     <xd:desc>
       <tapas:msg type="failed-assert" role="error" loc="/TEI/text/body/p/join" context="tei:join" test="../@test">You must supply at least two values for @target on join</tapas:msg>
