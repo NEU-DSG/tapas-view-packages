@@ -111,21 +111,21 @@
        anyXML is typically text with TEI phrase-level elements. 
     -->
 
-     <!-- The variable $Ventries contains nothing but a sequence -->
-     <!-- of <taptmp:Ventry> elements, sorted by the content of -->
+     <!-- The variable $val_msg_entries contains nothing but a sequence -->
+     <!-- of <taptmp:val_msg_entry> elements, sorted by the content of -->
      <!-- <taptmp:orig> but with the Java class path that generated -->
      <!-- the original message (which may be specified as a parameter) -->
      <!-- stripped off, which is the same as what the string content of -->
      <!-- <taptmp:truncated> will be except with quotation marks around -->
      <!-- the element and attribute names. -->
-     <xsl:variable name="Ventries">
+     <xsl:variable name="val_msg_entries">
        <!-- see ./internal.rnc for format of $Ventires -->
-       <xsl:apply-templates select="( $warnings, $errors )" mode="VentryWrapper">
+       <xsl:apply-templates select="( $warnings, $errors )" mode="val_msg_wrapper">
          <xsl:sort select="replace( normalize-space(.), $rng_prefix, '')"/>
        </xsl:apply-templates>
      </xsl:variable>
-     <div class="debug Ventries" style="display:none;">
-       <xsl:copy-of select="$Ventries"/>
+     <div class="debug val_msg_entries" style="display:none;">
+       <xsl:copy-of select="$val_msg_entries"/>
      </div>
      
      <div class="validation-tei_all-pkg">
@@ -138,7 +138,7 @@
             TAPAS-wide stylesheets and viewing options. There may be other restrictions,
             but certainly a TEI file should meet the criteria expressed in <tt>tei_all</tt>.</p>
          <xsl:choose>
-            <xsl:when test="$Ventries/*">
+            <xsl:when test="$val_msg_entries/*">
                <h3>Problems…</h3>
                <p>The validation messages below describe where
                   the encoding in this file is invalid: that is, where it differs from
@@ -148,24 +148,78 @@
                   Other cases may simply be errors in the encoding,
                   or places where the encoding isn’t finished yet.</p>
                <h2>Messages</h2>
-               <xsl:variable name="ranked">
-                  <xsl:for-each-group select="FIXME" group-adjacent="normalize-space(.)">
-                     <xsl:variable name="this_grp">
+              <xsl:variable name="val_msg_entries_by_abstracted">
+                <xsl:variable name="val_msg_entries_sorted">
+                  <xsl:for-each select="$val_msg_entries/*">
+                    <xsl:sort select="tapas:abstracted"/>
+                    <xsl:copy-of select="."/>
+                  </xsl:for-each>
+                </xsl:variable>
+                <xsl:for-each-group select="$val_msg_entries_sorted/*" group-adjacent="./tapas:abstracted">
+                  <xsl:variable name="this_set">
+                    <xsl:for-each select="current-group()">
+                      <xsl:copy-of select="."/>
+                    </xsl:for-each>
+                  </xsl:variable>
+                  <tapas:val_msg_set n="{position()}" cnt="{count( $this_set/tapas:val_msg_entry )}">
+                    <xsl:call-template name="subset">
+                      <xsl:with-param name="set" select="$this_set"/>
+                    </xsl:call-template>
+                  </tapas:val_msg_set>
+                </xsl:for-each-group>
+              </xsl:variable>
+              <div class="debug val_msg_entries_by_abstracted" style="display: none;">
+                <xsl:copy-of select="$val_msg_entries_by_abstracted"/>
+              </div>
+              <ul class="collapsable" id="{generate-id()}">
+                <xsl:for-each select="$val_msg_entries_by_abstracted/tapas:val_msg_set">
+                  <xsl:sort select="@cnt cast as xs:integer" order="descending"/>
+                  <xsl:message>DEBUG processing vms #<xsl:value-of select="@n"/> which has <xsl:value-of select="@cnt"/></xsl:message>
+                  <li>
+                    <span class="abstractMsg collapsableHeading">
+                      <span class="cnt"><xsl:value-of select="@cnt"/></span>
+                      <span class="msg">
+                        <xsl:apply-templates select="tapas:val_msg_subset[1]/tapas:val_msg_entry[1]/tapas:abstracted" mode="msg"/>
+                      </span>
+                    </span>
+                    <ul class="collapsable-hidden" id="{generate-id()}">
+                      <xsl:for-each select="tapas:val_msg_subset">
+                        <li>
+                          <span class="msgType collapsableHeading">
+                            <span class="cnt"><xsl:value-of select="@cnt"/></span>
+                            <span class="msg">
+                              <xsl:apply-templates select="tapas:val_msg_entry[1]/tapas:truncated" mode="msg"/>
+                            </span>
+                          </span>
+                        </li>
+                      </xsl:for-each>
+                    </ul>
+                  </li>
+                </xsl:for-each>
+              </ul>
+              
+              
+<!--               <xsl:variable name="ranked">
+                  <xsl:for-each-group select="$val_msg_entries/*" group-adjacent="normalize-space(.)">
+                     <xsl:variable name="this_set">
                         <xsl:for-each select="current-group()">
                            <xsl:copy-of select="."/>
                         </xsl:for-each>
                      </xsl:variable>
-                     <tapas:listMessage n="{position()}" cnt="{count( $this_grp/tapas:msg )}">
-                        <xsl:copy-of select="$this_grp"/>
-                     </tapas:listMessage>
+                     <tapas:val_msg_set n="{position()}" cnt="{count( $this_set/tapas:val_msg_entry )}">
+                        <xsl:copy-of select="$this_set"/>
+                     </tapas:val_msg_set>
                   </xsl:for-each-group>
                </xsl:variable>
+              <div class="debug ranked" style="display: none;">
+                <xsl:copy-of select="$ranked"/>
+              </div>
                <ul class="collapsable" id="{generate-id()}">
                   <xsl:apply-templates select="$ranked/*" mode="ranked-msg-list">
                      <xsl:sort select="@cnt cast as xs:integer" order="descending"/>
                   </xsl:apply-templates>
                </ul>
-            </xsl:when>
+-->            </xsl:when>
             <xsl:otherwise>
                <h3>Valid!</h3>
                <p>This file is valid against the <tt>tei_all</tt> schema. You can read more
@@ -176,13 +230,28 @@
       </div>
    </xsl:template>
    
-  <xsl:template match="c:error" mode="VentryWrapper">
-      <tapas:Ventry role="error" line="{@line}" col="{@column}">
-         <xsl:apply-templates select="." mode="VentryContents"/>
-      </tapas:Ventry>
+   <xsl:template name="subset">
+     <!-- param = a sequence of <tapas:val_msg_entry>s that all have same abstraction -->
+     <xsl:param name="set"/>
+     <xsl:for-each-group select="$set/*" group-adjacent="./tapas:truncated">
+       <xsl:variable name="this_set">
+         <xsl:for-each select="current-group()">
+           <xsl:copy-of select="."/>
+         </xsl:for-each>
+       </xsl:variable>
+       <tapas:val_msg_subset n="{position()}" cnt="{count( $this_set/tapas:val_msg_entry )}">
+         <xsl:copy-of select="$this_set"/>
+       </tapas:val_msg_subset>
+     </xsl:for-each-group>
    </xsl:template>
    
-   <xsl:template match="svrl:text" mode="VentryWrapper">
+  <xsl:template match="c:error" mode="val_msg_wrapper">
+      <tapas:val_msg_entry role="error" line="{@line}" col="{@column}">
+         <xsl:apply-templates select="." mode="val_msg_contents"/>
+      </tapas:val_msg_entry>
+   </xsl:template>
+   
+   <xsl:template match="svrl:text" mode="val_msg_wrapper">
       <xsl:variable name="loc">
          <xsl:variable name="ns_predicate" select="concat('\[namespace-uri\(\)=',$apos,'http://www.tei-c.org/ns/1.0',$apos,'\]')"/>
          <xsl:variable name="loc-sans-ns" select="replace( normalize-space(../@location),$ns_predicate,'')"/>
@@ -190,14 +259,14 @@
          <xsl:value-of select="replace( $loc-sans-useless-ns-prefix, '(\c)\[1\]','$1')"/>
       </xsl:variable>
       <xsl:variable name="role" select="if (@role) then @role else 'error'"/>
-      <tapas:Ventry type="{local-name(..)}" role="{$role}"
+      <tapas:val_msg_entry type="{local-name(..)}" role="{$role}"
         context="{../preceding-sibling::svrl:fired-rule[1]/@context}"
         test="{../@test}" loc="{$loc}">
-        <xsl:apply-templates select="." mode="VentryContents"/>
-      </tapas:Ventry>
+        <xsl:apply-templates select="." mode="val_msg_contents"/>
+      </tapas:val_msg_entry>
    </xsl:template>
 
-  <xsl:template match="c:error|svrl:text" mode="VentryContents">
+  <xsl:template match="c:error|svrl:text" mode="val_msg_contents">
     <xsl:variable name="me" select="normalize-space(.)"/>
     <xsl:variable name="stripped" select="
       if ( starts-with( $me, $rng_prefix ) )
@@ -265,7 +334,46 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="abstracted">
-      <xsl:apply-templates select="$beefedUp" mode="homicide"/>
+      <xsl:variable name="abs1">
+        <xsl:apply-templates select="$beefedUp" mode="homicide"/>
+      </xsl:variable>
+      <!--
+        TEI Schematron messages are simply too eclectic to proces generically. So
+        until TEI-C gets its at together and gives names of constructs in a consistent
+        and parseable manner, we do an ugly table lookup.
+      -->
+      <xsl:variable name="abs2" select="normalize-space($abs1)"/>
+      <xsl:choose>
+        <xsl:when test="$abs2 eq 'The @when attribute cannot be used with any other att.datable.w3c attributes.'">
+          <xsl:value-of select="$abs2"/>
+        </xsl:when>
+        <xsl:when test="$abs2 eq 'The @from and @notBefore attributes cannot be used together.'">
+          <xsl:value-of select="$abs2"/>
+        </xsl:when>
+        <xsl:when test="$abs2 eq 'The @to and @notAfter attributes cannot be used together.'">
+          <xsl:value-of select="$abs2"/>
+        </xsl:when>
+        <xsl:when test="starts-with( $abs2,'@calendar indicates the system or calendar to which the date represented by the content of this element belongs, but this ')">
+          <xsl:value-of select="replace( $abs2, 'this \i\c* element', concat('this ', $genericELEMENTsymbol,' element') )"/>
+        </xsl:when>
+        <xsl:when test="substring-after( $abs2, '@' ) eq 'subtype unless also categorized in general with @type'">
+          <xsl:value-of select="replace( $abs2, 'The \i\c* element', concat('The ', $genericELEMENTsymbol,' element') )"/>
+        </xsl:when>
+        <xsl:when test="starts-with( $abs2,'@targetLang should only be used on')">
+          <xsl:value-of select="replace( $abs2, 'on \i\c* if', concat('on ', $genericELEMENTsymbol, ' if') )"/>
+        </xsl:when>
+        <xsl:when test="starts-with( $abs2,'The element indicated by @spanTo')">
+          <xsl:variable name="tmp" select="replace( $abs2,'@spanTo \(\i\c*\) must', concat('@spanTo (', $genericELEMENTsymbol,') must') )"/>
+          <xsl:value-of select="replace( $tmp, '(the current elmement )\i\c*', concat('$1', $genericELEMENTsymbol) )"/>
+        </xsl:when>
+        <xsl:when test="$abs2 eq '@schemeVersion can only be used if @scheme is specified.'">
+          <xsl:value-of select="$abs2"/>
+        </xsl:when>
+        <!-- so far only have coded the first 8 (of ~81 in English; there are 3 more in French) -->
+        <xsl:otherwise>
+          <xsl:value-of select="$abs2"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
     <tapas:orig>
       <xsl:value-of select="$stripped"/>
@@ -281,11 +389,11 @@
     </tapas:abstracted>
   </xsl:template>
   
-   <xsl:template match="tapas:listMessage" mode="ranked-msg-list">
+   <xsl:template match="tapas:val_msg_set" mode="ranked-msg-list">
       <li>
          <span class="msgType collapsableHeading">
             <span class="cnt"><xsl:value-of select="@cnt"/></span>
-            <span class="msg"><xsl:apply-templates select="tapas:msg[1]" mode="msg"/></span>
+            <span class="msg"><xsl:apply-templates select="tapas:val_msg_entry/tapas:orig[1]" mode="msg"/></span>
          </span>
          <ul class="collapsable" id="{generate-id()}">
             <xsl:apply-templates select="tapas:msg" mode="msg2li"/>
@@ -293,7 +401,7 @@
       </li>
    </xsl:template>
    
-   <xsl:template match="tapas:msg" mode="msg">
+   <xsl:template match="*" mode="msg">
       <xsl:apply-templates mode="#current"/>
    </xsl:template>
    

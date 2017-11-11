@@ -14,23 +14,29 @@ curl -v -F file=@T.xml -u tapas http://localhost:8086/exist/apps/tapas-xq/derive
       <p>prose</p>
       <ul class="collapsable" id="ID1">
         <li>
-          <span class="abstractMsg collapsableHeading">3 unknown element msg grps</span>
+          <span class="abstractMsg collapsableHeading">
+            <span class="cnt">3</span>
+            <span class="msg">unknown element ∃</span>
+          </span>
           <ul class="collapsable" id="ID2">
-            <li><span class="msgType collapsableHeading">4 unknown element "hello"</span>
-              <ul class="collapsable" id="ID3">
-                <li><span class="msg collapsableHeading">Unknown element &lt;hello></span>
-                  <span class="collapsable" id="ID4">
-                    <span class="lineNum blocked"><span class="label">Approximate line #:</span>
-                      17</span>
-                    <span class="colNum blocked"><span class="label">Estimated column #:</span>
-                      45</span>
-                    <span class="allowed blocked"><span class="label">STUFF:</span>
-                      <span class="gi">one</span>, <span class="gi">two</span>, or <span class="gi"
-                        >three</span></span>
-                    <!-- "gi", "att", "val", "datatype" -->
-                  </span>
-                </li>
-              </ul>
+            <li><span class="msgType collapsableHeading">
+              <span class="cnt">4</span>
+              <span class="msg">unknown element "hello"</span>
+            </span>
+            <ul class="collapsable" id="ID3">
+              <li><span class="msg collapsableHeading">Unknown element &lt;hello></span>
+                <span class="collapsable" id="ID4">
+                  <span class="lineNum blocked"><span class="label">Approximate line #:</span>
+                    17</span>
+                  <span class="colNum blocked"><span class="label">Estimated column #:</span>
+                    45</span>
+                  <span class="allowed blocked"><span class="label">STUFF:</span>
+                    <span class="gi">one</span>, <span class="gi">two</span>, or <span class="gi"
+                      >three</span></span>
+                  <!-- "gi", "att", "val", "datatype" -->
+                </span>
+              </li>
+            </ul>
             </li>
           </ul>
         </li>
