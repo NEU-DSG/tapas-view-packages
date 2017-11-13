@@ -4,8 +4,6 @@ span.context:after { content: " "; }
 span.test { font-family: monospace; }
 span.test:after { content: " "; }
 a.loc { font-style: italic; }
-span.msg:before { content: "\A0\A0\201C"; }
-span.msg:after { content: "\201D"; }
 
 /*  prhase-level */
 span.gi, span.att, span.val { font-family: monospace; font-size: 80%; }

@@ -19,18 +19,18 @@
   
   <!-- saxon -xsl:validation_tei_all/process_messages.xslt -s:/tmp/errs.xml -o:/tmp/errs.html fullHTML=true css=/home/syd/Documents/tapas-view-packages/validation_tei_all/styles.css -->
 
-   <xsl:param name="fullHTML" select="'false'"/> <!-- set to 'true' to get browsable output for debugging -->
-   <xsl:param name="css" select="'./css/validation.css'"/>
-   <xsl:param name="jquery" select="'../common/jquery/jquery-3.2.1.min.js'"/>
-   <xsl:param name="js" select="'js/validation.js'"/>
-   <xsl:param name="rng_prefix" select="'org.xml.sax.SAXParseException: '"/>
+  <xsl:param name="fullHTML" select="'false'"/> <!-- set to 'true' to get browsable output for debugging -->
+  <xsl:param name="css" select="'./css/validation.css'"/>
+  <xsl:param name="jquery" select="'../common/jquery/jquery-3.2.1.min.js'"/>
+  <xsl:param name="js" select="'js/validation.js'"/>
+  <xsl:param name="rng_prefix" select="'org.xml.sax.SAXParseException: '"/>
   <xsl:param name="genericELEMENTsymbol" select="'∃'"/>
   <xsl:param name="genericATTRIBUTEsymbol" select="'∀'"/>
   <xsl:variable name="root" select="/" as="node()"/>
-   <xsl:variable name="apos" select='"&apos;"'/>
-   
-   <xsl:output method="xhtml"/>
-   
+  <xsl:variable name="apos" select='"&apos;"'/>
+  
+  <xsl:output method="xhtml"/>
+  
   <xsl:template match="tei:gi" mode="homicide">
     <xsl:value-of select="$genericELEMENTsymbol"/>
   </xsl:template>
@@ -41,51 +41,51 @@
     <xsl:value-of select="."/>
   </xsl:template>
   
-   <xsl:template match="/">
-      <xsl:choose>
-         <xsl:when test="$fullHTML eq 'true'">
-            <html xmlns:tapas="http://www.wheatoncollege.edu/TAPAS/1.0"
-              xmlns:tei="http://www.tei-c.org/ns/1.0">
-               <xsl:call-template name="htmlHead"/>
-               <body>
-                  <xsl:call-template name="contentDiv"/>
-               </body>
-            </html>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:if test="$fullHTML ne 'false'">
-               <xsl:message>WARNING: unrecognized value of 'fullHTML' parameter; presuming false</xsl:message>
-            </xsl:if>
+  <xsl:template match="/">
+    <xsl:choose>
+      <xsl:when test="$fullHTML eq 'true'">
+        <html xmlns:tapas="http://www.wheatoncollege.edu/TAPAS/1.0"
+          xmlns:tei="http://www.tei-c.org/ns/1.0">
+          <xsl:call-template name="htmlHead"/>
+          <body>
             <xsl:call-template name="contentDiv"/>
-         </xsl:otherwise>
-      </xsl:choose>
-   </xsl:template>
-   
-   <xsl:template name="htmlHead">
-      <head>
-         <title>TAPAS: TEI errors</title>
-         <meta charset="UTF-8"/>
-         <meta name="created-by" content="process_messages.xslt"/>
-         <meta name="creation-timestamp" content="{current-dateTime()}"/>
-         <link rel="stylesheet" type="text/css" href="{$css}"/>
-         <script type="text/javascript" src="{$jquery}"></script>
-         <script type="text/javascript" src="{$js}"></script>
-      </head>
-   </xsl:template>
-   
-   <xsl:template name="contentDiv">
-      <div class="debug input" style="display:none;">
-         <xsl:copy-of select="/"/>
-      </div>
-      <!-- The only 2 values TEI P5 uses for sch:*/@role are 'warning' and 'nonfatal'. -->
-      <xsl:variable name="errors" select="//c:error|//svrl:text[not( ../@role ) or ../@role eq 'nonfatal']"/>
-      <xsl:variable name="warnings" select="//svrl:text[../@role eq 'warning']"/>
-      <!-- For right now, TAPAS is going to treat errors as warnings. Probably will change -->
-      <!-- that in the future, but given that the schema we are currently validating against -->
-      <!-- (tei_all) has only 2 warnings, and they are both pretty severe, as it were, there -->
-      <!-- seems to be no reason to put in a lot of effort to treat these differently. -->
-      
-      <!--
+          </body>
+        </html>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:if test="$fullHTML ne 'false'">
+          <xsl:message>WARNING: unrecognized value of 'fullHTML' parameter; presuming false</xsl:message>
+        </xsl:if>
+        <xsl:call-template name="contentDiv"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="htmlHead">
+    <head>
+      <title>TAPAS: TEI errors</title>
+      <meta charset="UTF-8"/>
+      <meta name="created-by" content="process_messages.xslt"/>
+      <meta name="creation-timestamp" content="{current-dateTime()}"/>
+      <link rel="stylesheet" type="text/css" href="{$css}"/>
+      <script type="text/javascript" src="{$jquery}"></script>
+      <script type="text/javascript" src="{$js}"></script>
+    </head>
+  </xsl:template>
+
+  <xsl:template name="contentDiv">
+    <div class="debug input" style="display:none;">
+      <xsl:copy-of select="/"/>
+    </div>
+    <!-- The only 2 values TEI P5 uses for sch:*/@role are 'warning' and 'nonfatal'. -->
+    <xsl:variable name="errors" select="//c:error|//svrl:text[not( ../@role ) or ../@role eq 'nonfatal']"/>
+    <xsl:variable name="warnings" select="//svrl:text[../@role eq 'warning']"/>
+    <!-- For right now, TAPAS is going to treat errors as warnings. Probably will change -->
+    <!-- that in the future, but given that the schema we are currently validating against -->
+    <!-- (tei_all) has only 2 warnings, and they are both pretty severe, as it were, there -->
+    <!-- seems to be no reason to put in a lot of effort to treat these differently. -->
+    
+    <!--
         Regularize all warnings and errors, whether from RNG or SCH
         processing. Each error message (whether from c: or sch:
         namespace) gets converted to a <tapas:msg> element:
@@ -171,55 +171,69 @@
               <div class="debug val_msg_entries_by_abstracted" style="display: none;">
                 <xsl:copy-of select="$val_msg_entries_by_abstracted"/>
               </div>
-              <ul class="collapsable" id="{generate-id()}">
+              <ul class="collapsable collapsable-hidden" id="{generate-id()}">
                 <xsl:for-each select="$val_msg_entries_by_abstracted/tapas:val_msg_set">
                   <xsl:sort select="@cnt cast as xs:integer" order="descending"/>
                   <xsl:message>DEBUG processing vms #<xsl:value-of select="@n"/> which has <xsl:value-of select="@cnt"/></xsl:message>
                   <li>
-                    <span class="abstractMsg collapsableHeading">
+                    <span class="abstractMsg collapsableHeading collapsable-hidden">
                       <span class="cnt"><xsl:value-of select="@cnt"/></span>
                       <span class="msg">
                         <xsl:apply-templates select="tapas:val_msg_subset[1]/tapas:val_msg_entry[1]/tapas:abstracted" mode="msg"/>
                       </span>
                     </span>
-                    <ul class="collapsable-hidden" id="{generate-id()}">
+                    <ul class="collapsable collapsable-hidden" id="{generate-id()}">
                       <xsl:for-each select="tapas:val_msg_subset">
                         <li>
-                          <span class="msgType collapsableHeading">
+                          <span class="msgType collapsableHeading collapsable-hidden" id="{generate-id()}">
                             <span class="cnt"><xsl:value-of select="@cnt"/></span>
                             <span class="msg">
                               <xsl:apply-templates select="tapas:val_msg_entry[1]/tapas:truncated" mode="msg"/>
                             </span>
                           </span>
+                          <ul class="collapsable collapsable-hidden" id="{generate-id()}">
+                            <xsl:for-each select="tapas:val_msg_entry">
+                              <li>
+                                <span class="msg collapsable collapsable-hidden" id="{generate-id()}">
+                                  <xsl:if test="@line">             
+                                    <span class="lineNum blocked">
+                                      <span class="label">Approximate line #:</span>
+                                      <span class="num"><xsl:value-of select="@line"/></span>
+                                    </span>
+                                    <xsl:if test="@col">
+                                      <span class="colNum blocked">
+                                        <span class="label">Estimated column #:</span>
+                                        <span class="num"><xsl:value-of select="@col"/></span>
+                                      </span>
+                                    </xsl:if>
+                                  </xsl:if>
+                                  <xsl:if test="@loc">
+                                    <span class="xpath blocked">
+                                      <span class="label">Location (in XPath notation):</span>
+                                      <span class="num"><xsl:value-of select="@loc"/></span>
+                                    </span>
+                                  </xsl:if>
+                                  <xsl:apply-templates select="tapas:truncated" mode="msg"/>
+                                  <xsl:if test="tapas:expall">
+                                    <ul class="collapsable collapsable-hidden" id="{generate-id()}">
+                                      <li>
+                                        <span class="expall collapsable collapsable-hidden" id="{generate-id()}">
+                                          <xsl:apply-templates select="tapas:expall"/>
+                                        </span>
+                                      </li>
+                                    </ul>
+                                  </xsl:if>
+                                </span>
+                              </li>
+                            </xsl:for-each>
+                          </ul>
                         </li>
                       </xsl:for-each>
                     </ul>
                   </li>
                 </xsl:for-each>
               </ul>
-              
-              
-<!--               <xsl:variable name="ranked">
-                  <xsl:for-each-group select="$val_msg_entries/*" group-adjacent="normalize-space(.)">
-                     <xsl:variable name="this_set">
-                        <xsl:for-each select="current-group()">
-                           <xsl:copy-of select="."/>
-                        </xsl:for-each>
-                     </xsl:variable>
-                     <tapas:val_msg_set n="{position()}" cnt="{count( $this_set/tapas:val_msg_entry )}">
-                        <xsl:copy-of select="$this_set"/>
-                     </tapas:val_msg_set>
-                  </xsl:for-each-group>
-               </xsl:variable>
-              <div class="debug ranked" style="display: none;">
-                <xsl:copy-of select="$ranked"/>
-              </div>
-               <ul class="collapsable" id="{generate-id()}">
-                  <xsl:apply-templates select="$ranked/*" mode="ranked-msg-list">
-                     <xsl:sort select="@cnt cast as xs:integer" order="descending"/>
-                  </xsl:apply-templates>
-               </ul>
--->            </xsl:when>
+            </xsl:when>
             <xsl:otherwise>
                <h3>Valid!</h3>
                <p>This file is valid against the <tt>tei_all</tt> schema. You can read more
@@ -464,6 +478,7 @@
          <tapas:msg role="error" line="60" col="403">text not allowed here; expected the element end-tag</tapas:msg>
       </xd:desc>
    </xd:doc>
+
 </xsl:stylesheet>
 
 <!-- 
