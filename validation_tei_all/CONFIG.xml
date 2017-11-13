@@ -14,6 +14,7 @@
     <css_file>css/validation.css</css_file>
   </css_files>
   <js_files>
+    <js_file>../common/jquery/jquery-3.2.1.min.js</js_file>
     <js_file>js/validation.js</js_file>
   </js_files>
   <parameters/>
