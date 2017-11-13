@@ -10,8 +10,12 @@
     <file_type>tei</file_type>
   </file_types>
   <git_branch/>
-  <css_files/>
-  <js_files/>
+  <css_files>
+    <css_file>css/validation.css</css_file>
+  </css_files>
+  <js_files>
+    <js_file>js/validation.js</js_file>
+  </js_files>
   <parameters/>
   <run type="xproc" pgm="validate.xpl">
     <step qname="tapas:validity-report">
