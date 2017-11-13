@@ -14,6 +14,7 @@
   height: 100%;
   background-color: #ffffff;
   font-family: 'Times', 'Times New Roman', serif;
+  font-size: 1.1em;
   /* Control panel */
   /* Expandable headings */
   /* Containers for the <teiHeader> and <text> */
@@ -23,10 +24,15 @@
 .hieractivity .block {
   display: block;
 }
+.hieractivity code,
 .hieractivity .encoded {
+  brackground-color: rgba(255, 255, 255, 0);
   font-family: 'Courier', 'Courier New', monospace;
+  color: inherit;
 }
+.hieractivity code.encoded-att,
 .hieractivity .encoded.encoded-att,
+.hieractivity code[data-tapas-gi],
 .hieractivity .encoded[data-tapas-gi] {
   font-size: 0.95em;
 }

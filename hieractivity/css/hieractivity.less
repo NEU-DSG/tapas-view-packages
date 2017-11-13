@@ -81,13 +81,16 @@
   height: 100%;
   background-color: @white;
   font-family: @plain;
+  font-size: 1.1em;
   
   .block {
     display: block;
   }
   
-  .encoded {
+  code, .encoded {
+    brackground-color: @clear;
     font-family: @code;
+    color: inherit;
     
     &.encoded-att,
     &[data-tapas-gi] {
@@ -149,7 +152,7 @@
     width: 185px;
     position: fixed;
     z-index: 900;
-    top: 0;
+    top: 50px; // The TAPAS header is 50px.
     right: 0;
     background-color: rgba(0, 0, 0, 0.5);//@gray-dark;
     overflow: hidden;
