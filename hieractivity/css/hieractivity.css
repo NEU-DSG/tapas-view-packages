@@ -11,6 +11,7 @@
 }
 /* Hieractivity */
 .hieractivity {
+  height: 100%;
   background-color: #ffffff;
   font-family: 'Times', 'Times New Roman', serif;
   /* Control panel */
@@ -19,10 +20,14 @@
   /* TEI header */
   /* <text>-specific styles */
 }
+.hieractivity .block {
+  display: block;
+}
 .hieractivity .encoded {
   font-family: 'Courier', 'Courier New', monospace;
 }
-.hieractivity .encoded.encoded-att {
+.hieractivity .encoded.encoded-att,
+.hieractivity .encoded[data-tapas-gi] {
   font-size: 0.95em;
 }
 .hieractivity h1,
@@ -35,30 +40,64 @@
   font-weight: normal;
   color: black;
 }
-.hieractivity dl dd {
+.hieractivity h5,
+.hieractivity h6 {
+  font-size: 1em;
+}
+.hieractivity ul,
+.hieractivity .list-ul,
+.hieractivity ol,
+.hieractivity .list-ol {
+  margin: 0.8em 0;
+  padding-left: 1em;
+  display: block;
+}
+.hieractivity ul li,
+.hieractivity .list-ul li,
+.hieractivity ol li,
+.hieractivity .list-ol li,
+.hieractivity ul .list-item-li,
+.hieractivity .list-ul .list-item-li,
+.hieractivity ol .list-item-li,
+.hieractivity .list-ol .list-item-li {
+  display: list-item;
+}
+.hieractivity dl dd,
+.hieractivity .list-dl dd {
   margin-left: 1.2em;
 }
-.hieractivity dl dd + dt {
-  margin-top: 0.35em;
+.hieractivity dl dd + dt,
+.hieractivity .list-dl dd + dt {
+  margin-top: 0.2em;
+}
+.hieractivity a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration: dotted underline;
 }
 .hieractivity #control-panel {
-  border-radius: 0.4em;
-  padding: 0.5em;
+  border-radius: 2px;
+  padding: 0.3em;
+  padding-right: 0.25em;
+  max-height: 100%;
   width: 185px;
   position: fixed;
   z-index: 900;
-  top: 4px;
-  right: 4px;
-  background-color: #555555;
+  top: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
   color: black;
+  font-size: 0.85em;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-.hieractivity #control-panel.ui-draggable:hover {
-  cursor: move;
-  cursor: grab;
+.hieractivity #control-panel legend {
+  color: #555555;
+  font-size: 0.95em;
 }
-.hieractivity #control-panel.ui-draggable-dragging {
-  cursor: move !important;
-  cursor: grabbing !important;
+.hieractivity #control-panel table {
+  width: 100%;
+  font-size: 1em;
 }
 .hieractivity #control-panel h2,
 .hieractivity #control-panel h3,
@@ -67,97 +106,168 @@
   padding: 0;
   display: block;
   color: white;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  line-height: 1.1;
 }
 .hieractivity #control-panel .expandable-heading > button {
   border: none;
-  border-top: thin solid #8b1122;
-  border-radius: 0;
-  padding: 0.25em;
-  background-color: #FFF8F3;
+  border-radius: 0.2em;
+  padding: 0.25em 0.5em 0.2em 1.5em;
+  background-color: #EBEBEB;
   opacity: 1;
   width: 100%;
   box-shadow: none;
-  color: black;
+  color: #202020;
+  font-size: 0.95em;
 }
 .hieractivity #control-panel .expandable-heading > button[aria-expanded=true] {
   box-shadow: unset;
 }
+.hieractivity #control-panel .expandable-heading > button::before {
+  margin-left: -1em;
+}
 .hieractivity #control-panel h2.expandable-heading {
   margin-left: 0;
   margin-right: 0;
-  font-variant: small-caps;
   text-align: center;
 }
 .hieractivity #control-panel h2.expandable-heading > button {
-  border: medium solid #8b1122;
-  border-radius: 0.4em;
+  border-radius: 1px;
   padding: 0.25em 0.5em;
   box-shadow: 0.1em 0.1em 0.2em black;
+  font-size: 0.9em;
   font-variant: inherit;
 }
-.hieractivity #control-panel #controls-container {
+.hieractivity #control-panel h2.expandable-heading > button::before {
+  margin-left: 0;
+}
+.hieractivity #control-panel #controls-viewport {
   border: none;
-  padding: 0;
+  padding: 0 0.4em 0.2em;
+  padding-right: 0.25em;
+  max-height: 92%;
   overflow: auto;
   cursor: default;
   /* Widget customizations */
 }
-.hieractivity #control-panel #controls-container .control-widget {
-  margin-top: 0.5em;
+.hieractivity #control-panel #controls-viewport .expandable {
+  border: none;
+  padding: unset;
+}
+.hieractivity #control-panel #controls-viewport .control-widget {
+  margin-top: 0.35em;
   border-radius: 0.4em;
   padding-bottom: 0.1em;
-  background-color: #8b1122;
+  background-color: #f9f9f9;
 }
-.hieractivity #control-panel #controls-container .control-widget:first-child {
+.hieractivity #control-panel #controls-viewport .control-widget:first-child {
   margin-top: 0;
 }
-.hieractivity #control-panel #controls-container .control-widget .control-widget-component {
-  margin: 0.5em;
+.hieractivity #control-panel #controls-viewport .control-widget .control-widget-component {
+  margin: 0.25em;
   border: thin solid #dddddd;
-  height: 120px;
+  height: 100px;
   background-color: white;
   overflow-y: auto;
-  padding: 0.25em;
+  padding: 0.15em;
   display: block;
 }
-.hieractivity #control-panel #controls-container fieldset {
+.hieractivity #control-panel #controls-viewport fieldset {
   border: thin solid #dddddd;
-  padding: 0.15em 0;
+  padding: 0.15em 0.1em;
   text-align: left;
 }
-.hieractivity #control-panel #controls-container fieldset label {
+.hieractivity #control-panel #controls-viewport fieldset label {
   display: table-row;
 }
-.hieractivity #control-panel #controls-container fieldset label .label-desc {
-  margin: 0 0.35em;
-  font-size: 0.85em;
+.hieractivity #control-panel #controls-viewport fieldset label input[type=radio] {
+  margin: 0.2em 0.25em;
+  display: table-cell;
 }
-.hieractivity #control-panel #controls-container #zoom-container {
+.hieractivity #control-panel #controls-viewport fieldset label .label-desc {
+  padding-left: 0.2em;
+  display: table-cell;
+}
+.hieractivity #control-panel #controls-viewport fieldset label .label-desc .encoded {
+  font-size: 0.93em;
+}
+.hieractivity #control-panel #controls-viewport table {
+  margin-bottom: 0.2em;
+}
+.hieractivity #control-panel #controls-viewport table tbody {
+  border: none;
+}
+.hieractivity #control-panel #controls-viewport table tr {
+  border-top: thin solid #dddddd;
+}
+.hieractivity #control-panel #controls-viewport table tr:first-child {
+  border-top: none;
+}
+.hieractivity #control-panel #controls-viewport table td {
+  padding-left: 0.2em;
+  vertical-align: top;
+}
+.hieractivity #control-panel #controls-viewport table td:first-child {
+  padding-left: 0;
+}
+.hieractivity #control-panel #controls-viewport #zoom-container {
   padding: 0.4em;
-  display: flex;
   height: initial;
 }
-.hieractivity #control-panel #controls-container #zoom-container #zoom-slide {
-  width: 140px;
+.hieractivity #control-panel #controls-viewport #zoom-container .slidebar {
+  display: table-row;
 }
-.hieractivity #control-panel #controls-container #text-contrasts {
+.hieractivity #control-panel #controls-viewport #zoom-container .slidebar > * {
+  display: table-cell;
+  min-width: 10px;
+  vertical-align: middle;
+  text-align: center;
+}
+.hieractivity #control-panel #controls-viewport #zoom-container .slidebar #zoom-slide {
+  width: 110px;
+}
+.hieractivity #control-panel #controls-viewport #text-contrasts {
   height: unset;
 }
-.hieractivity #control-panel #controls-container #gi-option-selector .gi-count {
-  margin-top: 0.2em;
+.hieractivity #control-panel #controls-viewport #gi-option-selector .gi-count {
   float: right;
 }
-.hieractivity #control-panel #controls-container #gi-option-selector .legend {
-  float: right;
+.hieractivity #control-panel #controls-viewport #color-scheme-selector-container {
+  height: initial;
 }
-.hieractivity #control-panel #controls-container #gi-option-selector .legend .legend-key {
+.hieractivity #control-panel #controls-viewport #color-scheme-legend #legend-constants,
+.hieractivity #control-panel #controls-viewport #color-scheme-legend #legend-depthwise,
+.hieractivity #control-panel #controls-viewport #color-scheme-legend #legend-familial {
+  width: 100%;
+}
+.hieractivity #control-panel #controls-viewport #color-scheme-legend #legend-constants {
+  border-top: medium double #808080;
+}
+.hieractivity #control-panel #controls-viewport #color-scheme-legend .legend {
+  padding: 0.2em 0 0;
+  display: block;
+}
+.hieractivity #control-panel #controls-viewport #color-scheme-legend .legend svg {
+  margin-top: 0.15em;
+}
+.hieractivity #control-panel #controls-viewport #color-scheme-legend .legend svg .legend-key {
   stroke-width: 1px;
   stroke: #555555;
 }
-.hieractivity #control-panel #controls-container #gi-properties {
-  margin: 0.5em;
+.hieractivity #control-panel #controls-viewport #color-scheme-legend .legend .legend-desc {
+  margin: 0.2em 0;
+}
+.hieractivity #control-panel #controls-viewport #color-scheme-legend .legend .legend-desc ul {
+  margin: 0;
+}
+.hieractivity #control-panel #controls-viewport #color-scheme-legend .legend .encoded {
+  font-size: 0.9em;
+}
+.hieractivity #control-panel #controls-viewport #gi-properties {
+  margin: 0.25em;
   border: thin solid #dddddd;
-  height: 120px;
+  height: 100px;
   background-color: white;
   overflow-y: auto;
   text-align: left;
@@ -258,6 +368,7 @@
 }
 .hieractivity [data-tapas-gi].boxed {
   margin: 2em 1em;
+  border: none;
   padding: 0.85em;
   display: block;
 }
@@ -265,7 +376,8 @@
   margin: 0 0 2em;
 }
 .hieractivity [data-tapas-gi].boxed.selected-gi {
-  border-left: 1em solid #8b1122;
+  border-left: 0.5em solid #8b1122;
+  padding-left: 0.35em;
   color: black;
 }
 .hieractivity [data-tapas-gi].boxed.box-tabularasa {
@@ -273,6 +385,12 @@
 }
 .hieractivity [data-tapas-gi].boxed.box-tabularasa > .box-outermost {
   margin: 1.2em 1em;
+}
+.hieractivity [data-tapas-gi].boxed.boxed-gen {
+  margin: 1em 0.5em;
+}
+.hieractivity [data-tapas-gi].boxed[data-tapas-gi|=div] {
+  margin-top: 2em;
 }
 .hieractivity [data-tapas-gi].boxed.box-p {
   margin: 1em 0;
@@ -289,63 +407,52 @@
   fill: #ffffff;
 }
 .hieractivity .box-outermost {
-  background-color: rgba(50, 116, 184, 0.8);
-  fill: rgba(50, 116, 184, 0.8);
+  background-color: rgba(50, 116, 184, 0.85);
+  fill: rgba(50, 116, 184, 0.85);
 }
 .hieractivity .box-outer {
-  background-color: rgba(124, 186, 176, 0.8);
-  fill: rgba(124, 186, 176, 0.8);
+  background-color: rgba(124, 186, 176, 0.85);
+  fill: rgba(124, 186, 176, 0.85);
 }
 .hieractivity .box-p {
   background-color: #ffffee;
   fill: #ffffee;
 }
 .hieractivity .box-gen0 {
-  background-color: black;
-  fill: black;
+  background-color: rgba(128, 177, 211, 0.85);
+  fill: rgba(128, 177, 211, 0.85);
 }
 .hieractivity .box-gen1 {
-  background-color: rgba(255, 255, 179, 0.8);
-  fill: rgba(255, 255, 179, 0.8);
+  background-color: #ccebc5;
+  fill: #ccebc5;
 }
 .hieractivity .box-gen2 {
-  background-color: rgba(190, 186, 218, 0.8);
-  fill: rgba(190, 186, 218, 0.8);
+  background-color: rgba(179, 222, 105, 0.85);
+  fill: rgba(179, 222, 105, 0.85);
 }
 .hieractivity .box-gen3 {
-  background-color: rgba(251, 128, 114, 0.8);
-  fill: rgba(251, 128, 114, 0.8);
+  background-color: rgba(255, 237, 111, 0.85);
+  fill: rgba(255, 237, 111, 0.85);
 }
 .hieractivity .box-gen4 {
-  background-color: rgba(253, 180, 98, 0.8);
-  fill: rgba(253, 180, 98, 0.8);
+  background-color: rgba(253, 180, 98, 0.85);
+  fill: rgba(253, 180, 98, 0.85);
 }
 .hieractivity .box-gen5 {
-  background-color: rgba(128, 177, 211, 0.8);
-  fill: rgba(128, 177, 211, 0.8);
+  background-color: rgba(251, 128, 114, 0.85);
+  fill: rgba(251, 128, 114, 0.85);
 }
 .hieractivity .box-gen6 {
-  background-color: rgba(179, 222, 105, 0.8);
-  fill: rgba(179, 222, 105, 0.8);
+  background-color: rgba(252, 205, 229, 0.85);
+  fill: rgba(252, 205, 229, 0.85);
 }
 .hieractivity .box-gen7 {
-  background-color: rgba(252, 205, 229, 0.8);
-  fill: rgba(252, 205, 229, 0.8);
+  background-color: rgba(188, 128, 189, 0.85);
+  fill: rgba(188, 128, 189, 0.85);
 }
 .hieractivity .box-gen8 {
-  background-color: rgba(188, 128, 189, 0.8);
-  fill: rgba(188, 128, 189, 0.8);
-}
-.hieractivity .box-gen9 {
-  background-color: rgba(204, 235, 197, 0.8);
-  fill: rgba(204, 235, 197, 0.8);
-}
-.hieractivity .box-gen10 {
-  background-color: rgba(255, 237, 111, 0.8);
-  fill: rgba(255, 237, 111, 0.8);
-}
-.hieractivity .block {
-  display: block;
+  background-color: rgba(190, 186, 218, 0.85);
+  fill: rgba(190, 186, 218, 0.85);
 }
 .hieractivity .block[data-tapas-gi=pb],
 .hieractivity .block[data-tapas-gi=cb] {
@@ -367,7 +474,19 @@
   font-size: initial;
 }
 .hieractivity *[data-tapas-gi] {
-  padding: 0 0.1em;
+  padding: 0.15em;
+  line-height: 1.4em;
+}
+.hieractivity *[data-tapas-gi]:not(.boxed) {
+  border: 2px rgba(255, 255, 255, 0);
+  border-style: none solid;
+  border-radius: 0.5em;
+}
+.hieractivity *[data-tapas-gi]:not(.boxed):hover {
+  border-width: thin 2px;
+  border-style: none solid;
+  border-radius: 0.5em;
+  border-color: #9eaec9;
 }
 .hieractivity [data-tapas-gi=lb]::before {
   content: '↵';
@@ -395,51 +514,29 @@
   display: block;
   text-align: center;
 }
-.hieractivity ul,
-.hieractivity .list-ul,
-.hieractivity ol,
-.hieractivity .list-ol {
-  margin: 0.8em 0;
-  padding-left: 1em;
-  display: block;
-}
-.hieractivity ul li,
-.hieractivity .list-ul li,
-.hieractivity ol li,
-.hieractivity .list-ol li,
-.hieractivity ul .list-item-li,
-.hieractivity .list-ul .list-item-li,
-.hieractivity ol .list-item-li,
-.hieractivity .list-ol .list-item-li {
-  display: list-item;
-}
-.hieractivity table,
-.hieractivity .table {
+.hieractivity [data-tapas-gi=table] table,
+.hieractivity [data-tapas-gi=table] .table {
+  border-collapse: collapse;
   width: 100%;
   display: table;
   color: inherit;
 }
-.hieractivity table > span[data-tapas-gi=head],
-.hieractivity .table > span[data-tapas-gi=head] {
+.hieractivity [data-tapas-gi=table] table > [data-tapas-gi=head],
+.hieractivity [data-tapas-gi=table] .table > [data-tapas-gi=head] {
   display: table-caption;
 }
-.hieractivity table span[data-tapas-gi=row],
-.hieractivity .table span[data-tapas-gi=row] {
+.hieractivity [data-tapas-gi=table] table [data-tapas-gi=row],
+.hieractivity [data-tapas-gi=table] .table [data-tapas-gi=row] {
   display: table-row;
+  border: thin #9eaec9;
 }
-.hieractivity table span[data-tapas-gi=row] span[data-tapas-gi=cell],
-.hieractivity .table span[data-tapas-gi=row] span[data-tapas-gi=cell],
-.hieractivity table span[data-tapas-gi=row] .colspanned,
-.hieractivity .table span[data-tapas-gi=row] .colspanned {
-  border-top: thin solid #555555;
+.hieractivity [data-tapas-gi=table] table [data-tapas-gi=row] [data-tapas-gi=cell],
+.hieractivity [data-tapas-gi=table] .table [data-tapas-gi=row] [data-tapas-gi=cell],
+.hieractivity [data-tapas-gi=table] table [data-tapas-gi=row] .colspanned,
+.hieractivity [data-tapas-gi=table] .table [data-tapas-gi=row] .colspanned {
+  border: thin solid #9eaec9;
+  border-radius: 0;
   padding: 0.15em 0.2em;
-  display: table-cell;
-}
-.hieractivity table span[data-tapas-gi=row]:first-child span[data-tapas-gi=cell],
-.hieractivity .table span[data-tapas-gi=row]:first-child span[data-tapas-gi=cell],
-.hieractivity table span[data-tapas-gi=row]:first-child .colspanned,
-.hieractivity .table span[data-tapas-gi=row]:first-child .colspanned {
-  border-top: none;
   display: table-cell;
 }
 .hieractivity [data-tapas-gi=titlePage] {
@@ -451,4 +548,143 @@
   text-align: center;
   font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
   font-weight: normal;
+}
+.hieractivity .preformatted {
+  margin: 0;
+  border: thin inset rgba(0, 0, 0, 0.3);
+  padding: 0.25em;
+  display: block;
+  overflow: auto;
+  background-color: rgba(200, 200, 200, 0.1);
+  white-space: pre;
+}
+.hieractivity.hieractivity-depthwise #legend-familial {
+  display: none;
+}
+.hieractivity.hieractivity-familial #legend-depthwise {
+  display: none;
+}
+.hieractivity.hieractivity-familial .boxed-gen {
+  margin: 0.5em 0 0;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.hieractivity.hieractivity-familial .boxed-gen.legend-key {
+  fill: rgba(255, 255, 255, 0.3);
+}
+.hieractivity.hieractivity-familial .boxed-gen.box-gen1,
+.hieractivity.hieractivity-familial .boxed-gen.box-gen4,
+.hieractivity.hieractivity-familial .boxed-gen.box-gen7 {
+  background-color: #ccebc5;
+  fill: #ccebc5;
+}
+.hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed) {
+  border-width: thin 2px;
+  border-style: none solid;
+  border-radius: 0.5em;
+  border-color: #9eaec9;
+}
+.hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed).familial-candidate {
+  border-width: thin medium;
+}
+.hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed).familial-candidate:hover {
+  border-style: solid;
+  box-shadow: -0.2em -0.15em 0.3em rgba(0, 0, 0, 0.3);
+}
+.hieractivity.hieractivity-familial [data-tapas-gi]:not(.boxed).familial-candidate.selected-gi {
+  background-color: #8b1122;
+}
+.hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-dark {
+  border-color: #33a02c;
+}
+.hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #33a02c;
+}
+.hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-light {
+  border-color: #83cd41;
+}
+.hieractivity.hieractivity-familial .family-bibliographic.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #83cd41;
+}
+.hieractivity.hieractivity-familial .family-choicepart.familial-candidate-dark {
+  border-color: #ff7f00;
+}
+.hieractivity.hieractivity-familial .family-choicepart.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #ff7f00;
+}
+.hieractivity.hieractivity-familial .family-choicepart.familial-candidate-light {
+  border-color: #fdbf6f;
+}
+.hieractivity.hieractivity-familial .family-choicepart.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #fdbf6f;
+}
+.hieractivity.hieractivity-familial .family-measurement.familial-candidate-dark {
+  border-color: #a97211;
+}
+.hieractivity.hieractivity-familial .family-measurement.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #a97211;
+}
+.hieractivity.hieractivity-familial .family-measurement.familial-candidate-light {
+  border-color: #d6d63a;
+}
+.hieractivity.hieractivity-familial .family-measurement.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #d6d63a;
+}
+.hieractivity.hieractivity-familial .family-namelike.familial-candidate-dark {
+  border-color: #6a3d9a;
+}
+.hieractivity.hieractivity-familial .family-namelike.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #6a3d9a;
+}
+.hieractivity.hieractivity-familial .family-namelike.familial-candidate-light {
+  border-color: #cab2d6;
+}
+.hieractivity.hieractivity-familial .family-namelike.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #cab2d6;
+}
+.hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-dark {
+  border-color: #1f78b4;
+}
+.hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #1f78b4;
+}
+.hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-light {
+  border-color: #a6cee3;
+}
+.hieractivity.hieractivity-familial .family-rhetorical.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #a6cee3;
+}
+.hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-dark {
+  border-color: #ff181b;
+}
+.hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-dark.legend-key {
+  border-color: inherit;
+  fill: #ff181b;
+}
+.hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-light {
+  border-color: #ff96cb;
+}
+.hieractivity.hieractivity-familial .family-transcriptional.familial-candidate-light.legend-key {
+  border-color: inherit;
+  fill: #ff96cb;
+}
+@media (device-width: 768px) and (device-height: 1024px) {
+  .hieractivity ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+  }
+  .hieractivity ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+  }
 }

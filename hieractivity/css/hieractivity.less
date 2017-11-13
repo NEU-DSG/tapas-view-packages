@@ -2,17 +2,22 @@
 
 /*  MISC. VARIABLES  */
 
-@box-opacity: 0.8;
+@box-opacity: 0.85;
 @button-shadow: 0.1em 0.1em 0.2em;
 
 /*  COLORS  */
 
 @cream:             #FFE;
+@clear:             rgba(255, 255, 255, 0);
+@cloudy:            rgba(255, 255, 255, 0.3);
+@smokey:            rgba(0, 0, 0, 0.3);
+@shadow-touched:    rgba(200, 200, 200, 0.1);
 @gray-darker:       #202020;
 @gray-dark:         #555555;
 @gray:              #808080;
 @gray-light:        #DDDDDD;
 @gray-lighter:      #F0F0F0;
+@gray-lightest:     #F9F9F9;
 @raspberry-darker:  #8B1122;
 @raspberry-dark:    #B02B3D;
 @raspberry:         #CC4D5E;
@@ -20,27 +25,43 @@
 @raspberry-lighter: #F7AAB5;
 @slate:             #9EAEC9;
 @white:             #FFFFFF;
-// Color palette used for boxes at varying depths. This is a slightly modified
+// Color palette used for boxes at varying depths. This is a modified
   // version of 12-class Set3 from Cynthia Brewer's ColorBrewer 2.0:
   // http://colorbrewer2.org/?type=qualitative&scheme=Set3&n=12
-@box01:         rgba(50,  116, 184, @box-opacity);
-@box02:         rgba(124, 186, 176, @box-opacity);
-@box03:         rgba(255, 255, 179, @box-opacity);
-@box04:         rgba(190, 186, 218, @box-opacity);
-@box05:         rgba(251, 128, 114, @box-opacity);
-@box06:         rgba(253, 180, 98,  @box-opacity);
-@box07:         rgba(128, 177, 211, @box-opacity);
-@box08:         rgba(179, 222, 105, @box-opacity);
-@box09:         rgba(252, 205, 229, @box-opacity);
-@box10:         rgba(188, 128, 189, @box-opacity);
-@box11:         rgba(204, 235, 197, @box-opacity);
-@box12:         rgba(255, 237, 111, @box-opacity);
+@boxOutermost:      rgba(50,  116, 184, @box-opacity);
+@boxOuter:          rgba(124, 186, 176, @box-opacity);
+@box00:             rgba(128, 177, 211, @box-opacity);
+@box01:             rgba(204, 235, 197, 1);
+@box02:             rgba(179, 222, 105, @box-opacity);
+@box03:             rgba(255, 237, 111, @box-opacity);
+@box04:             rgba(253, 180, 98,  @box-opacity);
+@box05:             rgba(251, 128, 114, @box-opacity);
+@box06:             rgba(252, 205, 229, @box-opacity);
+@box07:             rgba(188, 128, 189, @box-opacity);
+@box08:             rgba(190, 186, 218, @box-opacity);
+// Color palette used for families of elements. This is a modified
+  // version of 12-class Paired from ColorBrewer 2.0:
+  // http://colorbrewer2.org/?type=qualitative&scheme=Paired&n=12
+@green-dark:        #33A02C;
+@green-light:       #83CD41;//#B2DF8A;
+@blue-dark:         #1F78B4;
+@blue-light:        #A6CEE3;
+@purple-dark:       #6A3D9A;
+@purple-light:      #CAB2D6;
+@red-dark:          #FF181B;//#E31A1C; <- replaced the reds because they looked too similar to the oranges
+@red-light:         #FF96CB;//#FB9A99;
+@orange-dark:       #FF7F00;
+@orange-light:      #FDBF6F;
+@brown-dark:        #a97211;//#B15928; <- replaced the brown to make its connection to yellow more apparent
+@yellow-light:      #D6D63A;//#FFFF99; <- darkened the yellow so it will stand out better against <p>s
+
 
 /*  FONTS  */
 
 @code: 'Courier', 'Courier New', monospace;
 @heading: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
 @plain: 'Times', 'Times New Roman', serif;
+@tapasfont: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif; // the font used in the main TAPAS site
 
 
 /*  RULES  */
@@ -57,13 +78,19 @@
 /* Hieractivity */
 
 .hieractivity {
+  height: 100%;
   background-color: @white;
   font-family: @plain;
+  
+  .block {
+    display: block;
+  }
   
   .encoded {
     font-family: @code;
     
-    &.encoded-att {
+    &.encoded-att,
+    &[data-tapas-gi] {
       font-size: 0.95em;
     }
   } // .encoded
@@ -78,39 +105,66 @@
     color: black;
   }
   
-  dl {
+  h5, h6 {
+    font-size: 1em;
+  }
+  
+  ul, .list-ul,
+  ol, .list-ol {
+    margin: 0.8em 0;
+    padding-left: 1em;
+    display: block;
+    
+    li, .list-item-li {
+      display: list-item;
+    }
+  } // ul, .list-type-ul, ol, .list-type-ol
+  
+  dl, .list-dl {
     
     dd {
       margin-left: 1.2em;
     }
     
     dd + dt {
-      margin-top: 0.35em;
+      margin-top: 0.2em;
     }
   } // dl
+  
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration: dotted underline;
+  }
   
   
   /* Control panel */
 
   #control-panel {
-    border-radius: 0.4em;
-    padding: 0.5em;
+    border-radius: 2px;
+    padding: 0.3em;
+    padding-right: 0.25em;
+    //height: 100%;
+    max-height: 100%;
     width: 185px;
     position: fixed;
     z-index: 900;
-    top: 4px;
-    right: 4px;
-    background-color: @gray-dark;
+    top: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);//@gray-dark;
+    overflow: hidden;
     color: black;
+    font-size: 0.85em;
+    font-family: @tapasfont;
     
-    &.ui-draggable:hover {
-      cursor: move;
-      cursor: grab;
+    legend {
+      color: @gray-dark;
+      font-size: 0.95em;
     }
     
-    &.ui-draggable-dragging {
-      cursor: move !important;
-      cursor: grabbing !important;
+    table {
+      width: 100%;
+      font-size: 1em;
     }
     
     h2, h3, h4 {
@@ -118,23 +172,30 @@
       padding: 0;
       display: block;
       color: white;
+      font-family: @tapasfont;
+      font-weight: 300;
+      line-height: 1.1;
     }
     
     .expandable-heading {
       
       > button {
         border: none;
-        border-top: thin solid @raspberry-darker;
-        border-radius: 0;
-        padding: 0.25em;
-        background-color: #FFF8F3;
+        border-radius: 0.2em;
+        padding: 0.25em 0.5em 0.2em 1.5em;
+        background-color: #EBEBEB;//#EFF2F5;
         opacity: 1;
         width: 100%;
         box-shadow: none;
-        color: black;
+        color: @gray-darker;//#2B3E50;
+        font-size: 0.95em;
         
         &[aria-expanded=true] {
           box-shadow: unset;
+        }
+        
+        &::before {
+          margin-left: -1em;
         }
       } // .expandable-heading > button
     } // .expandable-heading
@@ -142,37 +203,50 @@
     h2.expandable-heading {
       margin-left: 0;
       margin-right: 0;
-      font-variant: small-caps;
       text-align: center;
       
       > button {
-        border: medium solid @raspberry-darker;
-        border-radius: 0.4em;
+        border-radius: 1px;
         padding: 0.25em 0.5em;
         box-shadow: @button-shadow black;
+        font-size: 0.9em;
         font-variant: inherit;
+        
+        &::before {
+          margin-left: 0;
+        }
       } // h2 > button
     } // h2
     
-    #controls-container {
+    #controls-viewport {
       border: none;
-      padding: 0;
+      //border: thin outset @cloudy;
+      padding: 0 0.4em 0.2em;
+      padding-right: 0.25em;
+      //height: 100%;
+      max-height: 92%;
       overflow: auto;
       cursor: default;
       
       .component-inner() {
-        margin: 0.5em;
+        margin: 0.25em;
         border: thin solid @gray-light;
-        height: 120px;
+        height: 100px;
         background-color: white;
         overflow-y: auto;
       }
       
+      .expandable {
+        border: none;
+        padding: unset;
+      }
+      
       .control-widget {
-        margin-top: 0.5em;
+        margin-top: 0.35em;
         border-radius: 0.4em;
         padding-bottom: 0.1em;
-        background-color: @raspberry-darker;
+        background-color: @gray-lightest;
+        //background-color: @raspberry-darker;
         
         &:first-child {
           margin-top: 0;
@@ -180,35 +254,81 @@
         
         .control-widget-component {
           .component-inner();
-          padding: 0.25em;
+          padding: 0.15em;
           display: block;
         }
       } // .control-widget
       
       fieldset {
         border: thin solid @gray-light;
-        padding: 0.15em 0;
+        padding: 0.15em 0.1em;
         text-align: left;
         
         label {
           display: table-row;
           
+          input[type=radio] {
+            margin: 0.2em 0.25em;
+            display: table-cell;
+          }
+          
           .label-desc {
-            margin: 0 0.35em;
-            font-size: 0.85em;
+            padding-left: 0.2em;
+            display: table-cell;
+            //font-size: 0.95em;
+            
+            .encoded {
+              font-size: 0.93em;
+            }
           }
         } // label
       } // fieldset
+      
+      table {
+        margin-bottom: 0.2em;
+        //border: thin solid @gray-light;
+        
+        tbody {
+          border: none;
+        }
+        
+        tr {
+          border-top: thin solid @gray-light;
+          
+          &:first-child {
+            border-top: none;
+          }
+        } // tr
+        
+        td {
+          padding-left: 0.2em;
+          vertical-align: top;
+          
+          &:first-child {
+            padding-left: 0;
+          }
+        } // td
+      } // table
       
       /* Widget customizations */
       
       #zoom-container {
         padding: 0.4em;
-        display: flex;
         height: initial;
-      
-        #zoom-slide {
-          width: 140px;
+        
+        .slidebar {
+          display: table-row;
+          
+          > * {
+            display: table-cell;
+            min-width: 10px;
+            vertical-align: middle;
+            text-align: center;
+          }
+          
+          #zoom-slide {
+            width: 110px;
+          }
         }
       } // #zoom-container
       
@@ -219,19 +339,53 @@
       #gi-option-selector {
         
         .gi-count {
-          margin-top: 0.2em;
+          //margin-top: 0.2em;
           float: right;
+        }
+      } // #gi-option-selector
+      
+      #color-scheme-selector-container {
+        height: initial;
+      }
+      
+      #color-scheme-legend {
+        
+        #legend-constants,
+        #legend-depthwise,
+        #legend-familial {
+          width: 100%;
+        }
+        
+        #legend-constants {
+          border-top: medium double @gray;
         }
         
         .legend {
-          float: right;
+          padding: 0.2em 0 0;
+          display: block;
           
-          .legend-key {
-            stroke-width: 1px;
-            stroke: @gray-dark;
+          svg {
+            margin-top: 0.15em;
+            
+            .legend-key {
+              stroke-width: 1px;
+              stroke: @gray-dark;
+            }
+          } // svg
+          
+          .legend-desc {
+            margin: 0.2em 0;
+            
+            ul {
+              margin: 0;
+            }
+          } // .legend-desc
+          
+          .encoded {
+            font-size: 0.9em;
           }
         } // .legend
-      } // #gi-option-selector
+      } // #color-scheme-legend
       
       #gi-properties {
         .component-inner();
@@ -240,7 +394,7 @@
       } // #gi-properties
       
     } // #controls-container
-  } // .control-panel
+  } // #control-panel
   
   
   /* Expandable headings */
@@ -353,7 +507,7 @@
     color: black; // This would be '.text-contrast-high'.
     
     &.text-contrast-none {
-      color: rgba(255, 255, 255, 0);
+      color: @clear;
     }
     
     &.text-contrast-low {
@@ -390,6 +544,7 @@
   
   [data-tapas-gi].boxed {
     margin: 2em 1em;
+    border: none;
     padding: 0.85em;
     display: block;
     
@@ -398,7 +553,8 @@
     }
     
     &.selected-gi {
-      border-left: 1em solid @raspberry-darker;
+      border-left: 0.5em solid @raspberry-darker;
+      padding-left: 0.35em;
       color: black;
     }
     
@@ -409,6 +565,14 @@
         margin: 1.2em 1em;
       }
     } // [data-tapas-gi].boxed.box-tabularasa
+    
+    &.boxed-gen {
+      margin: 1em 0.5em;
+    }
+    
+    &[data-tapas-gi|=div] {
+      margin-top: 2em;
+    }
     
     &.box-p {
       margin: 1em 0;
@@ -428,66 +592,54 @@
   }
   
   .box-outermost {
-    .box-of-color(@box01);
+    .box-of-color(@boxOutermost);
   }
   
   .box-outer {
-    .box-of-color(@box02);
+    .box-of-color(@boxOuter);
   }
   
   .box-p {
     .box-of-color(@cream);
   }
   
-  // .box-gen0 should only occur when a box-like element (not <body>, <front> or
-    // <back>) occurs as a child of <text>. Which is invalid TEI, so using a sharp
-    // black instead of our usual palette should be fine.
   .box-gen0 {
-    .box-of-color(black);
+    .box-of-color(@box00);
   }
   
   .box-gen1 {
-    .box-of-color(@box03);
+    .box-of-color(@box01);
   }
   
   .box-gen2 {
-    .box-of-color(@box04);
+    .box-of-color(@box02);
   }
   
   .box-gen3 {
-    .box-of-color(@box05);
+    .box-of-color(@box03);
   }
   
   .box-gen4 {
-    .box-of-color(@box06);
+    .box-of-color(@box04);
   }
   
   .box-gen5 {
-    .box-of-color(@box07);
+    .box-of-color(@box05);
   }
   
   .box-gen6 {
-    .box-of-color(@box08);
+    .box-of-color(@box06);
   }
   
   .box-gen7 {
-    .box-of-color(@box09);
+    .box-of-color(@box07);
   }
   
   .box-gen8 {
-    .box-of-color(@box10);
-  }
-  
-  .box-gen9 {
-    .box-of-color(@box11);
-  }
-  
-  .box-gen10 {
-    .box-of-color(@box12);
+    .box-of-color(@box08);
   }
   
   .block {
-    display: block;
     
     &[data-tapas-gi=pb],
     &[data-tapas-gi=cb] {
@@ -514,9 +666,27 @@
     }
   }
   
-  *[data-tapas-gi] {
-    padding: 0 0.1em;
+  .parenthetical() {
+    border-width: thin 2px;
+    border-style: none solid;
+    border-radius: 0.5em;
+    border-color: @slate;
   }
+  
+  *[data-tapas-gi] {
+    padding: 0.15em;
+    line-height: 1.4em;
+    
+    &:not(.boxed) {
+      border: 2px @clear;
+      border-style: none solid;
+      border-radius: 0.5em;
+      
+      &:hover {
+        .parenthetical();
+      }
+    } // .*[data-tapas-gi]:not(boxed)
+  } // .*[data-tapas-gi]
   
   [data-tapas-gi=lb] {
     
@@ -545,48 +715,31 @@
     text-align: center;
   }
   
-  ul, .list-ul,
-  ol, .list-ol {
-    margin: 0.8em 0;
-    padding-left: 1em;
-    display: block;
+  [data-tapas-gi=table] {
     
-    li, .list-item-li {
-      display: list-item;
-    }
-  } // ul, .list-type-ul, ol, .list-type-ol
-  
-  dl, .list-dl {
+    table, .table {
+      border-collapse: collapse;
+      width: 100%;
+      display: table;
+      color: inherit;
     
-  }
-  
-  table, .table {
-    width: 100%;
-    display: table;
-    color: inherit;
-    
-    > span[data-tapas-gi=head] {
-      display: table-caption;
-    }
-    
-    span[data-tapas-gi=row] {
-      display: table-row;
-      
-      span[data-tapas-gi=cell], .colspanned {
-        border-top: thin solid @gray-dark;
-        padding: 0.15em 0.2em;
-        display: table-cell;
+      > [data-tapas-gi=head] {
+        display: table-caption;
       }
+    
+      [data-tapas-gi=row] {
+        display: table-row;
+        border: thin @slate;
       
-      &:first-child {
-        
-        span[data-tapas-gi=cell], .colspanned {
-          border-top: none;
+        [data-tapas-gi=cell], .colspanned {
+          border: thin solid @slate;
+          border-radius: 0;
+          padding: 0.15em 0.2em;
           display: table-cell;
         }
-      }
-    }
-  } // span[data-tapas-gi=table]
+      } // [data-tapas-gi=row]
+    } // table, .table
+  } // [data-tapas-gi=table]
   
   [data-tapas-gi=titlePage] {
     .centered();
@@ -598,5 +751,144 @@
     .centered();
     .html-heading();
   }
-
+  
+  .preformatted {
+    margin: 0;
+    border: thin inset @smokey;
+    padding: 0.25em;
+    display: block;
+    overflow: auto;
+    background-color: @shadow-touched;
+    white-space: pre;
+  }
+  
+  
+  &.hieractivity-depthwise {
+    
+    #legend-familial {
+      display: none;
+    }
+  } // .hieractivity.hieractivity-depthwise
+  
+  
+  &.hieractivity-familial {
+    
+    .parenthetical-of-color(@color) {
+      border-color: @color;
+      
+      &.legend-key {
+        border-color: inherit;
+        fill: @color;
+      }
+    }
+    
+    #legend-depthwise {
+      display: none;
+    }
+    
+    .boxed-gen {
+      margin: 0.5em 0 0;
+      background-color: @cloudy;
+      
+      &.legend-key {
+        fill: @cloudy;
+      }
+      
+      // Every third box refreshes the color scheme by returning to Box Color 1.
+      &.box-gen1,
+      &.box-gen4,
+      &.box-gen7 {
+        .box-of-color(@box01);
+      }
+    } // .boxed-gen
+    
+    [data-tapas-gi]:not(.boxed) {
+      .parenthetical();
+      
+      &.familial-candidate {
+        border-width: thin medium;
+      
+        &:hover {
+          border-style: solid;
+          box-shadow: -0.2em -0.15em 0.3em @smokey;
+        }
+      
+        &.selected-gi {
+          background-color: @raspberry-darker;
+        }
+      } // .familial-candidate
+    } // [data-tapas-gi]:not(.boxed)
+    
+    .family-bibliographic {
+      
+      &.familial-candidate-dark {
+        .parenthetical-of-color(@green-dark);
+      }
+      &.familial-candidate-light {
+        .parenthetical-of-color(@green-light);
+      }
+    } // .family-bibliographic
+    
+    .family-choicepart {
+      
+      &.familial-candidate-dark {
+        .parenthetical-of-color(@orange-dark);
+      }
+      &.familial-candidate-light {
+        .parenthetical-of-color(@orange-light);
+      }
+    } // .family-choicepart
+    
+    .family-measurement {
+      
+      &.familial-candidate-dark {
+        .parenthetical-of-color(@brown-dark);
+      }
+      &.familial-candidate-light {
+        .parenthetical-of-color(@yellow-light);
+      }
+    } // .family-measurement
+    
+    .family-namelike {
+      
+      &.familial-candidate-dark {
+        .parenthetical-of-color(@purple-dark);
+      }
+      &.familial-candidate-light {
+        .parenthetical-of-color(@purple-light);
+      }
+    } // .family-namelike
+    
+    .family-rhetorical {
+      
+      &.familial-candidate-dark {
+        .parenthetical-of-color(@blue-dark);
+      }
+      &.familial-candidate-light {
+        .parenthetical-of-color(@blue-light);
+      }
+    } // .family-rhetorical
+    
+    .family-transcriptional {
+      
+      &.familial-candidate-dark {
+        .parenthetical-of-color(@red-dark);
+      }
+      &.familial-candidate-light {
+        .parenthetical-of-color(@red-light);
+      }
+    } // .family-transcriptional
+  } // .hieractivity.hieractivity-familial
+  
+  @media(device-width: 768px) and (device-height: 1024px){
+    ::-webkit-scrollbar {
+        -webkit-appearance: none;
+        width: 7px;
+    }
+    ::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background-color: rgba(0,0,0,.5);
+        -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+    }
+}
 } // .hieractivity
