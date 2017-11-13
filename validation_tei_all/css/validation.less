@@ -1,0 +1,104 @@
+// validation.less
+
+/* VARIABLES */
+
+/* Colors */
+/* Fonts */
+@code: 'Courier', 'Courier New', monospace;
+@tapasfont: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif; // the font used in the main TAPAS site
+
+/* MIXINS */
+/* RULES */
+
+.validation-tei_all-pkg {
+  margin: 1em 2em;
+  font-family: @tapasfont;
+  
+  .blocked {
+    display: block;
+  }
+  
+  .label {
+    color: #777;
+  }
+  
+  .att, .gi, .val {
+    font-family: @code;
+  }
+  
+  .att:before {
+    content: '@';
+  }
+  
+  .gi {
+    
+    &:before {
+      padding-right: 1px;
+      content: '<';
+      font-size: 0.9em;
+    }
+    
+    &:after {
+      padding-left: 1px;
+      content: '>';
+      font-size: 0.9em;
+    }
+  } // .gi
+  
+  ul {
+    margin: 0.5em 0;
+    padding-left: 1.5em;
+    list-style: none;
+    
+    li {
+      margin: 0.5em;
+    }
+    
+    ul {
+      padding-left: 1em;
+    }
+  } // ul
+  
+  /* Collapsables */
+  
+  .collapsableHeading {
+    font-size: 1.2em;
+    
+    > button {
+      all: inherit;
+      
+      &:before {
+        padding: 0 0.2em;
+        margin-right: 0.5em;
+        display: inline-block;
+        width: 0.75em;
+        text-align: center;
+        font-weight: bold;
+      }
+      
+      &:focus {
+        
+        &:before {
+          outline: 2px solid lightblue;
+          outline-color: invert;
+        }
+      } // button:focus
+      
+      &[aria-expanded=true] {
+        
+        &:before {
+          content: '-';
+        }
+      } // button[aria-expanded=true]
+      
+      &[aria-expanded=false] {
+        
+        &:before {
+          content: '+';
+        }
+      } // button[aria-expanded=false]
+    } // .collapsableHeading > button
+  } // .collapsableHeading
+  
+} // .validation-tei_all
+

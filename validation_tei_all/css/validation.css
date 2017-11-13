@@ -1,0 +1,69 @@
+/* VARIABLES */
+/* Colors */
+/* Fonts */
+/* MIXINS */
+/* RULES */
+.validation-tei_all-pkg {
+  margin: 1em 2em;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Collapsables */
+}
+.validation-tei_all-pkg .blocked {
+  display: block;
+}
+.validation-tei_all-pkg .label {
+  color: #777;
+}
+.validation-tei_all-pkg .att,
+.validation-tei_all-pkg .gi,
+.validation-tei_all-pkg .val {
+  font-family: 'Courier', 'Courier New', monospace;
+}
+.validation-tei_all-pkg .att:before {
+  content: '@';
+}
+.validation-tei_all-pkg .gi:before {
+  padding-right: 1px;
+  content: '<';
+  font-size: 0.9em;
+}
+.validation-tei_all-pkg .gi:after {
+  padding-left: 1px;
+  content: '>';
+  font-size: 0.9em;
+}
+.validation-tei_all-pkg ul {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+  list-style: none;
+}
+.validation-tei_all-pkg ul li {
+  margin: 0.5em;
+}
+.validation-tei_all-pkg ul ul {
+  padding-left: 1em;
+}
+.validation-tei_all-pkg .collapsableHeading {
+  font-size: 1.2em;
+}
+.validation-tei_all-pkg .collapsableHeading > button {
+  all: inherit;
+}
+.validation-tei_all-pkg .collapsableHeading > button:before {
+  padding: 0 0.2em;
+  margin-right: 0.5em;
+  display: inline-block;
+  width: 0.75em;
+  text-align: center;
+  font-weight: bold;
+}
+.validation-tei_all-pkg .collapsableHeading > button:focus:before {
+  outline: 2px solid lightblue;
+  outline-color: invert;
+}
+.validation-tei_all-pkg .collapsableHeading > button[aria-expanded=true]:before {
+  content: '-';
+}
+.validation-tei_all-pkg .collapsableHeading > button[aria-expanded=false]:before {
+  content: '+';
+}
