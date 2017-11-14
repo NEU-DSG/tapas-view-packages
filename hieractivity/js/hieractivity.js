@@ -111,7 +111,7 @@ $(document).ready(function() {
       .property('disabled', false);
   d3.select('#color-scheme-selector')
       .property('disabled', false);
-  console.log(d3.select('#color-scheme-selector').property('disabled'));
+  //console.log(d3.select('#color-scheme-selector').property('disabled'));
   
 
   // Assign box (and control panel) heights soon, and when the window is resized.
@@ -141,7 +141,7 @@ $(document).ready(function() {
     });
     // Assign the height of the scrollElement back to it.
     assignHeightBack(scrollElementNode);
-    console.log($(scrollElementNode).outerHeight());
+    //console.log($(scrollElementNode).outerHeight());
     // Assign the other boxes' heights back to them.
     containers
         .data(heightData)
