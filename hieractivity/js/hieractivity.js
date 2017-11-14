@@ -46,9 +46,6 @@ $(document).ready(function() {
   var teiElements = d3.selectAll('[data-tapas-gi]')
       .on('click', inspectElement);
   var containers = teiElements.filter('.boxed');
-  // Assign box (and control panel) heights now, and when the window is resized.
-  assignAllHeights();
-  $(window).resize(assignAllHeights);
   
   // When the radio buttons' input value changes, mark HTML elements that correspond
     // to the chosen TEI element.
@@ -115,6 +112,11 @@ $(document).ready(function() {
   d3.select('#color-scheme-selector')
       .property('disabled', false);
   console.log(d3.select('#color-scheme-selector').property('disabled'));
+  
+
+  // Assign box (and control panel) heights soon, and when the window is resized.
+  setTimeout(assignAllHeights, 500);
+  $(window).resize(assignAllHeights);
   
   // Make the control panel draggable.
   /*$('#control-panel').draggable({
