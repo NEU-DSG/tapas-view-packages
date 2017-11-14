@@ -115,7 +115,7 @@ $(document).ready(function() {
   
 
   // Assign box (and control panel) heights soon, and when the window is resized.
-  setTimeout(assignAllHeights, 500);
+  setTimeout(assignAllHeights, 1000);
   $(window).resize(assignAllHeights);
   
   // Make the control panel draggable.
