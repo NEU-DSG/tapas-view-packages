@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  console.log('Loaded Hieractivity')
   // Turn on tooltip functionality from the jQueryUI library.
   $('.legend-key').tooltip({
     classes: {

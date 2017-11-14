@@ -26,7 +26,7 @@
 }
 .hieractivity code,
 .hieractivity .encoded {
-  brackground-color: rgba(255, 255, 255, 0);
+  background-color: rgba(255, 255, 255, 0);
   font-family: 'Courier', 'Courier New', monospace;
   color: inherit;
 }
@@ -89,7 +89,7 @@
   width: 185px;
   position: fixed;
   z-index: 900;
-  top: 0;
+  top: 50px;
   right: 0;
   background-color: rgba(0, 0, 0, 0.5);
   overflow: hidden;
