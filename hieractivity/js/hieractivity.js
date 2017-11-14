@@ -107,12 +107,14 @@ $(document).ready(function() {
   });
   
   // Enable remaining form controls.
+  console.log('Attempting to enable form inputs');
   d3.select('#text-contrast-selector')
       .property('disabled', false);
   d3.select('#gi-option-selector')
       .property('disabled', false);
   d3.select('#color-scheme-selector')
       .property('disabled', false);
+  console.log(d3.select('#color-scheme-selector').property('disabled'));
   
   // Make the control panel draggable.
   /*$('#control-panel').draggable({
@@ -143,6 +145,7 @@ $(document).ready(function() {
           //console.log(d);
           return d + 'px';
         });
+    console.log("Assigned heights to boxes");
   }
   
   function assignAllHeights() {
