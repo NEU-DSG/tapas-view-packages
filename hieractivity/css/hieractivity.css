@@ -26,6 +26,7 @@
 }
 .hieractivity code,
 .hieractivity .encoded {
+  padding: 0;
   background-color: rgba(255, 255, 255, 0);
   font-family: 'Courier', 'Courier New', monospace;
   color: inherit;
@@ -45,6 +46,18 @@
   font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
   font-weight: normal;
   color: black;
+}
+.hieractivity h1 {
+  font-size: 2em;
+}
+.hieractivity h2 {
+  font-size: 1.75em;
+}
+.hieractivity h3 {
+  font-size: 1.4em;
+}
+.hieractivity h4 {
+  font-size: 1.15em;
 }
 .hieractivity h5,
 .hieractivity h6 {
@@ -68,12 +81,13 @@
 .hieractivity .list-ol .list-item-li {
   display: list-item;
 }
-.hieractivity dl dd,
-.hieractivity .list-dl dd {
+.hieractivity dt {
+  font-weight: inherit;
+}
+.hieractivity dd {
   margin-left: 1.2em;
 }
-.hieractivity dl dd + dt,
-.hieractivity .list-dl dd + dt {
+.hieractivity dd + dt {
   margin-top: 0.2em;
 }
 .hieractivity a {
@@ -98,6 +112,10 @@
   font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .hieractivity #control-panel legend {
+  margin: 0 0.25em;
+  border: none;
+  padding: 0 2px;
+  width: auto;
   color: #555555;
   font-size: 0.95em;
 }
@@ -172,7 +190,7 @@
 }
 .hieractivity #control-panel #controls-viewport .control-widget .control-widget-component {
   margin: 0.25em;
-  border: thin solid #dddddd;
+  border: thin solid #808080;
   height: 100px;
   background-color: white;
   overflow-y: auto;
@@ -186,6 +204,7 @@
 }
 .hieractivity #control-panel #controls-viewport fieldset label {
   display: table-row;
+  font-weight: normal;
 }
 .hieractivity #control-panel #controls-viewport fieldset label input[type=radio] {
   margin: 0.2em 0.25em;
@@ -272,7 +291,7 @@
 }
 .hieractivity #control-panel #controls-viewport #gi-properties {
   margin: 0.25em;
-  border: thin solid #dddddd;
+  border: thin solid #808080;
   height: 100px;
   background-color: white;
   overflow-y: auto;

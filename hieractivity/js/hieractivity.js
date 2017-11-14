@@ -115,10 +115,10 @@ $(document).ready(function() {
       .property('disabled', false);
   
   // Make the control panel draggable.
-  $('#control-panel').draggable({
+  /*$('#control-panel').draggable({
     cancel: 'h2, #controls-container',
     containment: 'window'
-  });
+  });*/
 
 
 /*  FUNCTIONS  */

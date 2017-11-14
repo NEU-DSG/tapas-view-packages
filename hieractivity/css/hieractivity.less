@@ -88,6 +88,7 @@
   }
   
   code, .encoded {
+    padding: 0;
     background-color: @clear;
     font-family: @code;
     color: inherit;
@@ -108,6 +109,22 @@
     color: black;
   }
   
+  h1 {
+    font-size: 2em;
+  }
+  
+  h2 {
+    font-size: 1.75em;
+  }
+  
+  h3 {
+    font-size: 1.4em;
+  }
+  
+  h4 {
+    font-size: 1.15em;
+  }
+  
   h5, h6 {
     font-size: 1em;
   }
@@ -123,16 +140,19 @@
     }
   } // ul, .list-type-ul, ol, .list-type-ol
   
-  dl, .list-dl {
-    
-    dd {
-      margin-left: 1.2em;
-    }
-    
-    dd + dt {
-      margin-top: 0.2em;
-    }
-  } // dl
+  dl, .list-dl {} // As of 2017-11-14, most <dd>s and <dt>s don't occur inside <dl> (which is invalid)
+  
+  dt {
+    font-weight: inherit;
+  }
+  
+  dd {
+    margin-left: 1.2em;
+  }
+  
+  dd + dt {
+    margin-top: 0.2em;
+  }
   
   a {
     color: inherit;
@@ -161,6 +181,10 @@
     font-family: @tapasfont;
     
     legend {
+      margin: 0 0.25em;
+      border: none;
+      padding: 0 2px;
+      width: auto;
       color: @gray-dark;
       font-size: 0.95em;
     }
@@ -233,7 +257,7 @@
       
       .component-inner() {
         margin: 0.25em;
-        border: thin solid @gray-light;
+        border: thin solid @gray;
         height: 100px;
         background-color: white;
         overflow-y: auto;
@@ -269,6 +293,7 @@
         
         label {
           display: table-row;
+          font-weight: normal;
           
           input[type=radio] {
             margin: 0.2em 0.25em;
