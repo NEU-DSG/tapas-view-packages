@@ -132,6 +132,7 @@ $(document).ready(function() {
     // to zoom on HTML elements.
   function assignTextHeights() {
     // Remove previous height calculation.
+    scrollElement.style('height', null);
     containers.style('height', null);
     // Get the calculated heights of each div with a @data-tapas-gi on it.
     var heightData = [];
@@ -140,6 +141,7 @@ $(document).ready(function() {
     });
     // Assign the height of the scrollElement back to it.
     assignHeightBack(scrollElementNode);
+    console.log($(scrollElementNode).outerHeight());
     // Assign the other boxes' heights back to them.
     containers
         .data(heightData)
@@ -152,7 +154,7 @@ $(document).ready(function() {
   
   function assignAllHeights() {
     var windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight(),
-        panelMaxHeight = windowHeight - 8,
+        panelMaxHeight = windowHeight - 50,
         viewportMaxHeight = panelMaxHeight - $('#control-panel > h2').outerHeight();
     controlPanel.style('max-height', panelMaxHeight);
     controlsViewport.style('max-height', viewportMaxHeight);
