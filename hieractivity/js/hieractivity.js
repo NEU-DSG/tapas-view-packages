@@ -115,8 +115,8 @@ $(document).ready(function() {
   
 
   // Assign box (and control panel) heights soon, and when the window is resized.
-  setTimeout(assignAllHeights, 1000);
   $(window).resize(assignAllHeights);
+  setTimeout(assignAllHeights, 3000);
   
   // Make the control panel draggable.
   /*$('#control-panel').draggable({
@@ -132,8 +132,8 @@ $(document).ready(function() {
     // to zoom on HTML elements.
   function assignTextHeights() {
     // Remove previous height calculation.
-    scrollElement.style('height', null);
     containers.style('height', null);
+    unassignHeight(scrollElementNode);
     // Get the calculated heights of each div with a @data-tapas-gi on it.
     var heightData = [];
     $('[data-tapas-gi].boxed').toArray().forEach(function(obj) {
