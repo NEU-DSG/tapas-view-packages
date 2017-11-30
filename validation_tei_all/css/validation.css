@@ -11,9 +11,16 @@
 .validation-tei_all-pkg .blocked {
   display: block;
 }
-.validation-tei_all-pkg .label {
-  color: #777;
+.validation-tei_all-pkg .cnt {
+  border-radius: 0.5em;
+  padding: 0 0.35em;
+  background-color: #5bc0de;
 }
+.validation-tei_all-pkg .label {
+  color: #2b3e50;
+}
+.validation-tei_all-pkg tt,
+.validation-tei_all-pkg code,
 .validation-tei_all-pkg .att,
 .validation-tei_all-pkg .gi,
 .validation-tei_all-pkg .val {
@@ -38,16 +45,51 @@
   list-style: none;
 }
 .validation-tei_all-pkg ul li {
-  margin: 0.5em;
+  border: 2px #E1DFDF;
+  border-style: none solid solid;
+  padding: 0.5em;
+  background-color: inherit;
+}
+.validation-tei_all-pkg ul li:first-child {
+  border-style: solid;
+}
+.validation-tei_all-pkg ul li:nth-of-type(2n+1) {
+  background-color: #F5F8FF;
 }
 .validation-tei_all-pkg ul ul {
-  padding-left: 1em;
+  margin-left: 0.7em;
+  border-left: thin solid gray;
+  padding-left: 0;
+}
+.validation-tei_all-pkg ul ul li {
+  border-style: none;
+  border-bottom: thin solid gray;
+  background-color: inherit;
+}
+.validation-tei_all-pkg ul ul li:first-child {
+  border-style: none none solid none;
+}
+.validation-tei_all-pkg ul ul li:nth-of-type(2n+1) {
+  background-color: inherit;
 }
 .validation-tei_all-pkg .collapsableHeading {
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 .validation-tei_all-pkg .collapsableHeading > button {
-  all: inherit;
+  border: inherit;
+  padding: 0.15em;
+  width: 100%;
+  background-color: inherit;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.validation-tei_all-pkg .collapsableHeading > button::-moz-focus-inner {
+  padding-block-start: inherit;
+  padding-block-end: inherit;
+  padding-inline-start: inherit;
+  padding-inline-end: inherit;
 }
 .validation-tei_all-pkg .collapsableHeading > button:before {
   padding: 0 0.2em;
@@ -56,10 +98,6 @@
   width: 0.75em;
   text-align: center;
   font-weight: bold;
-}
-.validation-tei_all-pkg .collapsableHeading > button:focus:before {
-  outline: 2px solid lightblue;
-  outline-color: invert;
 }
 .validation-tei_all-pkg .collapsableHeading > button[aria-expanded=true]:before {
   content: '-';

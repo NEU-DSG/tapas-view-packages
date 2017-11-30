@@ -13,6 +13,9 @@ $(document).ready(function() {
     heading.wrapInner('<button aria-expanded="'+ !isAutoCollapsed
       +'" aria-controls="'+ collapsableID +'"></button>');
     collapsable.attr('aria-hidden', isAutoCollapsed);
+    if ( isAutoCollapsed ) {
+      collapsable.slideToggle();
+    }
     var button = heading.children('button');
     // Show or hide the collapsable <div> when the associated button is pressed.
     button.on('click', function() {

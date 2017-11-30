@@ -3,25 +3,39 @@
 /* VARIABLES */
 
 /* Colors */
+@tapas-blue-dark:   #2B3E50;
+@tapas-blue-light:  #5BC0DE;
+@tapas-bluegray:    #4E5D6C;
+@tapas-orange:      #DF691A;
+
+
 /* Fonts */
 @code: 'Courier', 'Courier New', monospace;
-@tapasfont: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif; // the font used in the main TAPAS site
+@tapas-font: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif; // the font used in the main TAPAS site
 
 /* MIXINS */
 /* RULES */
 
 .validation-tei_all-pkg {
   margin: 1em 2em;
-  font-family: @tapasfont;
+  font-family: @tapas-font;
   
   .blocked {
     display: block;
   }
   
-  .label {
-    color: #777;
+  .cnt {
+    border-radius: 0.5em;
+    padding: 0 0.35em;
+    background-color: @tapas-blue-light;
   }
   
+  .label {
+    //margin-right: 0.4em;
+    color: @tapas-blue-dark;//#676767;
+  }
+  
+  tt, code,
   .att, .gi, .val {
     font-family: @code;
   }
@@ -51,21 +65,64 @@
     list-style: none;
     
     li {
-      margin: 0.5em;
-    }
+      border: 2px #E1DFDF;
+      border-style: none solid solid;
+      padding: 0.5em;
+      background-color: inherit;
+      
+      &:first-child {
+        border-style: solid;
+      }
+      
+      &:nth-of-type(2n+1) {
+        background-color: #F5F8FF;
+      }
+    } // ul li
     
     ul {
-      padding-left: 1em;
-    }
+      margin-left: 0.7em;
+      border-left: thin solid gray;
+      padding-left: 0;
+      
+      li {
+        border-style: none;
+        border-bottom: thin solid gray;
+        background-color: inherit;
+        
+        &:first-child {
+          border-style: none none solid none
+        }
+        
+        &:nth-of-type(2n+1) {
+          background-color: inherit;
+        }
+      } // ul ul li
+    } // ul ul
   } // ul
   
   /* Collapsables */
   
   .collapsableHeading {
-    font-size: 1.2em;
+    font-size: 1.1em;
     
     > button {
-      all: inherit;
+      border: inherit;
+      padding: 0.15em;
+      width: 100%;
+      background-color: inherit;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      
+      // Put a little more space in between Firefox's focus outline and the button
+        // contents.
+      &::-moz-focus-inner {
+        padding-block-start: inherit;
+        padding-block-end: inherit;
+        padding-inline-start: inherit;
+        padding-inline-end: inherit;
+      }
       
       &:before {
         padding: 0 0.2em;
@@ -76,27 +133,13 @@
         font-weight: bold;
       }
       
-      &:focus {
-        
-        &:before {
-          outline: 2px solid lightblue;
-          outline-color: invert;
-        }
-      } // button:focus
+      &[aria-expanded=true]:before {
+        content: '-';
+      }
       
-      &[aria-expanded=true] {
-        
-        &:before {
-          content: '-';
-        }
-      } // button[aria-expanded=true]
-      
-      &[aria-expanded=false] {
-        
-        &:before {
-          content: '+';
-        }
-      } // button[aria-expanded=false]
+      &[aria-expanded=false]:before {
+        content: '+';
+      }
     } // .collapsableHeading > button
   } // .collapsableHeading
   
