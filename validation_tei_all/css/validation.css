@@ -76,8 +76,20 @@
   font-size: 1.1em;
 }
 .validation-tei_all-pkg .collapsableHeading > button {
-  all: inherit;
+  border: inherit;
+  padding: 0.15em;
   width: 100%;
+  background-color: inherit;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.validation-tei_all-pkg .collapsableHeading > button::-moz-focus-inner {
+  padding-block-start: inherit;
+  padding-block-end: inherit;
+  padding-inline-start: inherit;
+  padding-inline-end: inherit;
 }
 .validation-tei_all-pkg .collapsableHeading > button:before {
   padding: 0 0.2em;
@@ -86,10 +98,6 @@
   width: 0.75em;
   text-align: center;
   font-weight: bold;
-}
-.validation-tei_all-pkg .collapsableHeading > button:focus {
-  outline: 2px solid lightblue;
-  outline-color: invert;
 }
 .validation-tei_all-pkg .collapsableHeading > button[aria-expanded=true]:before {
   content: '-';

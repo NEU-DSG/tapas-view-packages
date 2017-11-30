@@ -106,8 +106,23 @@
     font-size: 1.1em;
     
     > button {
-      all: inherit;
+      border: inherit;
+      padding: 0.15em;
       width: 100%;
+      background-color: inherit;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      
+      // Put a little more space in between Firefox's focus outline and the button
+        // contents.
+      &::-moz-focus-inner {
+        padding-block-start: inherit;
+        padding-block-end: inherit;
+        padding-inline-start: inherit;
+        padding-inline-end: inherit;
+      }
       
       &:before {
         padding: 0 0.2em;
@@ -118,24 +133,13 @@
         font-weight: bold;
       }
       
-      &:focus {
-        outline: 2px solid lightblue;
-        outline-color: invert;
-      } // button:focus
+      &[aria-expanded=true]:before {
+        content: '-';
+      }
       
-      &[aria-expanded=true] {
-        
-        &:before {
-          content: '-';
-        }
-      } // button[aria-expanded=true]
-      
-      &[aria-expanded=false] {
-        
-        &:before {
-          content: '+';
-        }
-      } // button[aria-expanded=false]
+      &[aria-expanded=false]:before {
+        content: '+';
+      }
     } // .collapsableHeading > button
   } // .collapsableHeading
   
