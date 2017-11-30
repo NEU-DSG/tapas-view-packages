@@ -178,6 +178,7 @@
                   <li>
                     <span class="abstractMsg collapsableHeading collapsable-hidden">
                       <span class="cnt"><xsl:value-of select="@cnt"/></span>
+                      <xsl:text>&#xA0;</xsl:text>
                       <span class="msg">
                         <xsl:apply-templates select="tapas:val_msg_subset[1]/tapas:val_msg_entry[1]/tapas:abstracted" mode="msg"/>
                       </span>
@@ -187,6 +188,7 @@
                         <li>
                           <span class="msgType collapsableHeading collapsable-hidden" id="{generate-id()}">
                             <span class="cnt"><xsl:value-of select="@cnt"/></span>
+                            <xsl:text>&#xA0;</xsl:text>
                             <span class="msg">
                               <xsl:apply-templates select="tapas:val_msg_entry[1]/tapas:truncated" mode="msg"/>
                             </span>
@@ -198,11 +200,13 @@
                                   <xsl:if test="@line">             
                                     <span class="lineNum blocked">
                                       <span class="label">Approximate line #:</span>
+                                      <xsl:text>&#xA0;</xsl:text>
                                       <span class="num"><xsl:value-of select="@line"/></span>
                                     </span>
                                     <xsl:if test="@col">
                                       <span class="colNum blocked">
                                         <span class="label">Estimated column #:</span>
+                                        <xsl:text>&#xA0;</xsl:text>
                                         <span class="num"><xsl:value-of select="@col"/></span>
                                       </span>
                                     </xsl:if>
@@ -210,20 +214,19 @@
                                   <xsl:if test="@loc">
                                     <span class="xpath blocked">
                                       <span class="label">Location (in XPath notation):</span>
+                                      <xsl:text>&#xA0;</xsl:text>
                                       <span class="num"><xsl:value-of select="@loc"/></span>
                                     </span>
                                   </xsl:if>
                                   <xsl:apply-templates select="tapas:truncated" mode="msg"/>
-                                  <xsl:if test="tapas:expall">
-                                    <ul class="collapsable collapsable-hidden" id="{generate-id()}">
-                                      <li>
-                                        <span class="expall collapsable collapsable-hidden" id="{generate-id()}">
-                                          <xsl:apply-templates select="tapas:expall"/>
-                                        </span>
-                                      </li>
-                                    </ul>
-                                  </xsl:if>
                                 </span>
+                                <xsl:if test="tapas:expall">
+                                  <ul class="collapsable collapsable-hidden" id="{generate-id()}">
+                                    <li>
+                                      <xsl:apply-templates select="tapas:expall/*" mode="msg"/>
+                                    </li>
+                                  </ul>
+                                </xsl:if>
                               </li>
                             </xsl:for-each>
                           </ul>
@@ -441,24 +444,9 @@
       </li>
    </xsl:template>
    
-   <xsl:template match="tei:att" mode="msg msg2li">
+   <xsl:template match="tei:att | tei:gi | tei:val" mode="msg msg2li">
       <span class="{local-name(.)}">
-         <xsl:text>@</xsl:text>
          <xsl:apply-templates mode="#current"/>
-      </span>
-   </xsl:template>
-   <xsl:template match="tei:gi" mode="msg">
-      <span class="{local-name(.)}">
-         <xsl:text>&lt;</xsl:text>
-         <xsl:apply-templates mode="#current"/>
-         <xsl:text>></xsl:text>
-      </span>
-   </xsl:template>
-   <xsl:template match="tei:val" mode="msg">
-      <span class="{local-name(.)}">
-         <xsl:text>"</xsl:text>
-         <xsl:apply-templates mode="#current"/>
-         <xsl:text>"</xsl:text>
       </span>
    </xsl:template>
    
