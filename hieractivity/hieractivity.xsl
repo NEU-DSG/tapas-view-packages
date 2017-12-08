@@ -533,7 +533,7 @@
             <script src="{$common-base}d3/d3.v4.min.js" type="text/javascript"></script>
             <script src="{$js-base}hieractivity.js" type="text/javascript"></script>
           </head>
-          <body>
+          <body class="standalone-html">
             <xsl:copy-of select="$body"/>
           </body>
         </html>

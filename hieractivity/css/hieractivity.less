@@ -75,6 +75,28 @@
   font-family: @plain;
 }
 
+/* Standalone HTML rules */
+
+body.standalone-html .hieractivity {
+  font-size: 1em;
+  
+  h1 {
+    font-size: 2em;
+  }
+  
+  h2 {
+    font-size: 1.75em;
+  }
+  
+  h3 {
+    font-size: 1.25em;
+  }
+  
+  h4 {
+    font-size: 1.1em;
+  }
+} // 
+
 /* Hieractivity */
 
 .hieractivity {
@@ -450,7 +472,7 @@
     > button {
       border: thin solid @gray-dark;
       border-radius: 0.4em;
-      padding-top: 0.2em;
+      padding: 0.1em 0.3em 0.05em;
       box-shadow: @button-shadow @gray-dark;
       background-color: @white;
       opacity: 0.9;
@@ -478,6 +500,7 @@
       > code {
         padding-top: 0.15em;
         display: inline-block;
+        font-size: 90%;
       }
     } // .expandable-heading > button
   } // .expandable-heading
