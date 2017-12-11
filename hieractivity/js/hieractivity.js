@@ -139,7 +139,7 @@ $(document).ready(function() {
     // Get the calculated heights of each div with a @data-tapas-gi on it.
     var heightData = [];
     $('[data-tapas-gi].boxed').toArray().forEach(function(obj) {
-      var useHeight = isStandalone ? $(obj).height() : $(obj).outerHeight();
+      var useHeight = /*isStandalone ? $(obj).height() :*/ $(obj).outerHeight();
       heightData.push(useHeight);
     });
     // Assign the height of the scrollElement back to it.

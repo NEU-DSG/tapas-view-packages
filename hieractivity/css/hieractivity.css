@@ -37,6 +37,9 @@ body.standalone-html .hieractivity h4 {
   /* TEI header */
   /* <text>-specific styles */
 }
+.hieractivity * {
+  box-sizing: border-box;
+}
 .hieractivity .block {
   display: block;
 }
@@ -175,7 +178,7 @@ body.standalone-html .hieractivity h4 {
 .hieractivity #control-panel h2.expandable-heading > button {
   border-radius: 1px;
   padding: 0.25em 0.5em;
-  box-shadow: 0.1em 0.1em 0.2em black;
+  box-shadow: 0.1em 0.1em 0.2em #000000;
   font-size: 0.9em;
   font-variant: inherit;
 }
