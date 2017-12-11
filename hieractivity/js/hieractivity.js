@@ -46,8 +46,8 @@ $(document).ready(function() {
   var teiElements = d3.selectAll('[data-tapas-gi]')
       .on('click', inspectElement);
   var containers = teiElements.filter('.boxed');
-  // Test if this is standalone HTML.
-  var isStandalone = $('body').hasClass('standalone-html');
+  // Test if this is standalone HTML. Not currently needed.
+  //var isStandalone = $('body').hasClass('standalone-html');
   
   // When the radio buttons' input value changes, mark HTML elements that correspond
     // to the chosen TEI element.
@@ -139,7 +139,7 @@ $(document).ready(function() {
     // Get the calculated heights of each div with a @data-tapas-gi on it.
     var heightData = [];
     $('[data-tapas-gi].boxed').toArray().forEach(function(obj) {
-      var useHeight = /*isStandalone ? $(obj).height() :*/ $(obj).outerHeight();
+      var useHeight = $(obj).outerHeight();
       heightData.push(useHeight);
     });
     // Assign the height of the scrollElement back to it.
