@@ -52,7 +52,7 @@
 @red-light:         #FF96CB;//#FB9A99;
 @orange-dark:       #FF7F00;
 @orange-light:      #FDBF6F;
-@brown-dark:        #a97211;//#B15928; <- replaced the brown to make its connection to yellow more apparent
+@brown-dark:        #A97211;//#B15928; <- replaced the brown to make its connection to yellow more apparent
 @yellow-light:      #D6D63A;//#FFFF99; <- darkened the yellow so it will stand out better against <p>s
 
 
@@ -191,8 +191,9 @@ body.standalone-html .hieractivity {
 
   #control-panel {
     border-radius: 2px;
-    padding: 0.3em;
-    padding-right: 0.25em;
+    padding: 0.3em 0.25em 0.6em 0.3em;
+    display: flex;
+    flex-direction: column;
     //height: 100%;
     max-height: 100%;
     width: 185px;
@@ -274,8 +275,7 @@ body.standalone-html .hieractivity {
     #controls-viewport {
       border: none;
       //border: thin outset @cloudy;
-      padding: 0 0.4em 0.2em;
-      padding-right: 0.25em;
+      padding: 0 0.4em 0 0.25em;
       //height: 100%;
       max-height: 92%;
       overflow: auto;

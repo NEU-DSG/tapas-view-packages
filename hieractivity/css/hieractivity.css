@@ -116,8 +116,9 @@ body.standalone-html .hieractivity h4 {
 }
 .hieractivity #control-panel {
   border-radius: 2px;
-  padding: 0.3em;
-  padding-right: 0.25em;
+  padding: 0.3em 0.25em 0.6em 0.3em;
+  display: flex;
+  flex-direction: column;
   max-height: 100%;
   width: 185px;
   position: fixed;
@@ -187,8 +188,7 @@ body.standalone-html .hieractivity h4 {
 }
 .hieractivity #control-panel #controls-viewport {
   border: none;
-  padding: 0 0.4em 0.2em;
-  padding-right: 0.25em;
+  padding: 0 0.4em 0 0.25em;
   max-height: 92%;
   overflow: auto;
   cursor: default;
