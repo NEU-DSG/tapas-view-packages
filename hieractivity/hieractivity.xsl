@@ -527,7 +527,7 @@
             <meta charset="UTF-8" />
             <link rel="stylesheet" type="text/css" href="{$common-base}jquery-ui-1.12.1/jquery-ui.min.css"></link>
             <link id="maincss" rel="stylesheet" type="text/css" href="{$css-base}hieractivity.css" ></link>
-            <script src="{$common-base}jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
+            <script src="{$common-base}jquery/jquery-3.4.1.min.js" type="text/javascript"></script>
             <script src="{$common-base}jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
             <script src="{$common-base}jquery.scrollTo/jquery.scrollTo.min.js" type="text/javascript"></script>
             <script src="{$common-base}d3/d3.v4.min.js" type="text/javascript"></script>

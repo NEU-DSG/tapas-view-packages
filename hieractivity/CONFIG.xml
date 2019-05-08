@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../config.rnc" type="application/relax-ng-compact-syntax"?>
 <view_package xmlns="http://www.wheatoncollege.edu/TAPAS/1.0" 
-  version="0.6.0" xml:id="hieractivity" dynamic="false" scope="file">
+  version="0.6.1" xml:id="hieractivity" dynamic="false" scope="file">
   
   <human_name>Hieractivity</human_name>
   <description>This view package draws attention to the hierarchical structures of a TEI 
@@ -20,7 +20,7 @@
     <css_file>css/hieractivity.css</css_file>
   </css_files>
   <js_files>
-    <js_file>../common/jquery/jquery-3.2.1.min.js</js_file>
+    <js_file>../common/jquery/jquery-3.4.1.min.js</js_file>
     <js_file>../common/jquery-ui-1.12.1/jquery-ui.min.js</js_file>
     <js_file>../common/jquery.scrollTo/jquery.scrollTo.min.js</js_file>
     <js_file>../common/d3/d3.v4.min.js</js_file>
