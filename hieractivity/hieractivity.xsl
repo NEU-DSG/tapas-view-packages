@@ -29,6 +29,14 @@
             <xd:li></xd:li>
           </xd:ul>
         </xd:li>-->
+        <xd:li>2020-12-04, v0.5.0:
+          <xd:ul>
+            <xd:li>Changed global variable $defaultLanguage to global parameter 
+              $default-language.</xd:li>
+            <xd:li>Ensured that @xml:lang values are tunnelled; there shouldn't be errors 
+              when a language is passed down from a distant ancestor.</xd:li>
+          </xd:ul>
+        </xd:li>
         <xd:li>2017-10-23, v0.4.0: Added legends for the two color schemes, plus a 
           sublegend that is always shown, for elements that always get the same color 
           (e.g. &lt;text&gt;).
@@ -159,9 +167,11 @@
   <xsl:variable name="common-base" select="concat($assets-base,'../common/')"/>
   <xsl:variable name="css-base" select="concat($assets-base,'css/')"/>
   <xsl:variable name="js-base" select="concat($assets-base,'js/')"/>
-  <xsl:param name="render-full-html"   select="false()" as="xs:boolean"/> <!-- set to 'true' to get browsable output for debugging -->
   <xsl:param name="contrast-default" select="'mid'" as="xs:string"/>
+  <xsl:param name="default-language" as="xs:string" select="'en'"/>
   <xsl:param name="legend-icon-width" select="20" as="xs:integer"/>
+  <!-- Set $render-full-html to 'true' to get browsable output for debugging -->
+  <xsl:param name="render-full-html" select="false()" as="xs:boolean"/>
   
   <xsl:variable name="css-class-map" as="node()*">
     <!-- The classes below are those boxes which are strictly based on element identity. -->
@@ -200,7 +210,6 @@
       <span>transcriptional:</span>
     </class>
   </xsl:variable>
-  <xsl:variable name="defaultLanguage" select="'en'"/>
   <xsl:variable name="interjectStart">&lt;[ </xsl:variable>
   <xsl:variable name="interjectEnd"> ]&gt;</xsl:variable>
   <xsl:variable name="nbsp" select="'&#160;'"/>
@@ -471,7 +480,7 @@
   </xd:doc>
   <xsl:template match="/TEI" priority="92">
     <xsl:variable name="language" 
-      select="if ( @xml:lang ) then @xml:lang/data(.) else $defaultLanguage"/>
+      select="if ( @xml:lang ) then @xml:lang/data(.) else $default-language"/>
     <xsl:variable name="useLang" 
       select="if ( not(@xml:id) and text/@xml:id ) then 
                 text/@xml:id/data(.)
@@ -484,7 +493,7 @@
         <!-- Metadata from the <teiHeader> -->
         <div id="tei-header">
           <xsl:apply-templates select="teiHeader">
-            <xsl:with-param name="language" select="$language"/>
+            <xsl:with-param name="language" select="$useLang" tunnel="yes"/>
           </xsl:apply-templates>
         </div>
         <!-- The control panel -->
@@ -494,14 +503,8 @@
           <xsl:attribute name="class">
             <xsl:text>text-contrast-</xsl:text>
             <xsl:choose>
-              <xsl:when test="$contrast-default eq 'high'">
-                <xsl:text>high</xsl:text>
-              </xsl:when>
-              <xsl:when test="$contrast-default eq 'mid'">
-                <xsl:text>mid</xsl:text>
-              </xsl:when>
-              <xsl:when test="$contrast-default eq 'none'">
-                <xsl:text>none</xsl:text>
+              <xsl:when test="$contrast-default = ('high', 'mid', 'low', 'none')">
+                <xsl:value-of select="$contrast-default"/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:text>low</xsl:text>
@@ -510,7 +513,7 @@
           </xsl:attribute>
           <div id="tei-resources-box">
             <xsl:apply-templates select="text">
-              <xsl:with-param name="language" select="$useLang"/>
+              <xsl:with-param name="language" select="$useLang" tunnel="yes"/>
             </xsl:apply-templates>
           </div>
         </div>
@@ -572,7 +575,7 @@
       current node has its own language code defined, that code will be used instead.</xd:param>
   </xd:doc>
   <xsl:template match="teiHeader" priority="91">
-    <xsl:param name="language" as="xs:string" required="yes"/>
+    <xsl:param name="language" as="xs:string" required="yes" tunnel="yes"/>
     <xsl:apply-templates select="fileDesc/titleStmt/title[1]" mode="teiheader">
       <xsl:with-param name="is-doc-heading" select="true()"/>
     </xsl:apply-templates>
@@ -612,9 +615,9 @@
   </xd:doc>
   <xsl:template match="text" priority="90">
     <xsl:param name="depth" select="0" as="xs:integer" tunnel="yes"/>
-    <xsl:param name="language" as="xs:string" required="yes"/>
+    <xsl:param name="language" as="xs:string" required="yes" tunnel="yes"/>
     <xsl:variable name="useLang" 
-      select="if ( @xml:lang ) then @xml:lang/data(.) else $language"/>
+      select="if ( @xml:lang and normalize-space(@xml:lang) ne '' ) then @xml:lang/data(.) else $language"/>
     <div class="boxed box-outermost">
       <xsl:if test="$useLang ne $language">
         <xsl:attribute name="lang" select="$useLang"/>
@@ -703,7 +706,7 @@
       <xsl:attribute name="data-tapas-box-depth" select="$depth"/>
       <xsl:apply-templates mode="#current">
         <xsl:with-param name="depth" select="0" tunnel="yes"/>
-        <xsl:with-param name="language" select="$language"/>
+        <xsl:with-param name="language" select="$language" tunnel="yes"/>
       </xsl:apply-templates>
     </xsl:element>
   </xsl:template>
