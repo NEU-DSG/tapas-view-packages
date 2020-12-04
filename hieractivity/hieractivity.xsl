@@ -168,7 +168,7 @@
   <xsl:variable name="css-base" select="concat($assets-base,'css/')"/>
   <xsl:variable name="js-base" select="concat($assets-base,'js/')"/>
   <xsl:param name="contrast-default" select="'mid'" as="xs:string"/>
-  <xsl:param name="default-language" as="xs:string" select="'en'"/>
+  <xsl:param name="default-language" select="'en'" as="xs:string"/>
   <xsl:param name="legend-icon-width" select="20" as="xs:integer"/>
   <!-- Set $render-full-html to 'true' to get browsable output for debugging -->
   <xsl:param name="render-full-html" select="false()" as="xs:boolean"/>
@@ -479,12 +479,9 @@
       &lt;teiHeader&gt; is handled separately from &lt;text&gt;.</xd:desc>
   </xd:doc>
   <xsl:template match="/TEI" priority="92">
-    <xsl:variable name="language" 
-      select="if ( @xml:lang ) then @xml:lang/data(.) else $default-language"/>
     <xsl:variable name="useLang" 
-      select="if ( not(@xml:id) and text/@xml:id ) then 
-                text/@xml:id/data(.)
-              else $language"/>
+      select="if ( @xml:lang ) then @xml:lang/data(.)
+              else $default-language"/>
     <xsl:variable name="body" as="node()">
       <div class="hieractivity hieractivity-depthwise">
         <xsl:if test="not($render-full-html)">
@@ -617,7 +614,7 @@
     <xsl:param name="depth" select="0" as="xs:integer" tunnel="yes"/>
     <xsl:param name="language" as="xs:string" required="yes" tunnel="yes"/>
     <xsl:variable name="useLang" 
-      select="if ( @xml:lang and normalize-space(@xml:lang) ne '' ) then @xml:lang/data(.) else $language"/>
+      select="if ( @xml:lang ) then @xml:lang/data(.) else $language"/>
     <div class="boxed box-outermost">
       <xsl:if test="$useLang ne $language">
         <xsl:attribute name="lang" select="$useLang"/>
