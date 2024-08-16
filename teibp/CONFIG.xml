@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../config.rnc" type="application/relax-ng-compact-syntax"?>
 <view_package xmlns="http://www.wheatoncollege.edu/TAPAS/1.0" 
-  version="1.0" xml:id="teibp" dynamic="false" scope="file">
+  version="1.1" xml:id="teibp" dynamic="false" scope="file">
   <human_name>TEI Boilerplate</human_name>
   <description>Copies TEI document, with a very few modifications, into an HTML 
     shell, which provides access to Javascript and other features from the browser. 

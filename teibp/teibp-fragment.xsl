@@ -15,6 +15,11 @@
   
   <xsl:import href="teibp.xsl"/>
   
+  <!-- Make sure TAPAS uses the XHTML serialization for the output document. (We set 
+    it here because TEI Boilerplate uses XSLT 1.0, which does not have an "XHTML" 
+    output method.) -->
+  <xsl:output method="xhtml"/>
+  
   <xd:doc scope="stylesheet">
 		<xd:desc>
 			<xd:p><xd:b>Author:</xd:b> Ashley M. Clark</xd:p>
