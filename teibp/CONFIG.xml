@@ -13,6 +13,8 @@
   <git_branch></git_branch>
   <css_files>
     <css_file>css/teibp.css</css_file>
+    <css_file>css/sleepy.css</css_file>
+    <css_file>css/terminal.css</css_file>
     <css_file>css/custom.css</css_file>
   </css_files>
   <js_files>
